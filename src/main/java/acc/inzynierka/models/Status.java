@@ -19,6 +19,6 @@ public class Status {
     @Column(name = "status_id", nullable = false)
     private Long id;
 
-    @Column(name = "status_name",nullable = false)
+    @Column(name = "status_name",nullable = false, unique = true)
     private String name;
 }

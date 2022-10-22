@@ -19,9 +19,9 @@ public class Image {
     @Column(name = "image_id", nullable = false)
     private Long id;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url", nullable = false, unique = true)
     private String url;
 
-    @Column(name = "image_name",nullable = false)
+    @Column(name = "image_name",nullable = false, unique = true)
     private String name;
 }
