@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Followed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "followed_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)

@@ -8,7 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,7 +21,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "id")
     private Long Id;
 
     @Column(name = "login", nullable = false, unique = true)
@@ -35,10 +37,6 @@ public class User {
     @Column(name = "Is_active", nullable = false)
     private boolean isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
     @Column(name = "first_name")
     private String firstName;
 
@@ -47,6 +45,9 @@ public class User {
 
     @Column(name = "created", nullable = false) //tu będzie zmiana na Created
     private Timestamp CreationDate;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Result> results;
@@ -57,4 +58,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<User_Courses> courses;
 
+    public User(String login, String email, String password) {
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.CreationDate = Timestamp.from(Instant.now());
+    }
 }
