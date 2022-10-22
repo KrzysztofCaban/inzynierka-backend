@@ -19,10 +19,10 @@ import java.util.List;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "course_name",nullable = false, unique = true)
+    @Column(name = "name",nullable = false, unique = true)
     private String name;
 
     @Column(name = "description")

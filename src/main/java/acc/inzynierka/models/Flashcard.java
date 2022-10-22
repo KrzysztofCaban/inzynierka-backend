@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Flashcard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flashcard_id",nullable = false)
+    @Column(name = "id",nullable = false)
     private Long id;
 
     @Column(name = "exp_original", nullable = false)

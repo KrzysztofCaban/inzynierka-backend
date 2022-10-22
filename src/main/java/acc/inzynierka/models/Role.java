@@ -1,5 +1,6 @@
 package acc.inzynierka.models;
 
+import acc.inzynierka.models.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    private ERole name;
 }

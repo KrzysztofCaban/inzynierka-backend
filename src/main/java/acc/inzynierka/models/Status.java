@@ -1,5 +1,6 @@
 package acc.inzynierka.models;
 
+import acc.inzynierka.models.enums.EStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,10 @@ import javax.persistence.*;
 public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "status_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "status_name",nullable = false, unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name",nullable = false, unique = true)
+    private EStatus name;
 }

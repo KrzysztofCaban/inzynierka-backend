@@ -18,10 +18,10 @@ import java.util.List;
 public class Level {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "level_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "level_name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "difficulty", nullable = false)
