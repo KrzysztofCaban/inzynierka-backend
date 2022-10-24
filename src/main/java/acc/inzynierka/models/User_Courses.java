@@ -22,11 +22,12 @@ public class User_Courses {
     @Column(name = "join_Date", nullable = false)
     private Timestamp joinDate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
+
 }

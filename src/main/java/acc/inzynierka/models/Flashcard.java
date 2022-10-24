@@ -28,11 +28,11 @@ public class Flashcard {
     @Column(name = "exp_description", nullable = false)
     private String expDescription;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 

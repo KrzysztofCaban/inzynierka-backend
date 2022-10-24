@@ -34,11 +34,11 @@ public class Exercise {
     @Column(name = "bad_answer3", nullable = false)
     private String bad_answer3;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 }

@@ -46,7 +46,7 @@ public class User {
     @Column(name = "created", nullable = false) //tu będzie zmiana na Created
     private Timestamp CreationDate;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

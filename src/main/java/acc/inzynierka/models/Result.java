@@ -28,7 +28,7 @@ public class Result {
     @Column(name = "date", nullable = true)
     private Timestamp date;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

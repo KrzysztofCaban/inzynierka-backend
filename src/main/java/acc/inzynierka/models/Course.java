@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,19 +30,19 @@ public class Course {
     @Column(name = "created", nullable = false)
     private Timestamp created;
 
-    @Column(name = "modificated", nullable = false)
-    private Timestamp modificated;
+    @Column(name = "modified", nullable = false)
+    private Timestamp modified;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @JoinColumn(name = "category_id", nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     private Category category;
 
     @JoinColumn(name = "status_id", nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     private Status status;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")

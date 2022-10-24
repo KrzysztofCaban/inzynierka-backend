@@ -24,11 +24,11 @@ public class TestQuestion {
     @Column(name = "answer", nullable = false)
     private String answer;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 }
