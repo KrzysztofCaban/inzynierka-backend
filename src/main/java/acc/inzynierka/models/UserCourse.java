@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_courses")
-public class User_Courses {
+public class UserCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

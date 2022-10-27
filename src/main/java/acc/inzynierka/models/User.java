@@ -56,7 +56,7 @@ public class User {
     private List<Followed> followed;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<User_Courses> courses;
+    private List<UserCourse> courses;
 
     public User(String login, String email, String password) {
         this.login = login;
