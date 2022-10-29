@@ -1,21 +1,21 @@
 package acc.inzynierka.controllers;
 
-import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.CourseDto;
+import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.response.MessageResponse;
-import acc.inzynierka.repository.CourseRepository;
+import acc.inzynierka.payload.response.StatusCategoriesResponse;
 import acc.inzynierka.repository.UserRepository;
-import acc.inzynierka.security.services.UserDetailsImpl;
 import acc.inzynierka.services.CourseService;
+import acc.inzynierka.utils.userUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,10 +64,12 @@ public class CourseController {
     }
 
     @GetMapping("{name}")
-    public ResponseEntity<?> getCourseByName(@PathVariable String name){
-        CourseDto course = courseService.getCourseByName(name);
-        if (course == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Nie znaleziono kursu"));
+    public ResponseEntity<?> getCourseByName(@PathVariable String name) {
+        CourseDto course;
+        try {
+            course = courseService.getCourseByName(name);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
         return new ResponseEntity<>(
                 course
@@ -75,20 +77,50 @@ public class CourseController {
     }
 
     @GetMapping(value = {"delete/{id}"})
-    public ResponseEntity<?> delete(@PathVariable Long id){
-        if (courseService.deleteCourseById(id)){
-            return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
-        }else{
-            return ResponseEntity.ok().body(new MessageResponse("Nie znaleziono kursu"));
+    public ResponseEntity<?> deleteCourseById(@PathVariable Long id) {
+        try {
+            courseService.deleteCourseById(id);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
 
     }
 
+    @PostMapping(value = {"add"})
+    public ResponseEntity<?> createCourse(@Valid @RequestBody CourseRequest courseRequest) {
+        try {
+            courseService.addCourse(courseRequest);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie utworzono kurs"));
+    }
 
+    @GetMapping(value = {"add"})
+    public ResponseEntity<?> getStatusAndCategories(){
+        StatusCategoriesResponse statusCategoriesResponse;
+        try{
+            statusCategoriesResponse = courseService.getStatusAndCategories();
+        }catch(RuntimeException e){
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+        return new ResponseEntity<>(
+                statusCategoriesResponse,
+                HttpStatus.OK
+        );
+    }
 
-
-
+    @PostMapping(value = {"edit"})
+    public ResponseEntity<?> editCourse(@Valid @RequestBody CourseRequest courseRequest) {
+        try {
+            courseService.editCourse(courseRequest);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kurs"));
+    }
 
 
 }
