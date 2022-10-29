@@ -1,16 +1,28 @@
 package acc.inzynierka.services;
 
+import acc.inzynierka.exception.CategoryNotFoundException;
+import acc.inzynierka.exception.CourseNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
+import acc.inzynierka.modelsDTO.CategoryDto;
 import acc.inzynierka.modelsDTO.CourseDto;
+import acc.inzynierka.modelsDTO.StatusDto;
+import acc.inzynierka.payload.request.CourseRequest;
+import acc.inzynierka.payload.response.StatusCategoriesResponse;
+import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
+import acc.inzynierka.repository.StatusRepository;
 import acc.inzynierka.repository.UserRepository;
+import acc.inzynierka.security.services.UserDetailsImpl;
 import acc.inzynierka.utils.objectMapperUtil;
 import acc.inzynierka.utils.userUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +32,15 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
-    @Autowired UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    ModelMapper mMapper = new ModelMapper();
+    @Autowired
+    private StatusRepository statusRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     public List<CourseDto> getAllCourses(){
         return objectMapperUtil.mapToDTO(courseRepository.findAll(), CourseDto.class);
     }
@@ -32,28 +50,59 @@ public class CourseService {
     }
 
     public CourseDto getCourseByName(String name){
-        Optional course = courseRepository.findByName(name);
-        if(course.isEmpty())
-            return null;
+        Course course = courseRepository.findByName(name)
+                .orElseThrow(() -> new CourseNotFoundException(name, "Nie znaleziono kursu"));
 
-        return (CourseDto) objectMapperUtil.mapToDTOSingle(course.get(), CourseDto.class);
+        return (CourseDto) objectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }
 
-    public boolean deleteCourseById(Long id){
-        Optional course = courseRepository.findById(id);
-        if(course.isEmpty())
-          return false;
+    public void deleteCourseById(Long id){
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
 
-        courseRepository.delete((Course) course.get());
-        return true;
+        courseRepository.delete(course);
     }
 
-    public boolean deleteCourseByName(String name){
-        Optional course = courseRepository.findByName(name);
-        if(course.isEmpty())
-            return false;
+    public void addCourse(CourseRequest courseRequest) throws CategoryNotFoundException {
+        Course newCourse = new Course();
+        newCourse.setName(courseRequest.getName());
+        newCourse.setDescription(courseRequest.getDescription());
+        newCourse.setCreated(Timestamp.from(Instant.now()));
+        newCourse.setModified(Timestamp.from(Instant.now()));
 
-        courseRepository.deleteByName((String) course.get());
-        return true;
+        User author = userRepository.findById(userUtil.getUser()).get();
+        newCourse.setAuthor(author);
+
+        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
+        newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
+                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategoryName(),
+                        "Nie znaleziono podanej kategorii w bazie")));
+
+        courseRepository.save(newCourse);
+    }
+
+    public void editCourse(CourseRequest courseRequest) throws CategoryNotFoundException {
+        Course course = courseRepository.findByName(courseRequest.getName())
+                .orElseThrow(() -> new CourseNotFoundException(courseRequest.getName(),
+                        "Nie znaleziono kursu"));
+
+        course.setName(courseRequest.getName());
+        System.out.println(courseRequest.getDescription());
+        course.setDescription(courseRequest.getDescription());
+        course.setModified(Timestamp.from(Instant.now()));
+        course.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
+        course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
+                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategoryName(),
+                        "Nie znaleziono podanej kategorii w bazie")));
+
+        courseRepository.save(course);
+    }
+
+    public StatusCategoriesResponse getStatusAndCategories(){
+        StatusCategoriesResponse scResponse = new StatusCategoriesResponse();
+        scResponse.setStatusList(objectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class));
+        scResponse.setCategoryList(objectMapperUtil.mapToDTO(categoryRepository.findAll(), CategoryDto.class));
+
+        return scResponse;
     }
 }

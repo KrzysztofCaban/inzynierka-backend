@@ -32,26 +32,21 @@ public class CourseController {
     private UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<List<CourseDto>> getAllCourses(){
+    public ResponseEntity<List<CourseDto>> getAllCourses() {
         return new ResponseEntity<>(
-            courseService.getAllCourses()
-            ,HttpStatus.OK);
+                courseService.getAllCourses()
+                , HttpStatus.OK);
     }
 
-    @GetMapping(value = {"admin","admin/{id}"})
-    public ResponseEntity<?> getAllAdminCourses(@PathVariable Optional<Long> id){
-        Long adminId;
-        if (id.isPresent()) {
-            adminId = id.get();
-        } else {
-            UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            adminId = userDetails.getId();
-        }
+    @GetMapping(value = {"admin", "admin/{id}"})
+    public ResponseEntity<?> getAllAdminCourses(@PathVariable Optional<Long> id) {
+        Long adminId = id.orElseGet(userUtil::getUser);
+
         User admin = userRepository.findById(adminId).orElse(null);
         if (admin == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Nie znaleziono administratora"));
         }
-        if(admin.getRoles()
+        if (admin.getRoles()
                 .stream()
                 .filter(r -> r.getName().equals(ERole.ROLE_ADMIN))
                 .findAny()
@@ -59,8 +54,8 @@ public class CourseController {
             return ResponseEntity.badRequest().body(new MessageResponse("Użytkownik nie jest administratorem"));
         }
         return new ResponseEntity<>(
-            courseService.getAllAdminCourses(admin)
-            ,HttpStatus.OK);
+                courseService.getAllAdminCourses(admin)
+                , HttpStatus.OK);
     }
 
     @GetMapping("{name}")
@@ -73,7 +68,7 @@ public class CourseController {
         }
         return new ResponseEntity<>(
                 course
-                ,HttpStatus.OK);
+                , HttpStatus.OK);
     }
 
     @GetMapping(value = {"delete/{id}"})
