@@ -31,7 +31,7 @@ public class CourseController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping(value = "all")
     public ResponseEntity<List<CourseDto>> getAllCourses() {
         return new ResponseEntity<>(
                 courseService.getAllCourses()
