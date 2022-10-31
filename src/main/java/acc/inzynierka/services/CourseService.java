@@ -1,6 +1,7 @@
 package acc.inzynierka.services;
 
 import acc.inzynierka.exception.CategoryNotFoundException;
+import acc.inzynierka.exception.CourseAlreadyExistsException;
 import acc.inzynierka.exception.CourseNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
@@ -64,6 +65,10 @@ public class CourseService {
     }
 
     public void addCourse(CourseRequest courseRequest) throws CategoryNotFoundException {
+        Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
+        if(checkIfExists.isPresent()){
+            throw new CourseAlreadyExistsException(courseRequest.getName(), "Kurs już istnieje");
+        }
         Course newCourse = new Course();
         newCourse.setName(courseRequest.getName());
         newCourse.setDescription(courseRequest.getDescription());
