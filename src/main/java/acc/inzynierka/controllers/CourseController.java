@@ -71,7 +71,7 @@ public class CourseController {
                 , HttpStatus.OK);
     }
 
-    @GetMapping(value = {"delete/{id}"})
+    @PostMapping(value = {"delete/{id}"})
     public ResponseEntity<?> deleteCourseById(@PathVariable Long id) {
         try {
             courseService.deleteCourseById(id);
@@ -107,10 +107,10 @@ public class CourseController {
         );
     }
 
-    @PostMapping(value = {"edit"})
-    public ResponseEntity<?> editCourse(@Valid @RequestBody CourseRequest courseRequest) {
+    @PostMapping(value = {"edit/{id}"})
+    public ResponseEntity<?> editCourse(@PathVariable Long id, @Valid @RequestBody CourseRequest courseRequest) {
         try {
-            courseService.editCourse(courseRequest);
+            courseService.editCourse(id ,courseRequest);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

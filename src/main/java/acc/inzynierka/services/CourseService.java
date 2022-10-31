@@ -64,7 +64,7 @@ public class CourseService {
         courseRepository.delete(course);
     }
 
-    public void addCourse(CourseRequest courseRequest) throws CategoryNotFoundException {
+    public void addCourse(CourseRequest courseRequest) throws RuntimeException {
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
         if(checkIfExists.isPresent()){
             throw new CourseAlreadyExistsException(courseRequest.getName(), "Kurs już istnieje");
@@ -86,10 +86,15 @@ public class CourseService {
         courseRepository.save(newCourse);
     }
 
-    public void editCourse(CourseRequest courseRequest) throws CategoryNotFoundException {
-        Course course = courseRepository.findByName(courseRequest.getName())
+    public void editCourse(Long id,CourseRequest courseRequest) throws RuntimeException {
+        Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException(courseRequest.getName(),
                         "Nie znaleziono kursu"));
+
+        Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
+        if(checkIfExists.isPresent()){
+            throw new CourseAlreadyExistsException(courseRequest.getName(), "Podana nazwa kursu jest już w użyciu");
+        }
 
         course.setName(courseRequest.getName());
         System.out.println(courseRequest.getDescription());
