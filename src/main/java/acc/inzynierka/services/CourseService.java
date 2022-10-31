@@ -78,9 +78,9 @@ public class CourseService {
         User author = userRepository.findById(userUtil.getUser()).get();
         newCourse.setAuthor(author);
 
-        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
-        newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategoryName(),
+        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatus()).get());
+        newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategory())
+                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategory(),
                         "Nie znaleziono podanej kategorii w bazie")));
 
         courseRepository.save(newCourse);
@@ -88,11 +88,10 @@ public class CourseService {
 
     public void editCourse(Long id,CourseRequest courseRequest) throws RuntimeException {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(courseRequest.getName(),
-                        "Nie znaleziono kursu"));
+                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
 
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
-        if(checkIfExists.isPresent()){
+        if(checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())){
             throw new CourseAlreadyExistsException(courseRequest.getName(), "Podana nazwa kursu jest już w użyciu");
         }
 
@@ -100,9 +99,9 @@ public class CourseService {
         System.out.println(courseRequest.getDescription());
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
-        course.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
-        course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategoryName(),
+        course.setStatus(statusRepository.findByName(courseRequest.getStatus()).get());
+        course.setCategory(categoryRepository.findByName(courseRequest.getCategory())
+                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategory(),
                         "Nie znaleziono podanej kategorii w bazie")));
 
         courseRepository.save(course);
