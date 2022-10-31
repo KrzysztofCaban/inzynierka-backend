@@ -21,6 +21,6 @@ public class CourseDto{
     private Timestamp modified;
     private Long authorId;
     private String authorLogin;
-    private String categoryName;
-    private EStatus statusName;
+    private String category;
+    private EStatus status;
 }

@@ -22,7 +22,7 @@ public class CourseRequest implements Serializable {
     private String name;
     private String description;
     @NotNull(message = "Nazwa kategori nie może być pusta")
-    private String categoryName;
+    private String category;
     @NotNull(message = "Nazwa statusu nie może być pusta")
-    private EStatus statusName;
+    private EStatus status;
 }
