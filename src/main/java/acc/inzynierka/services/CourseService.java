@@ -50,9 +50,9 @@ public class CourseService {
         return objectMapperUtil.mapToDTO(courseRepository.findAllByAuthor(admin), CourseDto.class);
     }
 
-    public CourseDto getCourseByName(String name){
-        Course course = courseRepository.findByName(name)
-                .orElseThrow(() -> new CourseNotFoundException(name, "Nie znaleziono kursu"));
+    public CourseDto getCourseById(Long id){
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
 
         return (CourseDto) objectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }

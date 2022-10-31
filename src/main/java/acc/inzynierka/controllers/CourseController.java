@@ -58,11 +58,11 @@ public class CourseController {
                 , HttpStatus.OK);
     }
 
-    @GetMapping("{name}")
-    public ResponseEntity<?> getCourseByName(@PathVariable String name) {
+    @GetMapping("{id}")
+    public ResponseEntity<?> getCourseById(@PathVariable Long id) {
         CourseDto course;
         try {
-            course = courseService.getCourseByName(name);
+            course = courseService.getCourseById(id);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
