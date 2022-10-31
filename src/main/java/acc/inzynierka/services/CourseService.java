@@ -88,8 +88,7 @@ public class CourseService {
 
     public void editCourse(Long id,CourseRequest courseRequest) throws RuntimeException {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(courseRequest.getName(),
-                        "Nie znaleziono kursu"));
+                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
 
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
         if(checkIfExists.isPresent()){
