@@ -24,4 +24,5 @@ public class RestExceptionHandler {
         });
         return errors;
     }
+
 }

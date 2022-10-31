@@ -19,8 +19,10 @@ import acc.inzynierka.utils.objectMapperUtil;
 import acc.inzynierka.utils.userUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -50,16 +52,17 @@ public class CourseService {
         return objectMapperUtil.mapToDTO(courseRepository.findAllByAuthor(admin), CourseDto.class);
     }
 
+
     public CourseDto getCourseById(Long id){
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
+                .orElseThrow(CourseNotFoundException::new);
 
         return (CourseDto) objectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }
 
     public void deleteCourseById(Long id){
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
+                .orElseThrow(CourseNotFoundException::new);
 
         courseRepository.delete(course);
     }
@@ -67,7 +70,7 @@ public class CourseService {
     public void addCourse(CourseRequest courseRequest) throws RuntimeException {
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
         if(checkIfExists.isPresent()){
-            throw new CourseAlreadyExistsException(courseRequest.getName(), "Kurs już istnieje");
+            throw new CourseAlreadyExistsException(courseRequest.getCategoryName(), "test");
         }
         Course newCourse = new Course();
         newCourse.setName(courseRequest.getName());
@@ -80,29 +83,26 @@ public class CourseService {
 
         newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
         newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategoryName(),
-                        "Nie znaleziono podanej kategorii w bazie")));
+                .orElseThrow(CategoryNotFoundException::new));
 
         courseRepository.save(newCourse);
     }
 
     public void editCourse(Long id,CourseRequest courseRequest) throws RuntimeException {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Nie znaleziono kursu"));
 
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
         if(checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())){
-            throw new CourseAlreadyExistsException(courseRequest.getName(), "Podana nazwa kursu jest już w użyciu");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Podana nazwa kursu jest już w użyciu");
         }
 
         course.setName(courseRequest.getName());
-        System.out.println(courseRequest.getDescription());
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
         course.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
         course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFoundException(courseRequest.getCategoryName(),
-                        "Nie znaleziono podanej kategorii w bazie")));
+                .orElseThrow(CategoryNotFoundException::new));
 
         courseRepository.save(course);
     }
