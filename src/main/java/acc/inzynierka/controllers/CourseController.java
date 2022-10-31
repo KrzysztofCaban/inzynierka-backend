@@ -93,7 +93,7 @@ public class CourseController {
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie utworzono kurs"));
     }
 
-    @GetMapping(value = {"add"})
+    @GetMapping(value = {"statusAndCategories"})
     public ResponseEntity<?> getStatusAndCategories(){
         StatusCategoriesResponse statusCategoriesResponse;
         try{
