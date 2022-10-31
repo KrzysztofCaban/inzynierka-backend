@@ -52,5 +52,4 @@ public class Course {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private Collection<UserCourse> courseUsers;
-
 }

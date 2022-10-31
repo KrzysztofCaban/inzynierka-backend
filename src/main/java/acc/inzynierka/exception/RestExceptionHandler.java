@@ -29,8 +29,8 @@ public class RestExceptionHandler {
         });
         return errors;
     }
-    @ExceptionHandler(value = { RuntimeException.class })
-    public ResponseEntity<Object> handleRunTimeException(RuntimeException ex) {
+    @ExceptionHandler(value = { ApiRuntimeException.class })
+    public ResponseEntity<Object> handleRunTimeException(ApiRuntimeException ex) {
         logger.error(ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }

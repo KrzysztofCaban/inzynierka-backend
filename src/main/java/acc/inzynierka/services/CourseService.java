@@ -1,8 +1,9 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.CategoryNotFoundException;
-import acc.inzynierka.exception.CourseAlreadyExistsException;
-import acc.inzynierka.exception.CourseNotFoundException;
+import acc.inzynierka.exception.category.CategoryNotFoundException;
+import acc.inzynierka.exception.course.CourseAlreadyExistsException;
+import acc.inzynierka.exception.course.CourseNotFoundException;
+import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.modelsDTO.CategoryDto;
@@ -76,7 +77,8 @@ public class CourseService {
         User author = userRepository.findById(UserUtil.getUser()).get();
         newCourse.setAuthor(author);
 
-        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
+        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName())
+                .orElseThrow(StatusNotFoundException::new));
         newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
                 .orElseThrow(CategoryNotFoundException::new));
 
@@ -95,7 +97,8 @@ public class CourseService {
         course.setName(courseRequest.getName());
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
-        course.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
+        course.setStatus(statusRepository.findByName(courseRequest.getStatusName())
+                .orElseThrow(StatusNotFoundException::new));
         course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
                 .orElseThrow(CategoryNotFoundException::new));
 

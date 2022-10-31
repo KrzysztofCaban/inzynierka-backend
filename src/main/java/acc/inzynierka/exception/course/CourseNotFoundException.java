@@ -1,10 +1,10 @@
-package acc.inzynierka.exception;
+package acc.inzynierka.exception.course;
 
+import acc.inzynierka.exception.ApiRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class CourseNotFoundException extends RuntimeException {
+public class CourseNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public CourseNotFoundException() {
