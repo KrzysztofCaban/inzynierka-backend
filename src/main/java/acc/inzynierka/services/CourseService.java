@@ -14,15 +14,10 @@ import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.StatusRepository;
 import acc.inzynierka.repository.UserRepository;
-import acc.inzynierka.security.services.UserDetailsImpl;
-import acc.inzynierka.utils.objectMapperUtil;
-import acc.inzynierka.utils.userUtil;
-import org.modelmapper.ModelMapper;
+import acc.inzynierka.utils.ObjectMapperUtil;
+import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -44,23 +39,23 @@ public class CourseService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<CourseDto> getAllCourses(){
-        return objectMapperUtil.mapToDTO(courseRepository.findAll(), CourseDto.class);
+    public List<CourseDto> getAllCourses() {
+        return ObjectMapperUtil.mapToDTO(courseRepository.findAll(), CourseDto.class);
     }
 
     public List<CourseDto> getAllAdminCourses(User admin) {
-        return objectMapperUtil.mapToDTO(courseRepository.findAllByAuthor(admin), CourseDto.class);
+        return ObjectMapperUtil.mapToDTO(courseRepository.findAllByAuthor(admin), CourseDto.class);
     }
 
 
-    public CourseDto getCourseById(Long id){
+    public CourseDto getCourseById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(CourseNotFoundException::new);
 
-        return (CourseDto) objectMapperUtil.mapToDTOSingle(course, CourseDto.class);
+        return (CourseDto) ObjectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }
 
-    public void deleteCourseById(Long id){
+    public void deleteCourseById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(CourseNotFoundException::new);
 
@@ -69,8 +64,8 @@ public class CourseService {
 
     public void addCourse(CourseRequest courseRequest) throws RuntimeException {
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
-        if(checkIfExists.isPresent()){
-            throw new CourseAlreadyExistsException(courseRequest.getCategoryName(), "test");
+        if (checkIfExists.isPresent()) {
+            throw new CourseAlreadyExistsException();
         }
         Course newCourse = new Course();
         newCourse.setName(courseRequest.getName());
@@ -78,7 +73,7 @@ public class CourseService {
         newCourse.setCreated(Timestamp.from(Instant.now()));
         newCourse.setModified(Timestamp.from(Instant.now()));
 
-        User author = userRepository.findById(userUtil.getUser()).get();
+        User author = userRepository.findById(UserUtil.getUser()).get();
         newCourse.setAuthor(author);
 
         newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName()).get());
@@ -88,13 +83,13 @@ public class CourseService {
         courseRepository.save(newCourse);
     }
 
-    public void editCourse(Long id,CourseRequest courseRequest) throws RuntimeException {
+    public void editCourse(Long id, CourseRequest courseRequest) throws RuntimeException {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Nie znaleziono kursu"));
+                .orElseThrow(CourseNotFoundException::new);
 
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
-        if(checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Podana nazwa kursu jest już w użyciu");
+        if (checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())) {
+            throw new CourseAlreadyExistsException();
         }
 
         course.setName(courseRequest.getName());
@@ -107,10 +102,10 @@ public class CourseService {
         courseRepository.save(course);
     }
 
-    public StatusCategoriesResponse getStatusAndCategories(){
+    public StatusCategoriesResponse getStatusAndCategories() {
         StatusCategoriesResponse scResponse = new StatusCategoriesResponse();
-        scResponse.setStatusList(objectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class));
-        scResponse.setCategoryList(objectMapperUtil.mapToDTO(categoryRepository.findAll(), CategoryDto.class));
+        scResponse.setStatusList(ObjectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class));
+        scResponse.setCategoryList(ObjectMapperUtil.mapToDTO(categoryRepository.findAll(), CategoryDto.class));
 
         return scResponse;
     }

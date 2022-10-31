@@ -8,7 +8,7 @@ import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.payload.response.StatusCategoriesResponse;
 import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.services.CourseService;
-import acc.inzynierka.utils.userUtil;
+import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,18 +42,18 @@ public class CourseController {
 
     @GetMapping(value = {"admin", "admin/{id}"})
     public ResponseEntity<?> getAllAdminCourses(@PathVariable Optional<Long> id) {
-        Long adminId = id.orElseGet(userUtil::getUser);
+        Long adminId = id.orElseGet(UserUtil::getUser);
 
         User admin = userRepository.findById(adminId).orElse(null);
         if (admin == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Nie znaleziono administratora");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie znaleziono administratora");
         }
         if (admin.getRoles()
                 .stream()
                 .filter(r -> r.getName().equals(ERole.ROLE_ADMIN))
                 .findAny()
                 .isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Użytkownik nie jest administratorem");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Użytkownik nie jest administratorem");
         }
         return new ResponseEntity<>(
                 courseService.getAllAdminCourses(admin)
@@ -64,7 +64,7 @@ public class CourseController {
     public ResponseEntity<?> getCourseById(@PathVariable Long id) {
         CourseDto course;
 
-            course = courseService.getCourseById(id);
+        course = courseService.getCourseById(id);
 
         return new ResponseEntity<>(
                 course
@@ -74,7 +74,7 @@ public class CourseController {
     @DeleteMapping(value = {"delete/{id}"})
     public ResponseEntity<?> deleteCourseById(@PathVariable Long id) {
 
-            courseService.deleteCourseById(id);
+        courseService.deleteCourseById(id);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
 
@@ -83,13 +83,13 @@ public class CourseController {
     @PostMapping(value = {"add"})
     public ResponseEntity<?> createCourse(@Valid @RequestBody CourseRequest courseRequest) {
 
-            courseService.addCourse(courseRequest);
+        courseService.addCourse(courseRequest);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie utworzono kurs"));
     }
 
     @GetMapping(value = {"statusAndCategories"})
-    public ResponseEntity<?> getStatusAndCategories(){
+    public ResponseEntity<?> getStatusAndCategories() {
         StatusCategoriesResponse statusCategoriesResponse = courseService.getStatusAndCategories();
 
         return new ResponseEntity<>(
@@ -100,7 +100,7 @@ public class CourseController {
 
     @PatchMapping(value = {"edit/{id}"})
     public ResponseEntity<?> editCourse(@PathVariable Long id, @Valid @RequestBody CourseRequest courseRequest) {
-        courseService.editCourse(id ,courseRequest);
+        courseService.editCourse(id, courseRequest);
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kurs"));
     }
 

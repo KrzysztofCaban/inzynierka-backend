@@ -5,7 +5,7 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class objectMapperUtil {
+public class ObjectMapperUtil {
     public static <T> List<T> mapToDTO(List<?> oList, Class<T> destClass){
         ModelMapper modelMapper = new ModelMapper();
         return oList.stream().map(object -> modelMapper.map(object, destClass)).collect(Collectors.toList());
