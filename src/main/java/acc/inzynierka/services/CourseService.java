@@ -91,7 +91,7 @@ public class CourseService {
                 .orElseThrow(() -> new CourseNotFoundException(id, "Nie znaleziono kursu"));
 
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
-        if(checkIfExists.isPresent()){
+        if(checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())){
             throw new CourseAlreadyExistsException(courseRequest.getName(), "Podana nazwa kursu jest już w użyciu");
         }
 
