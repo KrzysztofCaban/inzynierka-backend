@@ -82,7 +82,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        roleRepository.save(new Role(1L,ERole.ROLE_USER));
         if (userRepository.existsByLogin(signUpRequest.getLogin())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }

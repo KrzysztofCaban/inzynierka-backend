@@ -106,9 +106,10 @@ public class DataLoader implements ApplicationRunner {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleRepository.findByName(ERole.ROLE_ADMIN).get());
         user.setRoles(roleSet);
+        userRepository.save(user);
         roleSet.clear();
         roleSet.add(roleRepository.findByName(ERole.ROLE_USER).get());
-        userRepository.save(user);
+        user2.setRoles(roleSet);
         userRepository.save(user2);
 
         Category category = new Category();
