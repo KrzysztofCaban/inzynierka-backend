@@ -43,5 +43,8 @@ public class Level {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "level")
     private List<Flashcard> flashcards;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "level")
+    private Collection<Result> levelResults;
+
 }
 
