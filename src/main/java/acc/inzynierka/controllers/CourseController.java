@@ -5,7 +5,6 @@ import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.response.MessageResponse;
-import acc.inzynierka.payload.response.StatusCategoriesResponse;
 import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.services.CourseService;
 import acc.inzynierka.utils.UserUtil;
@@ -62,9 +61,7 @@ public class CourseController {
 
     @GetMapping("{id}")
     public ResponseEntity<?> getCourseById(@PathVariable Long id) {
-        CourseDto course;
-
-        course = courseService.getCourseById(id);
+        CourseDto course = courseService.getCourseById(id);
 
         return new ResponseEntity<>(
                 course
@@ -86,16 +83,6 @@ public class CourseController {
         courseService.addCourse(courseRequest);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie utworzono kurs"));
-    }
-
-    @GetMapping(value = {"statusAndCategories"})
-    public ResponseEntity<?> getStatusAndCategories() {
-        StatusCategoriesResponse statusCategoriesResponse = courseService.getStatusAndCategories();
-
-        return new ResponseEntity<>(
-                statusCategoriesResponse,
-                HttpStatus.OK
-        );
     }
 
     @PatchMapping(value = {"edit/{id}"})

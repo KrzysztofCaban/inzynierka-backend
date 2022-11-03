@@ -30,4 +30,5 @@ public class UserCourse {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+
 }

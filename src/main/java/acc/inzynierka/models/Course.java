@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -49,4 +50,6 @@ public class Course {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private List<Level> levels;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    private Collection<UserCourse> courseUsers;
 }
