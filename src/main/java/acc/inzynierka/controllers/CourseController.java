@@ -1,5 +1,6 @@
 package acc.inzynierka.controllers;
 
+import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.CourseDto;
@@ -43,10 +44,8 @@ public class CourseController {
     public ResponseEntity<?> getAllAdminCourses(@PathVariable Optional<Long> id) {
         Long adminId = id.orElseGet(UserUtil::getUser);
 
-        User admin = userRepository.findById(adminId).orElse(null);
-        if (admin == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie znaleziono administratora");
-        }
+        User admin = userRepository.findById(adminId).orElseThrow(UserNotFoundException::new);
+
         if (admin.getRoles()
                 .stream()
                 .filter(r -> r.getName().equals(ERole.ROLE_ADMIN))
