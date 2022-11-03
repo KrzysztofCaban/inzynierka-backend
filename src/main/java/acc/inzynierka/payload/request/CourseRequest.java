@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -18,11 +19,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class CourseRequest implements Serializable {
-    @NotNull(message = "Nazwa nie może być pusta")
+    @NotEmpty(message = "Nazwa nie może być pusta")
     private String name;
     private String description;
-    @NotNull(message = "Nazwa kategori nie może być pusta")
+    @NotEmpty(message = "Nazwa kategori nie może być pusta")
     private String categoryName;
-    @NotNull(message = "Nazwa statusu nie może być pusta")
+    @NotEmpty(message = "Nazwa statusu nie może być pusta")
     private EStatus statusName;
 }
