@@ -6,11 +6,8 @@ import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
-import acc.inzynierka.modelsDTO.CategoryDto;
 import acc.inzynierka.modelsDTO.CourseDto;
-import acc.inzynierka.modelsDTO.StatusDto;
 import acc.inzynierka.payload.request.CourseRequest;
-import acc.inzynierka.payload.response.StatusCategoriesResponse;
 import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.StatusRepository;
@@ -103,13 +100,5 @@ public class CourseService {
                 .orElseThrow(CategoryNotFoundException::new));
 
         courseRepository.save(course);
-    }
-
-    public StatusCategoriesResponse getStatusAndCategories() {
-        StatusCategoriesResponse scResponse = new StatusCategoriesResponse();
-        scResponse.setStatusList(ObjectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class));
-        scResponse.setCategoryList(ObjectMapperUtil.mapToDTO(categoryRepository.findAll(), CategoryDto.class));
-
-        return scResponse;
     }
 }
