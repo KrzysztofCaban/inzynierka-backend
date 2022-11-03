@@ -24,6 +24,6 @@ public class CourseRequest implements Serializable {
     private String description;
     @NotEmpty(message = "Nazwa kategori nie może być pusta")
     private String categoryName;
-    @NotEmpty(message = "Nazwa statusu nie może być pusta")
+    @NotNull(message = "Nazwa statusu nie może być pusta")
     private EStatus statusName;
 }

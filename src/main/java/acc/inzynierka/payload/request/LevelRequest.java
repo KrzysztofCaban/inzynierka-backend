@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -22,6 +23,6 @@ public class LevelRequest implements Serializable {
     private String name;
     @NotEmpty(message = "Poziom trudności nie może być pusty")
     private int difficulty;
-    @NotEmpty(message = "Nazwa statusu nie może być pusta")
+    @NotNull(message = "Nazwa statusu nie może być pusta")
     private EStatus statusName;
 }
