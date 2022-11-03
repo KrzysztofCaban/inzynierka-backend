@@ -1,12 +1,9 @@
 package acc.inzynierka.controllers;
 
 import acc.inzynierka.modelsDTO.LevelDto;
-import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.request.LevelRequest;
 import acc.inzynierka.payload.response.MessageResponse;
-import acc.inzynierka.payload.response.StatusCategoriesResponse;
 import acc.inzynierka.services.LevelService;
-import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
