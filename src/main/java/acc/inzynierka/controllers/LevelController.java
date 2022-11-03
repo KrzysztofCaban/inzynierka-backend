@@ -30,7 +30,7 @@ public class LevelController {
         );
     }
 
-    @GetMapping(value = {"{/levelId}"})
+    @GetMapping(value = {"{levelId}"})
     public ResponseEntity<?> getLevel(@PathVariable Long levelId){
         return new ResponseEntity<>(
                 levelService.getLevelById(levelId),
