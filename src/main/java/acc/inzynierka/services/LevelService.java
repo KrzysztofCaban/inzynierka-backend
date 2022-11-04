@@ -6,8 +6,12 @@ import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
+import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.modelsDTO.LevelDto;
 import acc.inzynierka.payload.request.LevelRequest;
+import acc.inzynierka.payload.response.CourseResponse;
+import acc.inzynierka.payload.response.LevelResponse;
+import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.repository.StatusRepository;
@@ -42,7 +46,12 @@ public class LevelService {
     public LevelDto getLevelById(Long id){
         Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
 
-        return (LevelDto) ObjectMapperUtil.mapToDTOSingle(level, LevelDto.class);
+        LevelDto levelDto = (LevelDto) ObjectMapperUtil.mapToDTOSingle(level, LevelDto.class);
+        levelDto.setExerciseNumber(level.getExercises().size());
+        levelDto.setFlashcardNumber(level.getFlashcards().size());
+        levelDto.setTestQuestionNumber(level.getTestQuestions().size());
+
+        return levelDto;
     }
 
     public void deleteLevelById(Long id){
@@ -51,7 +60,7 @@ public class LevelService {
         levelRepository.delete(level);
     }
 
-    public void addLevel(Long courseID, LevelRequest levelRequest){
+    public LevelResponse addLevel(Long courseID, LevelRequest levelRequest){
         checkIfLevelNameIsUsed(courseID, levelRequest);
 
         Level level = new Level();
@@ -61,7 +70,13 @@ public class LevelService {
         level.setStatus(statusRepository.findByName(levelRequest.getStatusName())
                 .orElseThrow(StatusNotFoundException::new));
 
-        levelRepository.save(level);
+        Level savedLevel = levelRepository.save(level);
+
+        LevelResponse levelResponse = new LevelResponse();
+        levelResponse.setLevel((LevelDto) ObjectMapperUtil.mapToDTOSingle(savedLevel, LevelDto.class));
+        levelResponse.setMessage("Pomyślnie utworzono kurs");
+
+        return levelResponse;
     }
 
     public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest){

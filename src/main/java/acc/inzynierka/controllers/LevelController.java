@@ -49,9 +49,7 @@ public class LevelController {
     @PostMapping(value = {"add"})
     public ResponseEntity<?> createLevel(@PathVariable Long courseID ,@Valid @RequestBody LevelRequest levelRequest) {
 
-        levelService.addLevel(courseID ,levelRequest);
-
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie utworzono kurs"));
+        return new ResponseEntity<>(levelService.addLevel(courseID ,levelRequest), HttpStatus.CREATED);
     }
 
 
@@ -61,7 +59,5 @@ public class LevelController {
         levelService.editLevel(courseID, levelId, levelRequest);
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kurs"));
     }
-
-    //TODO zwracać listę statusów tak jak Kacper chce
 
 }

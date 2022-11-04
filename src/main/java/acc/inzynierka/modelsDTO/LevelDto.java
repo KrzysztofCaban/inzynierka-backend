@@ -18,4 +18,7 @@ public class LevelDto implements Serializable {
     private String name;
     private int difficulty;
     private EStatus statusName;
+    private int exerciseNumber;
+    private int flashcardNumber;
+    private int testQuestionNumber;
 }
