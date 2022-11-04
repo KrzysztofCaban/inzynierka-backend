@@ -8,6 +8,8 @@ import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.payload.request.CourseRequest;
+import acc.inzynierka.payload.response.CourseResponse;
+import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.StatusRepository;
@@ -60,7 +62,7 @@ public class CourseService {
         courseRepository.delete(course);
     }
 
-    public void addCourse(CourseRequest courseRequest) throws RuntimeException {
+    public CourseResponse addCourse(CourseRequest courseRequest) throws RuntimeException {
         Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
         if (checkIfExists.isPresent()) {
             throw new CourseAlreadyExistsException();
@@ -79,7 +81,13 @@ public class CourseService {
         newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
                 .orElseThrow(CategoryNotFoundException::new));
 
-        courseRepository.save(newCourse);
+        Course savedCourse =  courseRepository.save(newCourse);
+
+        CourseResponse courseResponse = new CourseResponse();
+        courseResponse.setCourse((CourseDto) ObjectMapperUtil.mapToDTOSingle(savedCourse, CourseDto.class));
+        courseResponse.setMessage("Pomyślnie utworzono kurs");
+
+        return courseResponse;
     }
 
     public void editCourse(Long id, CourseRequest courseRequest) throws RuntimeException {

@@ -79,9 +79,7 @@ public class CourseController {
     @PostMapping(value = {"add"})
     public ResponseEntity<?> createCourse(@Valid @RequestBody CourseRequest courseRequest) {
 
-        courseService.addCourse(courseRequest);
-
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie utworzono kurs"));
+        return new ResponseEntity<>(courseService.addCourse(courseRequest), HttpStatus.CREATED);
     }
 
     @PatchMapping(value = {"edit/{id}"})
