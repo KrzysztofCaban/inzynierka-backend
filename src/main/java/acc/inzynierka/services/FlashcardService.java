@@ -33,7 +33,8 @@ public class FlashcardService {
     ImageRepository imageRepository;
 
     public List<FlashcardDto> getAllFlashcards(Long levelID) {
-        Level level = levelRepository.findById(levelID).get();
+        Level level = levelRepository.findById(levelID)
+                .orElseThrow(LevelNotFoundException::new);
         List<Flashcard> flashcardList = level.getFlashcards();
 
         return ObjectMapperUtil.mapToDTO(flashcardList, FlashcardDto.class);
