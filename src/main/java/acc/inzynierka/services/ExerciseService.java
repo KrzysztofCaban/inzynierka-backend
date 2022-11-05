@@ -1,5 +1,6 @@
 package acc.inzynierka.services;
 
+import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.exercise.ExerciseAlreadyExistsException;
 import acc.inzynierka.exception.exercise.ExerciseNotFoundException;
 import acc.inzynierka.exception.image.ImageNotFoundException;
@@ -68,15 +69,17 @@ public class ExerciseService {
         newExercise.setImage(imageRepository.findByName(exerciseRequest.getImageName())
                 .orElseThrow(ImageNotFoundException::new));
 
+        Exercise savedExercise = exerciseRepository.save(newExercise);
         ExerciseResponse exerciseResponse = new ExerciseResponse();
-        exerciseResponse.setExercise((ExerciseDto) ObjectMapperUtil.mapToDTOSingle(newExercise, FlashcardDto.class));
+        exerciseResponse.setExercise((ExerciseDto) ObjectMapperUtil.mapToDTOSingle(savedExercise, FlashcardDto.class));
         exerciseResponse.setMessage("Pomyślnie utworzono ćwiczenie");
 
         return exerciseResponse;
     }
 
     public void editExercise(Long levelID ,Long exerciseID, ExerciseRequest exerciseRequest){
-        Exercise exercise = exerciseRepository.findById(exerciseID).get();
+        Exercise exercise = exerciseRepository.findById(exerciseID)
+                .orElseThrow(ExerciseNotFoundException::new);
         if(!exercise.getExpression().equals(exercise.getExpression())){
             checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
         }

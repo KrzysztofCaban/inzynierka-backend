@@ -41,7 +41,7 @@ public class ExerciseController {
 
         exerciseService.deleteExerciseById(exerciseId);
 
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto ćwiczenie"));
 
     }
 
@@ -56,7 +56,7 @@ public class ExerciseController {
     @PatchMapping(value = {"edit/{exerciseID}"})
     public ResponseEntity<?> editExercise(@PathVariable Long levelID, @PathVariable Long exerciseID, @Valid @RequestBody ExerciseRequest exerciseRequest) {
         exerciseService.editExercise(levelID, exerciseID, exerciseRequest);
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kurs"));
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano ćwiczenie"));
     }
 }
 

@@ -1,5 +1,6 @@
 package acc.inzynierka.services;
 
+import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.exception.testQuestion.TestQuestionAlreadyExistsException;
@@ -56,23 +57,25 @@ public class TestQuestionService {
     public TestQuestionResponse addTestQuestion(Long levelID, TestQuestionRequest testQuestionRequest){
         checkIfTestAnswerIsUsed(levelID, testQuestionRequest);
 
-        TestQuestion testQuestion = new TestQuestion();
-        testQuestion.setQuestion(testQuestionRequest.getQuestion());
-        testQuestion.setAnswer(testQuestionRequest.getAnswer());
-        testQuestion.setLevel(levelRepository.findById(levelID)
+        TestQuestion newTestQuestion = new TestQuestion();
+        newTestQuestion.setQuestion(testQuestionRequest.getQuestion());
+        newTestQuestion.setAnswer(testQuestionRequest.getAnswer());
+        newTestQuestion.setLevel(levelRepository.findById(levelID)
                 .orElseThrow(LevelNotFoundException::new));
-        testQuestion.setImage(imageRepository.findByName(testQuestionRequest.getImageName())
+        newTestQuestion.setImage(imageRepository.findByName(testQuestionRequest.getImageName())
                 .orElseThrow(ImageNotFoundException::new));
 
+        TestQuestion savedTestQuestion = testQuestionRepository.save(newTestQuestion);
         TestQuestionResponse testQuestionResponse = new TestQuestionResponse();
-        testQuestionResponse.setTestQuestion((TestQuestionDto) ObjectMapperUtil.mapToDTOSingle(testQuestion, TestQuestionDto.class));
+        testQuestionResponse.setTestQuestion((TestQuestionDto) ObjectMapperUtil.mapToDTOSingle(newTestQuestion, TestQuestionDto.class));
         testQuestionResponse.setMessage("Pomyślnie utworzono pytanie testowe");
 
         return testQuestionResponse;
     }
 
     public void editTestQuestion(Long levelID ,Long testQuestionID, TestQuestionRequest testQuestionRequest){
-        TestQuestion testQuestion = testQuestionRepository.findById(testQuestionID).get();
+        TestQuestion testQuestion = testQuestionRepository.findById(testQuestionID)
+                .orElseThrow(TestQuestionNotFoundException::new);
         if(!testQuestion.getAnswer().equals(testQuestionRequest.getAnswer())){
             checkIfTestAnswerIsUsed(levelID, testQuestionRequest);
         }

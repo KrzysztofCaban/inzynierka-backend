@@ -39,7 +39,7 @@ public class FlashcardController {
 
         flashcardService.deleteFlashcardById(flashcardId);
 
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto fiszkę"));
 
     }
 
@@ -54,6 +54,6 @@ public class FlashcardController {
     @PatchMapping(value = {"edit/{flashcardID}"})
     public ResponseEntity<?> editFlashcard(@PathVariable Long levelID, @PathVariable Long flashcardID, @Valid @RequestBody FlashcardRequest flashcardRequest) {
         flashcardService.editFlashcard(levelID, flashcardID, flashcardRequest);
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kurs"));
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano fiszkę"));
     }
 }
