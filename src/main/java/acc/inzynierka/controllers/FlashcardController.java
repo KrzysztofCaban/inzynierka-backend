@@ -27,17 +27,17 @@ public class FlashcardController {
         );
     }
 
-    @GetMapping(value = {"{levelId}"})
+    @GetMapping(value = {"{flashcardId}"})
     public ResponseEntity<?> getFlashcard(@PathVariable Long flashcardId){
         return new ResponseEntity<>(
                 flashcardService.getFlashcardById(flashcardId),
                 HttpStatus.OK);
     }
 
-    @DeleteMapping(value = {"delete/{levelId}"})
-    public ResponseEntity<?> deleteFlashcardById(@PathVariable Long levelId) {
+    @DeleteMapping(value = {"delete/{flashcardId}"})
+    public ResponseEntity<?> deleteFlashcardById(@PathVariable Long flashcardId) {
 
-        flashcardService.deleteFlashcardById(levelId);
+        flashcardService.deleteFlashcardById(flashcardId);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
 

@@ -36,10 +36,10 @@ public class ExerciseController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping(value = {"delete/{levelId}"})
-    public ResponseEntity<?> deleteExerciseById(@PathVariable Long levelId) {
+    @DeleteMapping(value = {"delete/{exerciseId}"})
+    public ResponseEntity<?> deleteExerciseById(@PathVariable Long exerciseId) {
 
-        exerciseService.deleteExerciseById(levelId);
+        exerciseService.deleteExerciseById(exerciseId);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
 

@@ -34,7 +34,8 @@ public class ExerciseService {
     ImageRepository imageRepository;
 
     public List<FlashcardDto> getAllExercises(Long levelID) {
-        Level level = levelRepository.findById(levelID).get();
+        Level level = levelRepository.findById(levelID)
+                .orElseThrow(LevelNotFoundException::new);
         List<Flashcard> flashcardList = level.getFlashcards();
 
         return ObjectMapperUtil.mapToDTO(flashcardList, FlashcardDto.class);
