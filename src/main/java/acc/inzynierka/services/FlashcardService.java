@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseAlreadyExistsException;
 import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.flashcard.FlashcardAlreadyExistsException;
 import acc.inzynierka.exception.flashcard.FlashcardNotFoundException;
@@ -54,10 +53,7 @@ public class FlashcardService {
     }
 
     public FlashcardResponse addFlashcard(Long levelID, FlashcardRequest flashcardRequest){
-        Optional checkIfExists = flashcardRepository.findByExpOriginal(flashcardRequest.getExpOriginal());
-        if (checkIfExists.isPresent()) {
-            throw new CourseAlreadyExistsException();
-        }
+        checkIfFlashcardExpressionIsUsed(levelID, flashcardRequest);
 
         Flashcard newFlashcard = new Flashcard();
         newFlashcard.setExpOriginal(flashcardRequest.getExpOriginal());
@@ -70,15 +66,17 @@ public class FlashcardService {
 
         FlashcardResponse flashcardResponse = new FlashcardResponse();
         flashcardResponse.setFlashcard((FlashcardDto) ObjectMapperUtil.mapToDTOSingle(newFlashcard, FlashcardDto.class));
-        flashcardResponse.setMessage("Pomyślnie utworzono kurs");
+        flashcardResponse.setMessage("Pomyślnie utworzono fiszkę");
 
         return flashcardResponse;
     }
 
     public void editFlashcard(Long levelID, Long flashcardID, FlashcardRequest flashcardRequest){
-        Flashcard flashcard = flashcardRepository.findByExpOriginal(flashcardRequest.getExpOriginal()).get();
+        Flashcard flashcard = flashcardRepository.findById(flashcardID)
+                .orElseThrow(FlashcardAlreadyExistsException::new);
+
         if(!flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal())){
-            throw new FlashcardAlreadyExistsException();
+            checkIfFlashcardExpressionIsUsed(levelID, flashcardRequest);
         }
 
         flashcard.setExpOriginal(flashcardRequest.getExpOriginal());
@@ -89,6 +87,21 @@ public class FlashcardService {
 
 
         flashcardRepository.save(flashcard);
+    }
+
+    public void checkIfFlashcardExpressionIsUsed(Long levelID, FlashcardRequest flashcardRequest){
+        Level level = levelRepository.findById(levelID)
+                .orElseThrow(LevelNotFoundException::new);
+
+        List<Flashcard> flashcardList = level.getFlashcards();
+
+        Optional checkIfFlashcardExists = flashcardList.stream()
+                .filter(flashcard -> flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal()))
+                .findFirst();
+
+        if(checkIfFlashcardExists.isPresent()){
+            throw new FlashcardAlreadyExistsException();
+        }
     }
 
 

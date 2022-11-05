@@ -74,7 +74,7 @@ public class LevelService {
 
         LevelResponse levelResponse = new LevelResponse();
         levelResponse.setLevel((LevelDto) ObjectMapperUtil.mapToDTOSingle(savedLevel, LevelDto.class));
-        levelResponse.setMessage("Pomyślnie utworzono kurs");
+        levelResponse.setMessage("Pomyślnie utworzono poziom");
 
         return levelResponse;
     }
