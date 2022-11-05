@@ -24,4 +24,8 @@ public class Image {
 
     @Column(name = "name",nullable = false, unique = true)
     private String name;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private Category category;
+
 }

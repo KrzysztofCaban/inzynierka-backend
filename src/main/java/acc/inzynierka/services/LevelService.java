@@ -6,12 +6,9 @@ import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
-import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.modelsDTO.LevelDto;
 import acc.inzynierka.payload.request.LevelRequest;
-import acc.inzynierka.payload.response.CourseResponse;
 import acc.inzynierka.payload.response.LevelResponse;
-import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.repository.StatusRepository;
@@ -69,6 +66,9 @@ public class LevelService {
         level.setDifficulty(levelRequest.getDifficulty());
         level.setStatus(statusRepository.findByName(levelRequest.getStatusName())
                 .orElseThrow(StatusNotFoundException::new));
+        level.setCourse(courseRepository.findById(courseID)
+                .orElseThrow(CourseNotFoundException::new));
+
 
         Level savedLevel = levelRepository.save(level);
 
