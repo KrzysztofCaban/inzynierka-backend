@@ -1,5 +1,6 @@
 package acc.inzynierka.controllers;
 
+import acc.inzynierka.payload.request.ImageRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.BlobStorage.BlobStorageService;
 import acc.inzynierka.services.ImageService;
@@ -7,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,15 +26,16 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class ImageController {
 
-    private final BlobStorageService blobStorageService;
+
 
     @Autowired
     ImageService imageService;
 
-    @PostMapping("uploadImage")
-    public ResponseEntity<?> writeBlobFile(@RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
+    @PostMapping(value = "uploadImage", consumes = {MediaType.APPLICATION_JSON_VALUE,
+                                                    MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> writeBlobFile(@RequestPart("data") ImageRequest imageRequest, @RequestPart("image") MultipartFile image) throws IOException {
         return new ResponseEntity<>(
-                new MessageResponse(blobStorageService.uploadPicture(file).toURL().toString()),
+                imageService.uploadImage(imageRequest,image),
                 HttpStatus.OK);
     }
 
