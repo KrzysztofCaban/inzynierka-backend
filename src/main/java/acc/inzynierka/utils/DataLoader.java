@@ -137,7 +137,8 @@ public class DataLoader implements ApplicationRunner {
 
         Image image = new Image();
         image.setName("test Image");
-        image.setUrl("wrongTestURL");
+        image.setUrl("https://inzblobstorage.blob.core.windows.net/images/37073d54-81fe-4ae6-b623-1a0628903a07.jfif");
+        image.setCategory(category);
 
         imageRepository.save(image);
 

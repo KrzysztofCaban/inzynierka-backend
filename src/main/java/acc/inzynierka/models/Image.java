@@ -25,7 +25,8 @@ public class Image {
     @Column(name = "name",nullable = false, unique = true)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne(optional = false)
     private Category category;
 
 }
