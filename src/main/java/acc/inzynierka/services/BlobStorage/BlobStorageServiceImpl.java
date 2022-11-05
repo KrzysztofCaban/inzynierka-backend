@@ -1,8 +1,7 @@
 package acc.inzynierka.services.BlobStorage;
 
-import acc.inzynierka.exception.picture.UploadPictureFailedException;
+import acc.inzynierka.exception.image.UploadImageFailedException;
 import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +29,14 @@ public class BlobStorageServiceImpl implements BlobStorageService{
         try {
             String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
             String fileName = String.join(".", UUID.randomUUID().toString(), extension);
+
+
             CloudBlockBlob blob = cloudBlobContainer.getBlockBlobReference(fileName);
             blob.upload(multipartFile.getInputStream(), -1);
             uri = blob.getUri();
         } catch (URISyntaxException | StorageException | IOException e) {
-            throw new UploadPictureFailedException();
+            throw new UploadImageFailedException();
         }
-        return Optional.ofNullable(uri).orElseThrow(UploadPictureFailedException::new);
+        return Optional.ofNullable(uri).orElseThrow(UploadImageFailedException::new);
     }
 }
