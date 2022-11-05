@@ -42,7 +42,7 @@ public class LevelController {
 
         levelService.deleteLevelById(levelId);
 
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kurs"));
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto poziom"));
 
     }
 
@@ -57,7 +57,7 @@ public class LevelController {
     @PatchMapping(value = {"edit/{levelId}"})
     public ResponseEntity<?> editLevel(@PathVariable Long courseID, @PathVariable Long levelId, @Valid @RequestBody LevelRequest levelRequest) {
         levelService.editLevel(courseID, levelId, levelRequest);
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kurs"));
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano poziom"));
     }
 
 }

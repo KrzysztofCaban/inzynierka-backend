@@ -65,8 +65,9 @@ public class FlashcardService {
         newFlashcard.setImage(imageRepository.findByName(flashcardRequest.getImageName())
                 .orElseThrow(ImageNotFoundException::new));
 
+        Flashcard savedFlashcard = flashcardRepository.save(newFlashcard);
         FlashcardResponse flashcardResponse = new FlashcardResponse();
-        flashcardResponse.setFlashcard((FlashcardDto) ObjectMapperUtil.mapToDTOSingle(newFlashcard, FlashcardDto.class));
+        flashcardResponse.setFlashcard((FlashcardDto) ObjectMapperUtil.mapToDTOSingle(savedFlashcard, FlashcardDto.class));
         flashcardResponse.setMessage("Pomyślnie utworzono fiszkę");
 
         return flashcardResponse;
@@ -74,7 +75,7 @@ public class FlashcardService {
 
     public void editFlashcard(Long levelID, Long flashcardID, FlashcardRequest flashcardRequest){
         Flashcard flashcard = flashcardRepository.findById(flashcardID)
-                .orElseThrow(FlashcardAlreadyExistsException::new);
+                .orElseThrow(FlashcardNotFoundException::new);
 
         if(!flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal())){
             checkIfFlashcardExpressionIsUsed(levelID, flashcardRequest);
