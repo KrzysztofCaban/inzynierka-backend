@@ -19,9 +19,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class LevelRequest implements Serializable {
-    @NotEmpty(message = "Nazwa nie może być pusta")
+    @NotNull(message = "Nazwa nie może być pusta")
     private String name;
-    @NotEmpty(message = "Poziom trudności nie może być pusty")
+    @NotNull(message = "Poziom trudności nie może być pusty")
     private int difficulty;
     @NotNull(message = "Nazwa statusu nie może być pusta")
     private EStatus statusName;
