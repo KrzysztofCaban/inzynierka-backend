@@ -91,11 +91,14 @@ public class DataLoader implements ApplicationRunner {
         status.setName(EStatus.STATUS_ACTIVE);
         Status status2 = new Status();
         status2.setName(EStatus.STATUS_SUSPENDED);
+        Status status3 = new Status();
+        status3.setName(EStatus.STATUS_ARCHIVED);
 
         List<Status> statuses = new ArrayList<>();
 
         statuses.add(status);
         statuses.add(status2);
+        statuses.add(status3);
 
         statusRepository.saveAll(statuses);
     }
