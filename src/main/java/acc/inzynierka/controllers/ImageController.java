@@ -31,11 +31,11 @@ public class ImageController {
     @Autowired
     ImageService imageService;
 
-    @PostMapping(value = "uploadImage", consumes = {MediaType.APPLICATION_JSON_VALUE,
-                                                    MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> writeBlobFile(@RequestPart("data") ImageRequest imageRequest, @RequestPart("image") MultipartFile image) throws IOException {
+    @PostMapping(value = "uploadImage", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+//    @RequestPart("data") ImageRequest imageRequest, @RequestPart("image") MultipartFile image
+    public ResponseEntity<?> writeBlobFile(@ModelAttribute ImageRequest imageRequest) throws IOException {
         return new ResponseEntity<>(
-                imageService.uploadImage(imageRequest,image),
+                imageService.uploadImage(imageRequest, imageRequest.getImage()),
                 HttpStatus.OK);
     }
 

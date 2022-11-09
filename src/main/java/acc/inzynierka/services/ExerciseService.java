@@ -71,7 +71,7 @@ public class ExerciseService {
 
         Exercise savedExercise = exerciseRepository.save(newExercise);
         ExerciseResponse exerciseResponse = new ExerciseResponse();
-        exerciseResponse.setExercise((ExerciseDto) ObjectMapperUtil.mapToDTOSingle(savedExercise, FlashcardDto.class));
+        exerciseResponse.setExercise((ExerciseDto) ObjectMapperUtil.mapToDTOSingle(savedExercise, ExerciseDto.class));
         exerciseResponse.setMessage("Pomyślnie utworzono ćwiczenie");
 
         return exerciseResponse;
