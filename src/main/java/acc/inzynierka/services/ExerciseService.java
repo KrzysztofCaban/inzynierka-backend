@@ -34,18 +34,18 @@ public class ExerciseService {
     @Autowired
     ImageRepository imageRepository;
 
-    public List<FlashcardDto> getAllExercises(Long levelID) {
+    public List<ExerciseDto> getAllExercises(Long levelID) {
         Level level = levelRepository.findById(levelID)
                 .orElseThrow(LevelNotFoundException::new);
-        List<Flashcard> flashcardList = level.getFlashcards();
+        List<Exercise> exerciseList = level.getExercises();
 
-        return ObjectMapperUtil.mapToDTO(flashcardList, FlashcardDto.class);
+        return ObjectMapperUtil.mapToDTO(exerciseList, ExerciseDto.class);
     }
 
-    public FlashcardDto getExerciseById(Long exerciseID){
+    public ExerciseDto getExerciseById(Long exerciseID){
         Exercise exercise = exerciseRepository.findById(exerciseID).orElseThrow(ExerciseNotFoundException::new);
 
-        return (FlashcardDto) ObjectMapperUtil.mapToDTOSingle(exercise, ExerciseDto.class);
+        return (ExerciseDto) ObjectMapperUtil.mapToDTOSingle(exercise, ExerciseDto.class);
     }
 
     public void deleteExerciseById(Long id) {
