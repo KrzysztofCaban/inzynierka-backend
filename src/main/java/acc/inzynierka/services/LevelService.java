@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.level.LevelAlreadyExistsException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Course;
@@ -8,7 +7,6 @@ import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.LevelDto;
 import acc.inzynierka.payload.request.LevelRequest;
 import acc.inzynierka.payload.response.LevelResponse;
-import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +96,13 @@ public class LevelService {
         if(checkIfLevelExists.isPresent()){
             throw new LevelAlreadyExistsException();
         }
+    }
+
+    public Level findById(long id) {
+        Level level = levelRepository.findById(id)
+                .orElseThrow(LevelNotFoundException::new);
+
+        return level;
     }
 
 }

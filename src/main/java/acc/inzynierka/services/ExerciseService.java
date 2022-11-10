@@ -3,7 +3,6 @@ package acc.inzynierka.services;
 import acc.inzynierka.exception.exercise.ExerciseAlreadyExistsException;
 import acc.inzynierka.exception.exercise.ExerciseNotFoundException;
 import acc.inzynierka.exception.image.ImageNotFoundException;
-import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Exercise;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.ExerciseDto;
@@ -11,7 +10,6 @@ import acc.inzynierka.payload.request.ExerciseRequest;
 import acc.inzynierka.payload.response.ExerciseResponse;
 import acc.inzynierka.repository.ExerciseRepository;
 import acc.inzynierka.repository.ImageRepository;
-import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +21,16 @@ import java.util.Optional;
 public class ExerciseService {
 
     @Autowired
-    ExerciseRepository exerciseRepository;
+    private ExerciseRepository exerciseRepository;
 
     @Autowired
-    LevelRepository levelRepository;
+    private LevelService levelService;
 
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
 
     public List<ExerciseDto> getAllExercises(Long levelID) {
-        Level level = levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new);
+        Level level = levelService.findById(levelID);
         List<Exercise> exerciseList = level.getExercises();
 
         return ObjectMapperUtil.mapToDTO(exerciseList, ExerciseDto.class);
@@ -61,8 +58,7 @@ public class ExerciseService {
         newExercise.setBad_answer1(exerciseRequest.getBad_answer1());
         newExercise.setBad_answer2(exerciseRequest.getBad_answer2());
         newExercise.setBad_answer3(exerciseRequest.getBad_answer3());
-        newExercise.setLevel(levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new));
+        newExercise.setLevel(levelService.findById(levelID));
         newExercise.setImage(imageRepository.findByName(exerciseRequest.getImageName())
                 .orElseThrow(ImageNotFoundException::new));
 
@@ -93,8 +89,7 @@ public class ExerciseService {
     }
 
     public void checkIfExerciseExpressionIsUsed(Long levelID, ExerciseRequest exerciseRequest){
-        Level level = levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new);
+        Level level = levelService.findById(levelID);
 
         List<Exercise> exerciseList = level.getExercises();
 

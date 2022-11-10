@@ -4,7 +4,6 @@ import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.flashcard.FlashcardAlreadyExistsException;
 import acc.inzynierka.exception.flashcard.FlashcardNotFoundException;
 import acc.inzynierka.exception.image.ImageNotFoundException;
-import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Flashcard;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.FlashcardDto;
@@ -12,7 +11,6 @@ import acc.inzynierka.payload.request.FlashcardRequest;
 import acc.inzynierka.payload.response.FlashcardResponse;
 import acc.inzynierka.repository.FlashcardRepository;
 import acc.inzynierka.repository.ImageRepository;
-import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,17 +22,16 @@ import java.util.Optional;
 public class FlashcardService {
 
     @Autowired
-    FlashcardRepository flashcardRepository;
+    private FlashcardRepository flashcardRepository;
 
     @Autowired
-    LevelRepository levelRepository;
+    private LevelService levelService;
 
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
 
     public List<FlashcardDto> getAllFlashcards(Long levelID) {
-        Level level = levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new);
+        Level level = levelService.findById(levelID);
         List<Flashcard> flashcardList = level.getFlashcards();
 
         return ObjectMapperUtil.mapToDTO(flashcardList, FlashcardDto.class);
@@ -60,8 +57,7 @@ public class FlashcardService {
         newFlashcard.setExpOriginal(flashcardRequest.getExpOriginal());
         newFlashcard.setExpTranslation(flashcardRequest.getExpTranslation());
         newFlashcard.setExpDescription(flashcardRequest.getExpDescription());
-        newFlashcard.setLevel(levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new));
+        newFlashcard.setLevel(levelService.findById(levelID));
         newFlashcard.setImage(imageRepository.findByName(flashcardRequest.getImageName())
                 .orElseThrow(ImageNotFoundException::new));
 
@@ -92,8 +88,7 @@ public class FlashcardService {
     }
 
     public void checkIfFlashcardExpressionIsUsed(Long levelID, FlashcardRequest flashcardRequest){
-        Level level = levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new);
+        Level level = levelService.findById(levelID);
 
         List<Flashcard> flashcardList = level.getFlashcards();
 
