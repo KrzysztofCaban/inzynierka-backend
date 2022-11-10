@@ -35,14 +35,13 @@ public class ExerciseService {
     }
 
     public ExerciseDto getExerciseById(Long exerciseID) {
-        Exercise exercise = exerciseRepository.findById(exerciseID).orElseThrow(ExerciseNotFoundException::new);
+        Exercise exercise = findById(exerciseID);
 
         return (ExerciseDto) ObjectMapperUtil.mapToDTOSingle(exercise, ExerciseDto.class);
     }
 
     public void deleteExerciseById(Long id) {
-        Exercise exercise = exerciseRepository.findById(id)
-                .orElseThrow(ExerciseNotFoundException::new);
+        Exercise exercise = findById(id);
 
         exerciseRepository.delete(exercise);
     }
@@ -68,8 +67,7 @@ public class ExerciseService {
     }
 
     public void editExercise(Long levelID, Long exerciseID, ExerciseRequest exerciseRequest) {
-        Exercise exercise = exerciseRepository.findById(exerciseID)
-                .orElseThrow(ExerciseNotFoundException::new);
+        Exercise exercise = findById(exerciseID);
         if (!exercise.getExpression().equals(exercise.getExpression())) {
             checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
         }
@@ -96,5 +94,11 @@ public class ExerciseService {
         if (checkIfExerciseExists.isPresent()) {
             throw new ExerciseAlreadyExistsException();
         }
+    }
+
+    public Exercise findById(long id) {
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(ExerciseNotFoundException::new);
+
+        return exercise;
     }
 }
