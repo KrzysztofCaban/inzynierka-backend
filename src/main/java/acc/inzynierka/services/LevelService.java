@@ -36,7 +36,7 @@ public class LevelService {
     }
 
     public LevelDto getLevelById(Long id) {
-        Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
+        Level level = findById(id);
 
         LevelDto levelDto = (LevelDto) ObjectMapperUtil.mapToDTOSingle(level, LevelDto.class);
         levelDto.setExerciseNumber(level.getExercises().size());
@@ -47,7 +47,7 @@ public class LevelService {
     }
 
     public void deleteLevelById(Long id) {
-        Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
+        Level level = findById(id);
 
         levelRepository.delete(level);
     }
@@ -73,7 +73,7 @@ public class LevelService {
     }
 
     public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
-        Level level = levelRepository.findById(levelID).orElseThrow(LevelNotFoundException::new);
+        Level level = findById(levelID);
         if (!level.getName().equals(levelRequest.getName())) {
             checkIfLevelNameIsUsed(courseID, levelRequest);
         }
