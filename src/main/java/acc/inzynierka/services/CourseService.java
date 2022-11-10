@@ -43,21 +43,19 @@ public class CourseService {
 
 
     public CourseDto getCourseById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = findById(id);
 
         return (CourseDto) ObjectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }
 
     public void deleteCourseById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = findById(id);
 
         courseRepository.delete(course);
     }
 
     public CourseResponse addCourse(CourseRequest courseRequest) throws RuntimeException {
-        Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
+        Optional checkIfExists = findByNameOptional(courseRequest.getName());
         if (checkIfExists.isPresent()) {
             throw new CourseAlreadyExistsException();
         }
@@ -83,10 +81,9 @@ public class CourseService {
     }
 
     public void editCourse(Long id, CourseRequest courseRequest) throws RuntimeException {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = findById(id);
 
-        Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
+        Optional checkIfExists = findByNameOptional(courseRequest.getName());
         if (checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())) {
             throw new CourseAlreadyExistsException();
         }
@@ -105,5 +102,11 @@ public class CourseService {
                 .orElseThrow(CourseNotFoundException::new);
 
         return course;
+    }
+
+    public Optional findByNameOptional(String name) {
+        Optional courseOptional = courseRepository.findByName(name);
+
+        return courseOptional;
     }
 }
