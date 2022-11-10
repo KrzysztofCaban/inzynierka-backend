@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.flashcard.FlashcardAlreadyExistsException;
 import acc.inzynierka.exception.flashcard.FlashcardNotFoundException;
 import acc.inzynierka.models.Flashcard;
