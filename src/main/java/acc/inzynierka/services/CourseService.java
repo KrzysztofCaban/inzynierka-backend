@@ -4,6 +4,7 @@ import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.course.CourseAlreadyExistsException;
 import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.status.StatusNotFoundException;
+import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.modelsDTO.CourseDto;
@@ -31,7 +32,7 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private StatusRepository statusRepository;
@@ -73,7 +74,7 @@ public class CourseService {
         newCourse.setCreated(Timestamp.from(Instant.now()));
         newCourse.setModified(Timestamp.from(Instant.now()));
 
-        User author = userRepository.findById(UserUtil.getUser()).get();
+        User author = userService.findById(UserUtil.getUser());
         newCourse.setAuthor(author);
 
         newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName())
