@@ -53,4 +53,12 @@ public class CategoryService {
 
         categoryRepository.save(category);
     }
+
+
+    public Category findByName(String name){
+        Category category = categoryRepository.findByName(name)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        return category;
+    }
 }

@@ -1,12 +1,10 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.image.ImageAlreadyExistsException;
 import acc.inzynierka.models.Image;
 import acc.inzynierka.modelsDTO.ImageDto;
 import acc.inzynierka.payload.request.ImageRequest;
 import acc.inzynierka.payload.response.ImageResponse;
-import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.ImageRepository;
 import acc.inzynierka.services.BlobStorage.BlobStorageService;
 import acc.inzynierka.utils.ObjectMapperUtil;
@@ -25,10 +23,10 @@ public class ImageService {
 
     private final BlobStorageService blobStorageService;
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     public List<ImageDto> getAllImages(String category){
         List<Image> imageList = imageRepository.findByCategory(category);
@@ -43,8 +41,7 @@ public class ImageService {
         Image newImage = new Image();
         newImage.setName(imageRequest.getName());
         newImage.setUrl(blobStorageService.uploadPicture(image).toURL().toString());
-        newImage.setCategory(categoryRepository.findByName(imageRequest.getCategoryName())
-                .orElseThrow(CategoryNotFoundException::new));
+        newImage.setCategory(categoryService.findByName(imageRequest.getCategoryName()));
 
         Image savedImage = imageRepository.save(newImage);
 

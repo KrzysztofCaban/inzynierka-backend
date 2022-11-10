@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.course.CourseAlreadyExistsException;
 import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.models.Course;
@@ -8,7 +7,6 @@ import acc.inzynierka.models.User;
 import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.response.CourseResponse;
-import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
@@ -33,7 +31,7 @@ public class CourseService {
     private StatusService statusService;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     public List<CourseDto> getAllCourses() {
         return ObjectMapperUtil.mapToDTO(courseRepository.findAll(), CourseDto.class);
@@ -73,8 +71,7 @@ public class CourseService {
         newCourse.setAuthor(author);
 
         newCourse.setStatus(statusService.findByName(courseRequest.getStatusName()));
-        newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(CategoryNotFoundException::new));
+        newCourse.setCategory(categoryService.findByName(courseRequest.getCategoryName()));
 
         Course savedCourse =  courseRepository.save(newCourse);
 
@@ -98,8 +95,7 @@ public class CourseService {
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
         course.setStatus(statusService.findByName(courseRequest.getStatusName()));
-        course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(CategoryNotFoundException::new));
+        course.setCategory(categoryService.findByName(courseRequest.getCategoryName()));
 
         courseRepository.save(course);
     }
