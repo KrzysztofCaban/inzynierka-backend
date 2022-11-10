@@ -99,4 +99,11 @@ public class CourseService {
 
         courseRepository.save(course);
     }
+
+    public Course findById(long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(CourseNotFoundException::new);
+
+        return course;
+    }
 }

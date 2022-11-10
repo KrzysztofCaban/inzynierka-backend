@@ -24,14 +24,13 @@ public class LevelService {
     private LevelRepository levelRepository;
 
     @Autowired
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
     @Autowired
     private StatusService statusService;
 
     public List<LevelDto> getAllLevels(Long courseID){
-        Course course = courseRepository.findById(courseID)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
 
@@ -63,8 +62,7 @@ public class LevelService {
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
         level.setStatus(statusService.findByName(levelRequest.getStatusName()));
-        level.setCourse(courseRepository.findById(courseID)
-                .orElseThrow(CourseNotFoundException::new));
+        level.setCourse(courseService.findById(courseID));
 
 
         Level savedLevel = levelRepository.save(level);
@@ -89,8 +87,7 @@ public class LevelService {
     }
 
     public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest){
-        Course course = courseRepository.findById(courseID)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
 

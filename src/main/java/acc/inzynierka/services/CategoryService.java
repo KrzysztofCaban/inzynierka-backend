@@ -55,7 +55,7 @@ public class CategoryService {
     }
 
 
-    public Category findByName(String name){
+    public Category findByName(String name) {
         Category category = categoryRepository.findByName(name)
                 .orElseThrow(CategoryNotFoundException::new);
 
