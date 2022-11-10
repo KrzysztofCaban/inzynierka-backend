@@ -36,14 +36,13 @@ public class FlashcardService {
     }
 
     public FlashcardDto getFlashcardById(Long flashcardID) {
-        Flashcard flashcard = flashcardRepository.findById(flashcardID).orElseThrow(FlashcardNotFoundException::new);
+        Flashcard flashcard = findById(flashcardID);
 
         return (FlashcardDto) ObjectMapperUtil.mapToDTOSingle(flashcard, FlashcardDto.class);
     }
 
     public void deleteFlashcardById(Long id) {
-        Flashcard flashcard = flashcardRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Flashcard flashcard = findById(id);
 
         flashcardRepository.delete(flashcard);
     }
@@ -67,8 +66,7 @@ public class FlashcardService {
     }
 
     public void editFlashcard(Long levelID, Long flashcardID, FlashcardRequest flashcardRequest) {
-        Flashcard flashcard = flashcardRepository.findById(flashcardID)
-                .orElseThrow(FlashcardNotFoundException::new);
+        Flashcard flashcard = findById(flashcardID);
 
         if (!flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal())) {
             checkIfFlashcardExpressionIsUsed(levelID, flashcardRequest);
@@ -97,5 +95,12 @@ public class FlashcardService {
         }
     }
 
+
+    public Flashcard findById(long id) {
+        Flashcard flashcard = flashcardRepository.findById(id)
+                .orElseThrow(FlashcardNotFoundException::new);
+
+        return flashcard;
+    }
 
 }
