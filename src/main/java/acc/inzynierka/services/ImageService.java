@@ -29,16 +29,40 @@ public class ImageService {
     @Autowired
     private CategoryService categoryService;
 
-    public List<ImageDto> getAllImages(String category) {
+    public void checkIfExistsByName(String name) {
+        Optional checkIfExists = findByNameOptional(name);
+        if (checkIfExists.isPresent()) {
+            throw new ImageAlreadyExistsException();
+        }
+    }
+
+    public Image findByName(String name) {
+        Image image = imageRepository.findByName(name)
+                .orElseThrow(ImageNotFoundException::new);
+
+        return image;
+    }
+
+    public Optional findByNameOptional(String name) {
+        Optional imageOptional = imageRepository.findByName(name);
+
+        return imageOptional;
+    }
+
+    public List<Image> findByCategory(String category) {
         List<Image> imageList = imageRepository.findByCategory(category);
+
+        return imageList;
+    }
+
+    public List<ImageDto> getAllImages(String category) {
+        List<Image> imageList = findByCategory(category);
         return ObjectMapperUtil.mapToDTO(imageList, ImageDto.class);
     }
 
     public ImageResponse uploadImage(ImageRequest imageRequest, MultipartFile image) throws IOException {
-        Optional checkIfExists = imageRepository.findByName(imageRequest.getName());
-        if (checkIfExists.isPresent()) {
-            throw new ImageAlreadyExistsException();
-        }
+        checkIfExistsByName(imageRequest.getName());
+
         Image newImage = new Image();
         newImage.setName(imageRequest.getName());
         newImage.setUrl(blobStorageService.uploadPicture(image).toURL().toString());
@@ -53,12 +77,4 @@ public class ImageService {
         return imageResponse;
 
     }
-
-    public Image findByName(String name) {
-        Image image = imageRepository.findByName(name)
-                .orElseThrow(ImageNotFoundException::new);
-
-        return image;
-    }
-
 }
