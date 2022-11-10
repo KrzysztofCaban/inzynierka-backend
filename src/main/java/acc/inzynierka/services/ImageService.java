@@ -1,6 +1,7 @@
 package acc.inzynierka.services;
 
 import acc.inzynierka.exception.image.ImageAlreadyExistsException;
+import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.models.Image;
 import acc.inzynierka.modelsDTO.ImageDto;
 import acc.inzynierka.payload.request.ImageRequest;
@@ -51,6 +52,13 @@ public class ImageService {
 
         return imageResponse;
 
+    }
+
+    public Image findByName(String name){
+        Image image = imageRepository.findByName(name)
+                .orElseThrow(ImageNotFoundException::new);
+
+        return image;
     }
 
 }

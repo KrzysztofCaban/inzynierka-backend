@@ -28,7 +28,7 @@ public class FlashcardService {
     private LevelService levelService;
 
     @Autowired
-    private ImageRepository imageRepository;
+    private ImageService imageService;
 
     public List<FlashcardDto> getAllFlashcards(Long levelID) {
         Level level = levelService.findById(levelID);
@@ -58,8 +58,7 @@ public class FlashcardService {
         newFlashcard.setExpTranslation(flashcardRequest.getExpTranslation());
         newFlashcard.setExpDescription(flashcardRequest.getExpDescription());
         newFlashcard.setLevel(levelService.findById(levelID));
-        newFlashcard.setImage(imageRepository.findByName(flashcardRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        newFlashcard.setImage(imageService.findByName(flashcardRequest.getImageName()));
 
         Flashcard savedFlashcard = flashcardRepository.save(newFlashcard);
         FlashcardResponse flashcardResponse = new FlashcardResponse();
@@ -80,8 +79,7 @@ public class FlashcardService {
         flashcard.setExpOriginal(flashcardRequest.getExpOriginal());
         flashcard.setExpTranslation(flashcardRequest.getExpTranslation());
         flashcard.setExpDescription(flashcardRequest.getExpDescription());
-        flashcard.setImage(imageRepository.findByName(flashcardRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        flashcard.setImage(imageService.findByName(flashcardRequest.getImageName()));
 
 
         flashcardRepository.save(flashcard);

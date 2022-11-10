@@ -27,7 +27,7 @@ public class TestQuestionService {
     private LevelService levelService;
 
     @Autowired
-    private ImageRepository imageRepository;
+    private ImageService imageService;
 
     public List<TestQuestionDto> getAllTestQuestions(Long levelID) {
         Level level = levelService.findById(levelID);
@@ -57,8 +57,7 @@ public class TestQuestionService {
         newTestQuestion.setQuestion(testQuestionRequest.getQuestion());
         newTestQuestion.setAnswer(testQuestionRequest.getAnswer());
         newTestQuestion.setLevel(levelService.findById(levelID));
-        newTestQuestion.setImage(imageRepository.findByName(testQuestionRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        newTestQuestion.setImage(imageService.findByName(testQuestionRequest.getImageName()));
 
         TestQuestion savedTestQuestion = testQuestionRepository.save(newTestQuestion);
         TestQuestionResponse testQuestionResponse = new TestQuestionResponse();
@@ -77,8 +76,7 @@ public class TestQuestionService {
 
         testQuestion.setQuestion(testQuestionRequest.getQuestion());
         testQuestion.setAnswer(testQuestionRequest.getAnswer());
-        testQuestion.setImage(imageRepository.findByName(testQuestionRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        testQuestion.setImage(imageService.findByName(testQuestionRequest.getImageName()));
 
         testQuestionRepository.save(testQuestion);
     }

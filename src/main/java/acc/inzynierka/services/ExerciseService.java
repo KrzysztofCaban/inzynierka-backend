@@ -27,7 +27,7 @@ public class ExerciseService {
     private LevelService levelService;
 
     @Autowired
-    private ImageRepository imageRepository;
+    private ImageService imageService;
 
     public List<ExerciseDto> getAllExercises(Long levelID) {
         Level level = levelService.findById(levelID);
@@ -59,8 +59,7 @@ public class ExerciseService {
         newExercise.setBad_answer2(exerciseRequest.getBad_answer2());
         newExercise.setBad_answer3(exerciseRequest.getBad_answer3());
         newExercise.setLevel(levelService.findById(levelID));
-        newExercise.setImage(imageRepository.findByName(exerciseRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        newExercise.setImage(imageService.findByName(exerciseRequest.getImageName()));
 
         Exercise savedExercise = exerciseRepository.save(newExercise);
         ExerciseResponse exerciseResponse = new ExerciseResponse();
@@ -82,8 +81,7 @@ public class ExerciseService {
         exercise.setBad_answer1(exerciseRequest.getBad_answer1());
         exercise.setBad_answer2(exerciseRequest.getBad_answer2());
         exercise.setBad_answer3(exerciseRequest.getBad_answer3());
-        exercise.setImage(imageRepository.findByName(exerciseRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        exercise.setImage(imageService.findByName(exerciseRequest.getImageName()));
 
         exerciseRepository.save(exercise);
     }
