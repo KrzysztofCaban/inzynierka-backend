@@ -2,8 +2,6 @@ package acc.inzynierka.services;
 
 import acc.inzynierka.exception.category.CategoryAlreadyExistsException;
 import acc.inzynierka.exception.category.CategoryNotFoundException;
-import acc.inzynierka.exception.course.CourseAlreadyExistsException;
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.models.Category;
 import acc.inzynierka.modelsDTO.CategoryDto;
 import acc.inzynierka.payload.request.CategoryRequest;

@@ -1,7 +1,4 @@
 package acc.inzynierka.security.services;
-import java.time.Instant;
-import java.util.Optional;
-import java.util.UUID;
 
 import acc.inzynierka.exception.TokenRefreshException;
 import acc.inzynierka.models.RefreshToken;
@@ -11,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RefreshTokenService {

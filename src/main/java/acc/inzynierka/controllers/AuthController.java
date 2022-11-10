@@ -1,16 +1,10 @@
 package acc.inzynierka.controllers;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
 
 import acc.inzynierka.exception.TokenRefreshException;
 import acc.inzynierka.models.RefreshToken;
-import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.models.Role;
 import acc.inzynierka.models.User;
+import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.payload.request.LoginRequest;
 import acc.inzynierka.payload.request.SignupRequest;
 import acc.inzynierka.payload.request.TokenRefreshRequest;
@@ -29,11 +23,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)

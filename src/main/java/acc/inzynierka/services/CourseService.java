@@ -3,18 +3,13 @@ package acc.inzynierka.services;
 import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.course.CourseAlreadyExistsException;
 import acc.inzynierka.exception.course.CourseNotFoundException;
-import acc.inzynierka.exception.status.StatusNotFoundException;
-import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.response.CourseResponse;
-import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
-import acc.inzynierka.repository.StatusRepository;
-import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +30,7 @@ public class CourseService {
     private UserService userService;
 
     @Autowired
-    private StatusRepository statusRepository;
+    private StatusService statusService;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -77,8 +72,7 @@ public class CourseService {
         User author = userService.findById(UserUtil.getUser());
         newCourse.setAuthor(author);
 
-        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName())
-                .orElseThrow(StatusNotFoundException::new));
+        newCourse.setStatus(statusService.findByName(courseRequest.getStatusName()));
         newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
                 .orElseThrow(CategoryNotFoundException::new));
 
@@ -103,8 +97,7 @@ public class CourseService {
         course.setName(courseRequest.getName());
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
-        course.setStatus(statusRepository.findByName(courseRequest.getStatusName())
-                .orElseThrow(StatusNotFoundException::new));
+        course.setStatus(statusService.findByName(courseRequest.getStatusName()));
         course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
                 .orElseThrow(CategoryNotFoundException::new));
 

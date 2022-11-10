@@ -1,10 +1,8 @@
 package acc.inzynierka.controllers;
 
 import acc.inzynierka.payload.request.ExerciseRequest;
-import acc.inzynierka.payload.request.FlashcardRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.ExerciseService;
-import acc.inzynierka.services.FlashcardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

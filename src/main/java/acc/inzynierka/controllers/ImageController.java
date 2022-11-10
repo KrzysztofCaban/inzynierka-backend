@@ -1,23 +1,16 @@
 package acc.inzynierka.controllers;
 
 import acc.inzynierka.payload.request.ImageRequest;
-import acc.inzynierka.payload.response.MessageResponse;
-import acc.inzynierka.services.BlobStorage.BlobStorageService;
 import acc.inzynierka.services.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.URI;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

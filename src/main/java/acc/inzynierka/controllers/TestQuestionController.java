@@ -1,6 +1,5 @@
 package acc.inzynierka.controllers;
 
-import acc.inzynierka.payload.request.ExerciseRequest;
 import acc.inzynierka.payload.request.TestQuestionRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.TestQuestionService;

@@ -1,5 +1,8 @@
 package acc.inzynierka.services;
 
+import acc.inzynierka.exception.status.StatusNotFoundException;
+import acc.inzynierka.models.Status;
+import acc.inzynierka.models.enums.EStatus;
 import acc.inzynierka.modelsDTO.StatusDto;
 import acc.inzynierka.repository.StatusRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
@@ -16,5 +19,13 @@ public class StatusService {
 
     public List<StatusDto> getStatuses(){
         return ObjectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class);
+    }
+
+
+    public Status findByName(EStatus name){
+        Status status = statusRepository.findByName(name)
+                .orElseThrow(StatusNotFoundException::new);
+
+        return status;
     }
 }

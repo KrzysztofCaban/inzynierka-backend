@@ -1,12 +1,12 @@
 package acc.inzynierka.models;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
-
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity(name = "refreshtoken")
 @Getter

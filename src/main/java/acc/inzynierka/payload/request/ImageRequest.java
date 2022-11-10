@@ -1,7 +1,6 @@
 package acc.inzynierka.payload.request;
 
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;

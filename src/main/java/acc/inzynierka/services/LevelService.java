@@ -3,7 +3,6 @@ package acc.inzynierka.services;
 import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.level.LevelAlreadyExistsException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
-import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.LevelDto;
@@ -11,7 +10,6 @@ import acc.inzynierka.payload.request.LevelRequest;
 import acc.inzynierka.payload.response.LevelResponse;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.LevelRepository;
-import acc.inzynierka.repository.StatusRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +21,13 @@ import java.util.Optional;
 public class LevelService {
 
     @Autowired
-    LevelRepository levelRepository;
+    private LevelRepository levelRepository;
 
     @Autowired
-    CourseRepository courseRepository;
+    private CourseRepository courseRepository;
 
     @Autowired
-    StatusRepository statusRepository;
+    private StatusService statusService;
 
     public List<LevelDto> getAllLevels(Long courseID){
         Course course = courseRepository.findById(courseID)
@@ -64,8 +62,7 @@ public class LevelService {
 
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
-        level.setStatus(statusRepository.findByName(levelRequest.getStatusName())
-                .orElseThrow(StatusNotFoundException::new));
+        level.setStatus(statusService.findByName(levelRequest.getStatusName()));
         level.setCourse(courseRepository.findById(courseID)
                 .orElseThrow(CourseNotFoundException::new));
 
@@ -86,8 +83,7 @@ public class LevelService {
         }
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
-        level.setStatus(statusRepository.findByName(levelRequest.getStatusName()).
-                orElseThrow(StatusNotFoundException::new));
+        level.setStatus(statusService.findByName(levelRequest.getStatusName()));
 
         levelRepository.save(level);
     }

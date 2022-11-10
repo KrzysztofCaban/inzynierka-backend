@@ -1,15 +1,12 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.exercise.ExerciseAlreadyExistsException;
 import acc.inzynierka.exception.exercise.ExerciseNotFoundException;
 import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Exercise;
-import acc.inzynierka.models.Flashcard;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.ExerciseDto;
-import acc.inzynierka.modelsDTO.FlashcardDto;
 import acc.inzynierka.payload.request.ExerciseRequest;
 import acc.inzynierka.payload.response.ExerciseResponse;
 import acc.inzynierka.repository.ExerciseRepository;

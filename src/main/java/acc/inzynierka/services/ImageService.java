@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.category.CategoryAlreadyExistsException;
 import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.image.ImageAlreadyExistsException;
 import acc.inzynierka.models.Image;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
 

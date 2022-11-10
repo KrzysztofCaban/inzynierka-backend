@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.exception.testQuestion.TestQuestionAlreadyExistsException;
