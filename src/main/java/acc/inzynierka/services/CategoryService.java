@@ -25,7 +25,7 @@ public class CategoryService {
     }
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
-        Optional checkIfExists = categoryRepository.findByName(categoryRequest.getName());
+        Optional checkIfExists = findByNameOptional(categoryRequest.getName());
         if (checkIfExists.isPresent()) {
             throw new CategoryAlreadyExistsException();
         }
@@ -41,10 +41,9 @@ public class CategoryService {
     }
 
     public void editCategory(Long categoryID, CategoryRequest categoryRequest) {
-        Category category = categoryRepository.findById(categoryID)
-                .orElseThrow(CategoryNotFoundException::new);
+        Category category = findById(categoryID);
 
-        Optional checkIfExists = categoryRepository.findByName(categoryRequest.getName());
+        Optional checkIfExists = findByNameOptional(categoryRequest.getName());
         if (checkIfExists.isPresent() && !category.getName().equals(categoryRequest.getName())) {
             throw new CategoryAlreadyExistsException();
         }
@@ -57,6 +56,19 @@ public class CategoryService {
 
     public Category findByName(String name) {
         Category category = categoryRepository.findByName(name)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        return category;
+    }
+
+    public Optional findByNameOptional(String name) {
+        Optional category = categoryRepository.findByName(name);
+
+        return category;
+    }
+
+    public Category findById(Long id) {
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(CategoryNotFoundException::new);
 
         return category;
