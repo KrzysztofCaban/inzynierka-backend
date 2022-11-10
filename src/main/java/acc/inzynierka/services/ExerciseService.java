@@ -2,14 +2,12 @@ package acc.inzynierka.services;
 
 import acc.inzynierka.exception.exercise.ExerciseAlreadyExistsException;
 import acc.inzynierka.exception.exercise.ExerciseNotFoundException;
-import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.models.Exercise;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.ExerciseDto;
 import acc.inzynierka.payload.request.ExerciseRequest;
 import acc.inzynierka.payload.response.ExerciseResponse;
 import acc.inzynierka.repository.ExerciseRepository;
-import acc.inzynierka.repository.ImageRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +34,7 @@ public class ExerciseService {
         return ObjectMapperUtil.mapToDTO(exerciseList, ExerciseDto.class);
     }
 
-    public ExerciseDto getExerciseById(Long exerciseID){
+    public ExerciseDto getExerciseById(Long exerciseID) {
         Exercise exercise = exerciseRepository.findById(exerciseID).orElseThrow(ExerciseNotFoundException::new);
 
         return (ExerciseDto) ObjectMapperUtil.mapToDTOSingle(exercise, ExerciseDto.class);
@@ -49,7 +47,7 @@ public class ExerciseService {
         exerciseRepository.delete(exercise);
     }
 
-    public ExerciseResponse addExercise(Long levelID, ExerciseRequest exerciseRequest){
+    public ExerciseResponse addExercise(Long levelID, ExerciseRequest exerciseRequest) {
         checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
 
         Exercise newExercise = new Exercise();
@@ -69,10 +67,10 @@ public class ExerciseService {
         return exerciseResponse;
     }
 
-    public void editExercise(Long levelID ,Long exerciseID, ExerciseRequest exerciseRequest){
+    public void editExercise(Long levelID, Long exerciseID, ExerciseRequest exerciseRequest) {
         Exercise exercise = exerciseRepository.findById(exerciseID)
                 .orElseThrow(ExerciseNotFoundException::new);
-        if(!exercise.getExpression().equals(exercise.getExpression())){
+        if (!exercise.getExpression().equals(exercise.getExpression())) {
             checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
         }
 
@@ -86,7 +84,7 @@ public class ExerciseService {
         exerciseRepository.save(exercise);
     }
 
-    public void checkIfExerciseExpressionIsUsed(Long levelID, ExerciseRequest exerciseRequest){
+    public void checkIfExerciseExpressionIsUsed(Long levelID, ExerciseRequest exerciseRequest) {
         Level level = levelService.findById(levelID);
 
         List<Exercise> exerciseList = level.getExercises();
@@ -95,7 +93,7 @@ public class ExerciseService {
                 .filter(exercise -> exercise.getExpression().equals(exerciseRequest.getExpression()))
                 .findFirst();
 
-        if(checkIfExerciseExists.isPresent()){
+        if (checkIfExerciseExists.isPresent()) {
             throw new ExerciseAlreadyExistsException();
         }
     }

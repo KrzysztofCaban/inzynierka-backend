@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CourseDto{
+public class CourseDto {
     private Long id;
     private String name;
     private String description;

@@ -1,6 +1,5 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.exception.testQuestion.TestQuestionAlreadyExistsException;
 import acc.inzynierka.exception.testQuestion.TestQuestionNotFoundException;
 import acc.inzynierka.models.Level;
@@ -8,7 +7,6 @@ import acc.inzynierka.models.TestQuestion;
 import acc.inzynierka.modelsDTO.TestQuestionDto;
 import acc.inzynierka.payload.request.TestQuestionRequest;
 import acc.inzynierka.payload.response.TestQuestionResponse;
-import acc.inzynierka.repository.ImageRepository;
 import acc.inzynierka.repository.TestQuestionRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class TestQuestionService {
         return ObjectMapperUtil.mapToDTO(testQuestionList, TestQuestionDto.class);
     }
 
-    public TestQuestionDto getTestQuestionById(Long testQuestionID){
+    public TestQuestionDto getTestQuestionById(Long testQuestionID) {
         TestQuestion testQuestion = testQuestionRepository.findById(testQuestionID)
                 .orElseThrow(TestQuestionNotFoundException::new);
 
@@ -50,7 +48,7 @@ public class TestQuestionService {
         testQuestionRepository.delete(testQuestion);
     }
 
-    public TestQuestionResponse addTestQuestion(Long levelID, TestQuestionRequest testQuestionRequest){
+    public TestQuestionResponse addTestQuestion(Long levelID, TestQuestionRequest testQuestionRequest) {
         checkIfTestAnswerIsUsed(levelID, testQuestionRequest);
 
         TestQuestion newTestQuestion = new TestQuestion();
@@ -67,10 +65,10 @@ public class TestQuestionService {
         return testQuestionResponse;
     }
 
-    public void editTestQuestion(Long levelID ,Long testQuestionID, TestQuestionRequest testQuestionRequest){
+    public void editTestQuestion(Long levelID, Long testQuestionID, TestQuestionRequest testQuestionRequest) {
         TestQuestion testQuestion = testQuestionRepository.findById(testQuestionID)
                 .orElseThrow(TestQuestionNotFoundException::new);
-        if(!testQuestion.getAnswer().equals(testQuestionRequest.getAnswer())){
+        if (!testQuestion.getAnswer().equals(testQuestionRequest.getAnswer())) {
             checkIfTestAnswerIsUsed(levelID, testQuestionRequest);
         }
 
@@ -81,7 +79,7 @@ public class TestQuestionService {
         testQuestionRepository.save(testQuestion);
     }
 
-    public void checkIfTestAnswerIsUsed(Long levelID, TestQuestionRequest testQuestionRequest){
+    public void checkIfTestAnswerIsUsed(Long levelID, TestQuestionRequest testQuestionRequest) {
         Level level = levelService.findById(levelID);
         List<TestQuestion> testQuestionList = level.getTestQuestions();
 
@@ -89,7 +87,7 @@ public class TestQuestionService {
                 .filter(exercise -> exercise.getAnswer().equals(testQuestionRequest.getAnswer()))
                 .findFirst();
 
-        if(checkIfExerciseExists.isPresent()){
+        if (checkIfExerciseExists.isPresent()) {
             throw new TestQuestionAlreadyExistsException();
         }
     }

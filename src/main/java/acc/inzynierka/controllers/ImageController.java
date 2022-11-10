@@ -20,11 +20,10 @@ import java.io.IOException;
 public class ImageController {
 
 
-
     @Autowired
     ImageService imageService;
 
-    @PostMapping(value = "uploadImage", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "uploadImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 //    @RequestPart("data") ImageRequest imageRequest, @RequestPart("image") MultipartFile image
     public ResponseEntity<?> writeBlobFile(@ModelAttribute ImageRequest imageRequest) throws IOException {
         return new ResponseEntity<>(
@@ -33,10 +32,10 @@ public class ImageController {
     }
 
     @GetMapping("{categoryName}")
-    public ResponseEntity<?> getAllImagesByCategory(@PathVariable String categoryName){
+    public ResponseEntity<?> getAllImagesByCategory(@PathVariable String categoryName) {
         return new ResponseEntity<>(
-            imageService.getAllImages(categoryName),
-            HttpStatus.OK
+                imageService.getAllImages(categoryName),
+                HttpStatus.OK
         );
     }
 }

@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class CategoryRequest implements Serializable{
+public class CategoryRequest implements Serializable {
     @NotEmpty(message = "Nazwa kategorii nie może być pusta")
     private String name;
 }

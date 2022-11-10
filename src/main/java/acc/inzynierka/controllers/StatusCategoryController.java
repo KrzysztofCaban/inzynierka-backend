@@ -27,18 +27,19 @@ public class StatusCategoryController {
     CategoryService categoryService;
 
     @GetMapping(value = "statuses")
-    public ResponseEntity<?> getStatuses(){
+    public ResponseEntity<?> getStatuses() {
         List<StatusDto> statusDtoList = statusService.getStatuses();
         return new ResponseEntity<>(statusDtoList, HttpStatus.OK);
     }
 
     @GetMapping(value = "categories")
-    public ResponseEntity<?> getCategories(){
+    public ResponseEntity<?> getCategories() {
         List<CategoryDto> categoryDtoList = categoryService.getCategories();
         return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
     }
+
     @PostMapping(value = "addCategory")
-    public ResponseEntity<?> addCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<?> addCategory(@RequestBody CategoryRequest categoryRequest) {
         return new ResponseEntity<>(
                 categoryService.addCategory(categoryRequest),
                 HttpStatus.OK
@@ -46,8 +47,8 @@ public class StatusCategoryController {
     }
 
     @PostMapping(value = "editCategory/{categoryID}")
-    public ResponseEntity<?> editCategory(@PathVariable Long categoryID,@RequestBody CategoryRequest categoryRequest){
-        categoryService.editCategory(categoryID,categoryRequest);
+    public ResponseEntity<?> editCategory(@PathVariable Long categoryID, @RequestBody CategoryRequest categoryRequest) {
+        categoryService.editCategory(categoryID, categoryRequest);
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kategorię"));
     }
 

@@ -20,7 +20,7 @@ public class ExerciseController {
     ExerciseService exerciseService;
 
     @GetMapping(value = {"all"})
-    public ResponseEntity<?> getAllExercises(@PathVariable Long levelID){
+    public ResponseEntity<?> getAllExercises(@PathVariable Long levelID) {
         return new ResponseEntity<>(
                 exerciseService.getAllExercises(levelID),
                 HttpStatus.OK
@@ -28,7 +28,7 @@ public class ExerciseController {
     }
 
     @GetMapping(value = {"{exerciseId}"})
-    public ResponseEntity<?> getExercise(@PathVariable Long exerciseId){
+    public ResponseEntity<?> getExercise(@PathVariable Long exerciseId) {
         return new ResponseEntity<>(
                 exerciseService.getExerciseById(exerciseId),
                 HttpStatus.OK);
@@ -44,11 +44,10 @@ public class ExerciseController {
     }
 
     @PostMapping(value = {"add"})
-    public ResponseEntity<?> createExercise(@PathVariable Long levelID , @Valid @RequestBody ExerciseRequest exerciseRequest) {
+    public ResponseEntity<?> createExercise(@PathVariable Long levelID, @Valid @RequestBody ExerciseRequest exerciseRequest) {
 
-        return new ResponseEntity<>(exerciseService.addExercise(levelID ,exerciseRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(exerciseService.addExercise(levelID, exerciseRequest), HttpStatus.CREATED);
     }
-
 
 
     @PatchMapping(value = {"edit/{exerciseID}"})

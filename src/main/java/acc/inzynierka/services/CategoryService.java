@@ -20,11 +20,11 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public List<CategoryDto> getCategories(){
+    public List<CategoryDto> getCategories() {
         return ObjectMapperUtil.mapToDTO(categoryRepository.findAll(), CategoryDto.class);
     }
 
-    public CategoryResponse addCategory(CategoryRequest categoryRequest){
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
         Optional checkIfExists = categoryRepository.findByName(categoryRequest.getName());
         if (checkIfExists.isPresent()) {
             throw new CategoryAlreadyExistsException();
@@ -40,7 +40,7 @@ public class CategoryService {
         return categoryResponse;
     }
 
-    public void editCategory(Long categoryID, CategoryRequest categoryRequest){
+    public void editCategory(Long categoryID, CategoryRequest categoryRequest) {
         Category category = categoryRepository.findById(categoryID)
                 .orElseThrow(CategoryNotFoundException::new);
 

@@ -20,7 +20,7 @@ public class FlashcardController {
     FlashcardService flashcardService;
 
     @GetMapping(value = {"all"})
-    public ResponseEntity<?> getAllFlashcards(@PathVariable Long levelID){
+    public ResponseEntity<?> getAllFlashcards(@PathVariable Long levelID) {
         return new ResponseEntity<>(
                 flashcardService.getAllFlashcards(levelID),
                 HttpStatus.OK
@@ -28,7 +28,7 @@ public class FlashcardController {
     }
 
     @GetMapping(value = {"{flashcardId}"})
-    public ResponseEntity<?> getFlashcard(@PathVariable Long flashcardId){
+    public ResponseEntity<?> getFlashcard(@PathVariable Long flashcardId) {
         return new ResponseEntity<>(
                 flashcardService.getFlashcardById(flashcardId),
                 HttpStatus.OK);
@@ -44,11 +44,10 @@ public class FlashcardController {
     }
 
     @PostMapping(value = {"add"})
-    public ResponseEntity<?> createFlashcard(@PathVariable Long levelID , @Valid @RequestBody FlashcardRequest flashcardRequest) {
+    public ResponseEntity<?> createFlashcard(@PathVariable Long levelID, @Valid @RequestBody FlashcardRequest flashcardRequest) {
 
-        return new ResponseEntity<>(flashcardService.addFlashcard(levelID ,flashcardRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(flashcardService.addFlashcard(levelID, flashcardRequest), HttpStatus.CREATED);
     }
-
 
 
     @PatchMapping(value = {"edit/{flashcardID}"})

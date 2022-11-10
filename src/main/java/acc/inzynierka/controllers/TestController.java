@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping("test")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN ')")
-    public String test(@AuthenticationPrincipal UserDetailsImpl user){
+    public String test(@AuthenticationPrincipal UserDetailsImpl user) {
         return user.getLogin();
     }
 }

@@ -27,7 +27,7 @@ public class LevelService {
     @Autowired
     private StatusService statusService;
 
-    public List<LevelDto> getAllLevels(Long courseID){
+    public List<LevelDto> getAllLevels(Long courseID) {
         Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
@@ -35,7 +35,7 @@ public class LevelService {
         return ObjectMapperUtil.mapToDTO(levelList, LevelDto.class);
     }
 
-    public LevelDto getLevelById(Long id){
+    public LevelDto getLevelById(Long id) {
         Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
 
         LevelDto levelDto = (LevelDto) ObjectMapperUtil.mapToDTOSingle(level, LevelDto.class);
@@ -46,13 +46,13 @@ public class LevelService {
         return levelDto;
     }
 
-    public void deleteLevelById(Long id){
+    public void deleteLevelById(Long id) {
         Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
 
         levelRepository.delete(level);
     }
 
-    public LevelResponse addLevel(Long courseID, LevelRequest levelRequest){
+    public LevelResponse addLevel(Long courseID, LevelRequest levelRequest) {
         checkIfLevelNameIsUsed(courseID, levelRequest);
 
         Level level = new Level();
@@ -72,9 +72,9 @@ public class LevelService {
         return levelResponse;
     }
 
-    public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest){
+    public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
         Level level = levelRepository.findById(levelID).orElseThrow(LevelNotFoundException::new);
-        if(!level.getName().equals(levelRequest.getName())){
+        if (!level.getName().equals(levelRequest.getName())) {
             checkIfLevelNameIsUsed(courseID, levelRequest);
         }
         level.setName(levelRequest.getName());
@@ -84,7 +84,7 @@ public class LevelService {
         levelRepository.save(level);
     }
 
-    public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest){
+    public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest) {
         Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
@@ -93,7 +93,7 @@ public class LevelService {
                 .filter(level -> level.getName().equals(levelRequest.getName()))
                 .findFirst();
 
-        if(checkIfLevelExists.isPresent()){
+        if (checkIfLevelExists.isPresent()) {
             throw new LevelAlreadyExistsException();
         }
     }

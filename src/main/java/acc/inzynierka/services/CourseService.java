@@ -73,7 +73,7 @@ public class CourseService {
         newCourse.setStatus(statusService.findByName(courseRequest.getStatusName()));
         newCourse.setCategory(categoryService.findByName(courseRequest.getCategoryName()));
 
-        Course savedCourse =  courseRepository.save(newCourse);
+        Course savedCourse = courseRepository.save(newCourse);
 
         CourseResponse courseResponse = new CourseResponse();
         courseResponse.setCourse((CourseDto) ObjectMapperUtil.mapToDTOSingle(savedCourse, CourseDto.class));

@@ -14,7 +14,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public void editUser(Long id, UserRequest userRequest){
+    public void editUser(Long id, UserRequest userRequest) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
         user.setPassword(userRequest.getPassword());
@@ -25,14 +25,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
         userRepository.delete(user);
     }
 
 
-    public User findById(long id){
+    public User findById(long id) {
         User user = userRepository.findById(UserUtil.getUser()).orElseThrow(UserNotFoundException::new);
         return user;
     }

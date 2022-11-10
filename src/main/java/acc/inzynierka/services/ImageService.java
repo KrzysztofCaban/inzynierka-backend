@@ -29,7 +29,7 @@ public class ImageService {
     @Autowired
     private CategoryService categoryService;
 
-    public List<ImageDto> getAllImages(String category){
+    public List<ImageDto> getAllImages(String category) {
         List<Image> imageList = imageRepository.findByCategory(category);
         return ObjectMapperUtil.mapToDTO(imageList, ImageDto.class);
     }
@@ -54,7 +54,7 @@ public class ImageService {
 
     }
 
-    public Image findByName(String name){
+    public Image findByName(String name) {
         Image image = imageRepository.findByName(name)
                 .orElseThrow(ImageNotFoundException::new);
 

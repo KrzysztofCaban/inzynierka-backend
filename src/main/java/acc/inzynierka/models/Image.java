@@ -22,7 +22,7 @@ public class Image {
     @Column(name = "url", nullable = false, unique = true)
     private String url;
 
-    @Column(name = "name",nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @JoinColumn(name = "category_id", nullable = false)

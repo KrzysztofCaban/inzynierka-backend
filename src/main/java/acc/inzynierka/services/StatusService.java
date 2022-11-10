@@ -17,12 +17,12 @@ public class StatusService {
     @Autowired
     StatusRepository statusRepository;
 
-    public List<StatusDto> getStatuses(){
+    public List<StatusDto> getStatuses() {
         return ObjectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class);
     }
 
 
-    public Status findByName(EStatus name){
+    public Status findByName(EStatus name) {
         Status status = statusRepository.findByName(name)
                 .orElseThrow(StatusNotFoundException::new);
 
