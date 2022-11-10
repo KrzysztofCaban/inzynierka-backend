@@ -15,7 +15,7 @@ public class UserService {
     UserRepository userRepository;
 
     public void editUser(Long id, UserRequest userRequest) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = findById(id);
 
         user.setPassword(userRequest.getPassword());
         user.setActive(userRequest.isActive());
@@ -26,7 +26,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = findById(id);
 
         userRepository.delete(user);
     }
