@@ -1,6 +1,5 @@
 package acc.inzynierka.payload.response;
 
-import acc.inzynierka.modelsDTO.ExerciseDto;
 import acc.inzynierka.modelsDTO.TestQuestionDto;
 import lombok.Data;
 

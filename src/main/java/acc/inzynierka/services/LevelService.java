@@ -1,17 +1,13 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.level.LevelAlreadyExistsException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
-import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.LevelDto;
 import acc.inzynierka.payload.request.LevelRequest;
 import acc.inzynierka.payload.response.LevelResponse;
-import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.LevelRepository;
-import acc.inzynierka.repository.StatusRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,25 +19,24 @@ import java.util.Optional;
 public class LevelService {
 
     @Autowired
-    LevelRepository levelRepository;
+    private LevelRepository levelRepository;
 
     @Autowired
-    CourseRepository courseRepository;
+    private CourseService courseService;
 
     @Autowired
-    StatusRepository statusRepository;
+    private StatusService statusService;
 
-    public List<LevelDto> getAllLevels(Long courseID){
-        Course course = courseRepository.findById(courseID)
-                .orElseThrow(CourseNotFoundException::new);
+    public List<LevelDto> getAllLevels(Long courseID) {
+        Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
 
         return ObjectMapperUtil.mapToDTO(levelList, LevelDto.class);
     }
 
-    public LevelDto getLevelById(Long id){
-        Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
+    public LevelDto getLevelById(Long id) {
+        Level level = findById(id);
 
         LevelDto levelDto = (LevelDto) ObjectMapperUtil.mapToDTOSingle(level, LevelDto.class);
         levelDto.setExerciseNumber(level.getExercises().size());
@@ -51,23 +46,21 @@ public class LevelService {
         return levelDto;
     }
 
-    public void deleteLevelById(Long id){
-        Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
+    public void deleteLevelById(Long id) {
+        Level level = findById(id);
 
         levelRepository.delete(level);
     }
 
-    public LevelResponse addLevel(Long courseID, LevelRequest levelRequest){
+    public LevelResponse addLevel(Long courseID, LevelRequest levelRequest) {
         checkIfLevelNameIsUsed(courseID, levelRequest);
 
         Level level = new Level();
 
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
-        level.setStatus(statusRepository.findByName(levelRequest.getStatusName())
-                .orElseThrow(StatusNotFoundException::new));
-        level.setCourse(courseRepository.findById(courseID)
-                .orElseThrow(CourseNotFoundException::new));
+        level.setStatus(statusService.findByName(levelRequest.getStatusName()));
+        level.setCourse(courseService.findById(courseID));
 
 
         Level savedLevel = levelRepository.save(level);
@@ -79,22 +72,20 @@ public class LevelService {
         return levelResponse;
     }
 
-    public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest){
-        Level level = levelRepository.findById(levelID).orElseThrow(LevelNotFoundException::new);
-        if(!level.getName().equals(levelRequest.getName())){
+    public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
+        Level level = findById(levelID);
+        if (!level.getName().equals(levelRequest.getName())) {
             checkIfLevelNameIsUsed(courseID, levelRequest);
         }
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
-        level.setStatus(statusRepository.findByName(levelRequest.getStatusName()).
-                orElseThrow(StatusNotFoundException::new));
+        level.setStatus(statusService.findByName(levelRequest.getStatusName()));
 
         levelRepository.save(level);
     }
 
-    public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest){
-        Course course = courseRepository.findById(courseID)
-                .orElseThrow(CourseNotFoundException::new);
+    public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest) {
+        Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
 
@@ -102,9 +93,16 @@ public class LevelService {
                 .filter(level -> level.getName().equals(levelRequest.getName()))
                 .findFirst();
 
-        if(checkIfLevelExists.isPresent()){
+        if (checkIfLevelExists.isPresent()) {
             throw new LevelAlreadyExistsException();
         }
+    }
+
+    public Level findById(long id) {
+        Level level = levelRepository.findById(id)
+                .orElseThrow(LevelNotFoundException::new);
+
+        return level;
     }
 
 }

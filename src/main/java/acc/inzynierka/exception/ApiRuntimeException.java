@@ -1,6 +1,6 @@
 package acc.inzynierka.exception;
 
-public class ApiRuntimeException extends RuntimeException{
+public class ApiRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ApiRuntimeException(String message) {

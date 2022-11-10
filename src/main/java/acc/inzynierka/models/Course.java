@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class Course {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name",nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "description")

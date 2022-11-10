@@ -1,6 +1,5 @@
 package acc.inzynierka.controllers;
 
-import acc.inzynierka.payload.request.ExerciseRequest;
 import acc.inzynierka.payload.request.TestQuestionRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.TestQuestionService;
@@ -21,7 +20,7 @@ public class TestQuestionController {
     TestQuestionService testQuestionService;
 
     @GetMapping(value = {"all"})
-    public ResponseEntity<?> getAllTestQuestions(@PathVariable Long levelID){
+    public ResponseEntity<?> getAllTestQuestions(@PathVariable Long levelID) {
         return new ResponseEntity<>(
                 testQuestionService.getAllTestQuestions(levelID),
                 HttpStatus.OK
@@ -29,7 +28,7 @@ public class TestQuestionController {
     }
 
     @GetMapping(value = {"{testQuestionId}"})
-    public ResponseEntity<?> getTestQuestion(@PathVariable Long testQuestionId){
+    public ResponseEntity<?> getTestQuestion(@PathVariable Long testQuestionId) {
         return new ResponseEntity<>(
                 testQuestionService.getTestQuestionById(testQuestionId),
                 HttpStatus.OK);
@@ -45,11 +44,10 @@ public class TestQuestionController {
     }
 
     @PostMapping(value = {"add"})
-    public ResponseEntity<?> createTestQuestion(@PathVariable Long levelID , @Valid @RequestBody TestQuestionRequest testQuestionRequest) {
+    public ResponseEntity<?> createTestQuestion(@PathVariable Long levelID, @Valid @RequestBody TestQuestionRequest testQuestionRequest) {
 
-        return new ResponseEntity<>(testQuestionService.addTestQuestion(levelID ,testQuestionRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(testQuestionService.addTestQuestion(levelID, testQuestionRequest), HttpStatus.CREATED);
     }
-
 
 
     @PatchMapping(value = {"edit/{testQuestionId}"})

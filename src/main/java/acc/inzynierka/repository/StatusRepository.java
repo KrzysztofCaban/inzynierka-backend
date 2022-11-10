@@ -1,6 +1,5 @@
 package acc.inzynierka.repository;
 
-import acc.inzynierka.models.Role;
 import acc.inzynierka.models.Status;
 import acc.inzynierka.models.enums.EStatus;
 import org.springframework.data.jpa.repository.JpaRepository;

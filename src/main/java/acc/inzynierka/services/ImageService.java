@@ -1,13 +1,11 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.category.CategoryAlreadyExistsException;
-import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.image.ImageAlreadyExistsException;
+import acc.inzynierka.exception.image.ImageNotFoundException;
 import acc.inzynierka.models.Image;
 import acc.inzynierka.modelsDTO.ImageDto;
 import acc.inzynierka.payload.request.ImageRequest;
 import acc.inzynierka.payload.response.ImageResponse;
-import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.ImageRepository;
 import acc.inzynierka.services.BlobStorage.BlobStorageService;
 import acc.inzynierka.utils.ObjectMapperUtil;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,26 +24,49 @@ public class ImageService {
 
     private final BlobStorageService blobStorageService;
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    public List<ImageDto> getAllImages(String category){
+    public void checkIfExistsByName(String name) {
+        Optional checkIfExists = findByNameOptional(name);
+        if (checkIfExists.isPresent()) {
+            throw new ImageAlreadyExistsException();
+        }
+    }
+
+    public Image findByName(String name) {
+        Image image = imageRepository.findByName(name)
+                .orElseThrow(ImageNotFoundException::new);
+
+        return image;
+    }
+
+    public Optional findByNameOptional(String name) {
+        Optional imageOptional = imageRepository.findByName(name);
+
+        return imageOptional;
+    }
+
+    public List<Image> findByCategory(String category) {
         List<Image> imageList = imageRepository.findByCategory(category);
+
+        return imageList;
+    }
+
+    public List<ImageDto> getAllImages(String category) {
+        List<Image> imageList = findByCategory(category);
         return ObjectMapperUtil.mapToDTO(imageList, ImageDto.class);
     }
 
     public ImageResponse uploadImage(ImageRequest imageRequest, MultipartFile image) throws IOException {
-        Optional checkIfExists = imageRepository.findByName(imageRequest.getName());
-        if (checkIfExists.isPresent()) {
-            throw new ImageAlreadyExistsException();
-        }
+        checkIfExistsByName(imageRequest.getName());
+
         Image newImage = new Image();
         newImage.setName(imageRequest.getName());
         newImage.setUrl(blobStorageService.uploadPicture(image).toURL().toString());
-        newImage.setCategory(categoryRepository.findByName(imageRequest.getCategoryName())
-                .orElseThrow(CategoryNotFoundException::new));
+        newImage.setCategory(categoryService.findByName(imageRequest.getCategoryName()));
 
         Image savedImage = imageRepository.save(newImage);
 
@@ -57,5 +77,4 @@ public class ImageService {
         return imageResponse;
 
     }
-
 }

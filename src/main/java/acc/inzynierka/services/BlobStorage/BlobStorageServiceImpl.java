@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 
-public class BlobStorageServiceImpl implements BlobStorageService{
+public class BlobStorageServiceImpl implements BlobStorageService {
     private final CloudBlobContainer cloudBlobContainer;
 
     @Override

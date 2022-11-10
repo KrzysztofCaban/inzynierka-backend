@@ -1,19 +1,13 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.exception.course.CourseAlreadyExistsException;
 import acc.inzynierka.exception.course.CourseNotFoundException;
-import acc.inzynierka.exception.status.StatusNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.modelsDTO.CourseDto;
 import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.response.CourseResponse;
-import acc.inzynierka.payload.response.MessageResponse;
-import acc.inzynierka.repository.CategoryRepository;
 import acc.inzynierka.repository.CourseRepository;
-import acc.inzynierka.repository.StatusRepository;
-import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +25,13 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private StatusRepository statusRepository;
+    private StatusService statusService;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     public List<CourseDto> getAllCourses() {
         return ObjectMapperUtil.mapToDTO(courseRepository.findAll(), CourseDto.class);
@@ -49,21 +43,19 @@ public class CourseService {
 
 
     public CourseDto getCourseById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = findById(id);
 
         return (CourseDto) ObjectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }
 
     public void deleteCourseById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = findById(id);
 
         courseRepository.delete(course);
     }
 
     public CourseResponse addCourse(CourseRequest courseRequest) throws RuntimeException {
-        Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
+        Optional checkIfExists = findByNameOptional(courseRequest.getName());
         if (checkIfExists.isPresent()) {
             throw new CourseAlreadyExistsException();
         }
@@ -73,15 +65,13 @@ public class CourseService {
         newCourse.setCreated(Timestamp.from(Instant.now()));
         newCourse.setModified(Timestamp.from(Instant.now()));
 
-        User author = userRepository.findById(UserUtil.getUser()).get();
+        User author = userService.findById(UserUtil.getUser());
         newCourse.setAuthor(author);
 
-        newCourse.setStatus(statusRepository.findByName(courseRequest.getStatusName())
-                .orElseThrow(StatusNotFoundException::new));
-        newCourse.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(CategoryNotFoundException::new));
+        newCourse.setStatus(statusService.findByName(courseRequest.getStatusName()));
+        newCourse.setCategory(categoryService.findByName(courseRequest.getCategoryName()));
 
-        Course savedCourse =  courseRepository.save(newCourse);
+        Course savedCourse = courseRepository.save(newCourse);
 
         CourseResponse courseResponse = new CourseResponse();
         courseResponse.setCourse((CourseDto) ObjectMapperUtil.mapToDTOSingle(savedCourse, CourseDto.class));
@@ -91,10 +81,9 @@ public class CourseService {
     }
 
     public void editCourse(Long id, CourseRequest courseRequest) throws RuntimeException {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Course course = findById(id);
 
-        Optional checkIfExists = courseRepository.findByName(courseRequest.getName());
+        Optional checkIfExists = findByNameOptional(courseRequest.getName());
         if (checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())) {
             throw new CourseAlreadyExistsException();
         }
@@ -102,11 +91,22 @@ public class CourseService {
         course.setName(courseRequest.getName());
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
-        course.setStatus(statusRepository.findByName(courseRequest.getStatusName())
-                .orElseThrow(StatusNotFoundException::new));
-        course.setCategory(categoryRepository.findByName(courseRequest.getCategoryName())
-                .orElseThrow(CategoryNotFoundException::new));
+        course.setStatus(statusService.findByName(courseRequest.getStatusName()));
+        course.setCategory(categoryService.findByName(courseRequest.getCategoryName()));
 
         courseRepository.save(course);
+    }
+
+    public Course findById(long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(CourseNotFoundException::new);
+
+        return course;
+    }
+
+    public Optional findByNameOptional(String name) {
+        Optional courseOptional = courseRepository.findByName(name);
+
+        return courseOptional;
     }
 }

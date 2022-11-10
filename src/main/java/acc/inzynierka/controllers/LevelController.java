@@ -23,7 +23,7 @@ public class LevelController {
 
 
     @GetMapping(value = "all")
-    public ResponseEntity<List<LevelDto>> getAllLevels(@PathVariable Long courseID){
+    public ResponseEntity<List<LevelDto>> getAllLevels(@PathVariable Long courseID) {
         return new ResponseEntity<>(
                 levelService.getAllLevels(courseID),
                 HttpStatus.OK
@@ -31,7 +31,7 @@ public class LevelController {
     }
 
     @GetMapping(value = {"{levelId}"})
-    public ResponseEntity<?> getLevel(@PathVariable Long levelId){
+    public ResponseEntity<?> getLevel(@PathVariable Long levelId) {
         return new ResponseEntity<>(
                 levelService.getLevelById(levelId),
                 HttpStatus.OK);
@@ -47,11 +47,10 @@ public class LevelController {
     }
 
     @PostMapping(value = {"add"})
-    public ResponseEntity<?> createLevel(@PathVariable Long courseID ,@Valid @RequestBody LevelRequest levelRequest) {
+    public ResponseEntity<?> createLevel(@PathVariable Long courseID, @Valid @RequestBody LevelRequest levelRequest) {
 
-        return new ResponseEntity<>(levelService.addLevel(courseID ,levelRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(levelService.addLevel(courseID, levelRequest), HttpStatus.CREATED);
     }
-
 
 
     @PatchMapping(value = {"edit/{levelId}"})

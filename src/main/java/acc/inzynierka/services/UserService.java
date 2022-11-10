@@ -4,6 +4,7 @@ import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.User;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.repository.UserRepository;
+import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public void editUser(Long id, UserRequest userRequest){
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    public void editUser(Long id, UserRequest userRequest) {
+        User user = findById(id);
 
         user.setPassword(userRequest.getPassword());
         user.setActive(userRequest.isActive());
@@ -24,9 +25,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id){
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    public void deleteUser(Long id) {
+        User user = findById(id);
 
         userRepository.delete(user);
+    }
+
+
+    public User findById(long id) {
+        User user = userRepository.findById(UserUtil.getUser()).orElseThrow(UserNotFoundException::new);
+        return user;
     }
 }

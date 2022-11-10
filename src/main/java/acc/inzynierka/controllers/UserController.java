@@ -21,7 +21,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping(value = {"edit", "edit/{id}"})
-    public ResponseEntity<?> editUser(@PathVariable Optional<Long> id, UserRequest userRequest){
+    public ResponseEntity<?> editUser(@PathVariable Optional<Long> id, UserRequest userRequest) {
         Long userId = id.orElseGet(UserUtil::getUser);
         userService.editUser(userId, userRequest);
 
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping(value = {"delete", "delete/{id}"})
-    public ResponseEntity<?> deleteUser(@PathVariable Optional<Long> id){
+    public ResponseEntity<?> deleteUser(@PathVariable Optional<Long> id) {
         Long userId = id.orElseGet(UserUtil::getUser);
         userService.deleteUser(userId);
 

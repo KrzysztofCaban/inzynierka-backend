@@ -2,8 +2,6 @@ package acc.inzynierka.services;
 
 import acc.inzynierka.exception.category.CategoryAlreadyExistsException;
 import acc.inzynierka.exception.category.CategoryNotFoundException;
-import acc.inzynierka.exception.course.CourseAlreadyExistsException;
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.models.Category;
 import acc.inzynierka.modelsDTO.CategoryDto;
 import acc.inzynierka.payload.request.CategoryRequest;
@@ -22,12 +20,12 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public List<CategoryDto> getCategories(){
+    public List<CategoryDto> getCategories() {
         return ObjectMapperUtil.mapToDTO(categoryRepository.findAll(), CategoryDto.class);
     }
 
-    public CategoryResponse addCategory(CategoryRequest categoryRequest){
-        Optional checkIfExists = categoryRepository.findByName(categoryRequest.getName());
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
+        Optional checkIfExists = findByNameOptional(categoryRequest.getName());
         if (checkIfExists.isPresent()) {
             throw new CategoryAlreadyExistsException();
         }
@@ -42,11 +40,10 @@ public class CategoryService {
         return categoryResponse;
     }
 
-    public void editCategory(Long categoryID, CategoryRequest categoryRequest){
-        Category category = categoryRepository.findById(categoryID)
-                .orElseThrow(CategoryNotFoundException::new);
+    public void editCategory(Long categoryID, CategoryRequest categoryRequest) {
+        Category category = findById(categoryID);
 
-        Optional checkIfExists = categoryRepository.findByName(categoryRequest.getName());
+        Optional checkIfExists = findByNameOptional(categoryRequest.getName());
         if (checkIfExists.isPresent() && !category.getName().equals(categoryRequest.getName())) {
             throw new CategoryAlreadyExistsException();
         }
@@ -54,5 +51,26 @@ public class CategoryService {
         category.setName(categoryRequest.getName());
 
         categoryRepository.save(category);
+    }
+
+
+    public Category findByName(String name) {
+        Category category = categoryRepository.findByName(name)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        return category;
+    }
+
+    public Optional findByNameOptional(String name) {
+        Optional category = categoryRepository.findByName(name);
+
+        return category;
+    }
+
+    public Category findById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        return category;
     }
 }

@@ -1,18 +1,13 @@
 package acc.inzynierka.services;
 
-import acc.inzynierka.exception.course.CourseNotFoundException;
 import acc.inzynierka.exception.flashcard.FlashcardAlreadyExistsException;
 import acc.inzynierka.exception.flashcard.FlashcardNotFoundException;
-import acc.inzynierka.exception.image.ImageNotFoundException;
-import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Flashcard;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.FlashcardDto;
 import acc.inzynierka.payload.request.FlashcardRequest;
 import acc.inzynierka.payload.response.FlashcardResponse;
 import acc.inzynierka.repository.FlashcardRepository;
-import acc.inzynierka.repository.ImageRepository;
-import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,46 +19,42 @@ import java.util.Optional;
 public class FlashcardService {
 
     @Autowired
-    FlashcardRepository flashcardRepository;
+    private FlashcardRepository flashcardRepository;
 
     @Autowired
-    LevelRepository levelRepository;
+    private LevelService levelService;
 
     @Autowired
-    ImageRepository imageRepository;
+    private ImageService imageService;
 
     public List<FlashcardDto> getAllFlashcards(Long levelID) {
-        Level level = levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new);
+        Level level = levelService.findById(levelID);
         List<Flashcard> flashcardList = level.getFlashcards();
 
         return ObjectMapperUtil.mapToDTO(flashcardList, FlashcardDto.class);
     }
 
-    public FlashcardDto getFlashcardById(Long flashcardID){
-        Flashcard flashcard = flashcardRepository.findById(flashcardID).orElseThrow(FlashcardNotFoundException::new);
+    public FlashcardDto getFlashcardById(Long flashcardID) {
+        Flashcard flashcard = findById(flashcardID);
 
         return (FlashcardDto) ObjectMapperUtil.mapToDTOSingle(flashcard, FlashcardDto.class);
     }
 
     public void deleteFlashcardById(Long id) {
-        Flashcard flashcard = flashcardRepository.findById(id)
-                .orElseThrow(CourseNotFoundException::new);
+        Flashcard flashcard = findById(id);
 
         flashcardRepository.delete(flashcard);
     }
 
-    public FlashcardResponse addFlashcard(Long levelID, FlashcardRequest flashcardRequest){
+    public FlashcardResponse addFlashcard(Long levelID, FlashcardRequest flashcardRequest) {
         checkIfFlashcardExpressionIsUsed(levelID, flashcardRequest);
 
         Flashcard newFlashcard = new Flashcard();
         newFlashcard.setExpOriginal(flashcardRequest.getExpOriginal());
         newFlashcard.setExpTranslation(flashcardRequest.getExpTranslation());
         newFlashcard.setExpDescription(flashcardRequest.getExpDescription());
-        newFlashcard.setLevel(levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new));
-        newFlashcard.setImage(imageRepository.findByName(flashcardRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        newFlashcard.setLevel(levelService.findById(levelID));
+        newFlashcard.setImage(imageService.findByName(flashcardRequest.getImageName()));
 
         Flashcard savedFlashcard = flashcardRepository.save(newFlashcard);
         FlashcardResponse flashcardResponse = new FlashcardResponse();
@@ -73,27 +64,24 @@ public class FlashcardService {
         return flashcardResponse;
     }
 
-    public void editFlashcard(Long levelID, Long flashcardID, FlashcardRequest flashcardRequest){
-        Flashcard flashcard = flashcardRepository.findById(flashcardID)
-                .orElseThrow(FlashcardNotFoundException::new);
+    public void editFlashcard(Long levelID, Long flashcardID, FlashcardRequest flashcardRequest) {
+        Flashcard flashcard = findById(flashcardID);
 
-        if(!flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal())){
+        if (!flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal())) {
             checkIfFlashcardExpressionIsUsed(levelID, flashcardRequest);
         }
 
         flashcard.setExpOriginal(flashcardRequest.getExpOriginal());
         flashcard.setExpTranslation(flashcardRequest.getExpTranslation());
         flashcard.setExpDescription(flashcardRequest.getExpDescription());
-        flashcard.setImage(imageRepository.findByName(flashcardRequest.getImageName())
-                .orElseThrow(ImageNotFoundException::new));
+        flashcard.setImage(imageService.findByName(flashcardRequest.getImageName()));
 
 
         flashcardRepository.save(flashcard);
     }
 
-    public void checkIfFlashcardExpressionIsUsed(Long levelID, FlashcardRequest flashcardRequest){
-        Level level = levelRepository.findById(levelID)
-                .orElseThrow(LevelNotFoundException::new);
+    public void checkIfFlashcardExpressionIsUsed(Long levelID, FlashcardRequest flashcardRequest) {
+        Level level = levelService.findById(levelID);
 
         List<Flashcard> flashcardList = level.getFlashcards();
 
@@ -101,11 +89,17 @@ public class FlashcardService {
                 .filter(flashcard -> flashcard.getExpOriginal().equals(flashcardRequest.getExpOriginal()))
                 .findFirst();
 
-        if(checkIfFlashcardExists.isPresent()){
+        if (checkIfFlashcardExists.isPresent()) {
             throw new FlashcardAlreadyExistsException();
         }
     }
 
 
+    public Flashcard findById(long id) {
+        Flashcard flashcard = flashcardRepository.findById(id)
+                .orElseThrow(FlashcardNotFoundException::new);
+
+        return flashcard;
+    }
 
 }

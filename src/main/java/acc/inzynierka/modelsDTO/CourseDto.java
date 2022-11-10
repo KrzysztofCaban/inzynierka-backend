@@ -1,7 +1,10 @@
 package acc.inzynierka.modelsDTO;
 
 import acc.inzynierka.models.enums.EStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -13,7 +16,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CourseDto{
+public class CourseDto {
     private Long id;
     private String name;
     private String description;
