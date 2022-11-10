@@ -35,15 +35,13 @@ public class TestQuestionService {
     }
 
     public TestQuestionDto getTestQuestionById(Long testQuestionID) {
-        TestQuestion testQuestion = testQuestionRepository.findById(testQuestionID)
-                .orElseThrow(TestQuestionNotFoundException::new);
+        TestQuestion testQuestion = findById(testQuestionID);
 
         return (TestQuestionDto) ObjectMapperUtil.mapToDTOSingle(testQuestion, TestQuestionDto.class);
     }
 
     public void deleteTestQuestionById(Long id) {
-        TestQuestion testQuestion = testQuestionRepository.findById(id)
-                .orElseThrow(TestQuestionNotFoundException::new);
+        TestQuestion testQuestion = findById(id);
 
         testQuestionRepository.delete(testQuestion);
     }
@@ -66,8 +64,7 @@ public class TestQuestionService {
     }
 
     public void editTestQuestion(Long levelID, Long testQuestionID, TestQuestionRequest testQuestionRequest) {
-        TestQuestion testQuestion = testQuestionRepository.findById(testQuestionID)
-                .orElseThrow(TestQuestionNotFoundException::new);
+        TestQuestion testQuestion = findById(testQuestionID);
         if (!testQuestion.getAnswer().equals(testQuestionRequest.getAnswer())) {
             checkIfTestAnswerIsUsed(levelID, testQuestionRequest);
         }
@@ -90,5 +87,12 @@ public class TestQuestionService {
         if (checkIfExerciseExists.isPresent()) {
             throw new TestQuestionAlreadyExistsException();
         }
+    }
+
+    public TestQuestion findById(long id) {
+        TestQuestion testQuestion = testQuestionRepository.findById(id)
+                .orElseThrow(TestQuestionNotFoundException::new);
+
+        return testQuestion;
     }
 }
