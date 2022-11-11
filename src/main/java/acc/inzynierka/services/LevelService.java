@@ -1,6 +1,7 @@
 package acc.inzynierka.services;
 
 import acc.inzynierka.exception.level.LevelAlreadyExistsException;
+import acc.inzynierka.exception.level.LevelDifficultyAlreadyExistsException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
@@ -53,7 +54,7 @@ public class LevelService {
     }
 
     public LevelResponse addLevel(Long courseID, LevelRequest levelRequest) {
-        checkIfLevelNameIsUsed(courseID, levelRequest);
+        checkIfLevelIsUsed(courseID, levelRequest);
 
         Level level = new Level();
 
@@ -75,7 +76,7 @@ public class LevelService {
     public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
         Level level = findById(levelID);
         if (!level.getName().equals(levelRequest.getName())) {
-            checkIfLevelNameIsUsed(courseID, levelRequest);
+            checkIfLevelIsUsed(courseID, levelRequest);
         }
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
@@ -84,7 +85,7 @@ public class LevelService {
         levelRepository.save(level);
     }
 
-    public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest) {
+    public void checkIfLevelIsUsed(Long courseID, LevelRequest levelRequest) {
         Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
@@ -95,6 +96,14 @@ public class LevelService {
 
         if (checkIfLevelExists.isPresent()) {
             throw new LevelAlreadyExistsException();
+        }
+
+        Optional checkIfLevelDifficultyExists = levelList.stream()
+                .filter(level -> level.getDifficulty() == levelRequest.getDifficulty())
+                .findFirst();
+
+        if (checkIfLevelDifficultyExists.isPresent()) {
+            throw new LevelDifficultyAlreadyExistsException();
         }
     }
 
