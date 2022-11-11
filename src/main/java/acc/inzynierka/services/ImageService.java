@@ -50,7 +50,7 @@ public class ImageService {
     }
 
     public List<Image> findByCategory(String category) {
-        List<Image> imageList = imageRepository.findByCategory(category);
+        List<Image> imageList = imageRepository.findByCategoryNameIsContaining(category);
 
         return imageList;
     }

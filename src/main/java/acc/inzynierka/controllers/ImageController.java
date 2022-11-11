@@ -24,7 +24,6 @@ public class ImageController {
     ImageService imageService;
 
     @PostMapping(value = "uploadImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//    @RequestPart("data") ImageRequest imageRequest, @RequestPart("image") MultipartFile image
     public ResponseEntity<?> writeBlobFile(@ModelAttribute ImageRequest imageRequest) throws IOException {
         return new ResponseEntity<>(
                 imageService.uploadImage(imageRequest, imageRequest.getImage()),

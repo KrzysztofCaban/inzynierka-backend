@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
-    List<Image> findByCategory(String category);
+    List<Image> findByCategoryNameIsContaining(String category);
 
     Optional<Image> findByName(String name);
 }
