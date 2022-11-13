@@ -1,10 +1,12 @@
 package acc.inzynierka.controllers;
 
+import acc.inzynierka.modelsDTO.UserDto;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.UserService;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +22,53 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = {"edit", "edit/{id}"})
-    public ResponseEntity<?> editUser(@PathVariable Optional<Long> id, UserRequest userRequest) {
-        Long userId = id.orElseGet(UserUtil::getUser);
+
+    @GetMapping(value = {""})
+    public ResponseEntity<?> getUser(){
+        Long userId = UserUtil.getUser();
+        UserDto userDto = userService.getUser(userId);
+
+        return new ResponseEntity<>(
+                userDto
+                , HttpStatus.OK);
+    }
+
+    @GetMapping(value = "{id}")
+    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    public ResponseEntity<?> getUserBySuperAdmin(@PathVariable Long id){
+        UserDto userDto = userService.getUser(id);
+
+        return new ResponseEntity<>(
+                userDto
+                , HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "edit")
+    public ResponseEntity<?> editUser(UserRequest userRequest) {
+        Long userId = UserUtil.getUser();
         userService.editUser(userId, userRequest);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
     }
+    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PatchMapping(value = {"edit/{id}"})
+    public ResponseEntity<?> editUserById(@PathVariable Long id, UserRequest userRequest) {
+        userService.editUser(id, userRequest);
 
-    @GetMapping(value = {"delete", "delete/{id}"})
-    public ResponseEntity<?> deleteUser(@PathVariable Optional<Long> id) {
-        Long userId = id.orElseGet(UserUtil::getUser);
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
+    }
+
+    @DeleteMapping(value = "delete")
+    public ResponseEntity<?> deleteUser() {
+        Long userId = UserUtil.getUser();
         userService.deleteUser(userId);
+
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));
+    }
+    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @DeleteMapping(value = { "delete/{id}"})
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        userService.deleteUser(id);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));
     }

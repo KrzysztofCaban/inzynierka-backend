@@ -2,8 +2,10 @@ package acc.inzynierka.services;
 
 import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.User;
+import acc.inzynierka.modelsDTO.UserDto;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.repository.UserRepository;
+import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,13 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+
+    public UserDto getUser(Long id){
+        User user = findById(id);
+
+        return (UserDto) ObjectMapperUtil.mapToDTOSingle(user, UserDto.class);
+    }
 
     public void editUser(Long id, UserRequest userRequest) {
         User user = findById(id);
