@@ -54,7 +54,8 @@ public class LevelService {
     }
 
     public LevelResponse addLevel(Long courseID, LevelRequest levelRequest) {
-        checkIfLevelIsUsed(courseID, levelRequest);
+        checkIfLevelNameIsUsed(courseID, levelRequest);
+        checkIfLevelDifficultyIsUsed(courseID, levelRequest);
 
         Level level = new Level();
 
@@ -76,8 +77,12 @@ public class LevelService {
     public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
         Level level = findById(levelID);
         if (!level.getName().equals(levelRequest.getName())) {
-            checkIfLevelIsUsed(courseID, levelRequest);
+            checkIfLevelNameIsUsed(courseID, levelRequest);
         }
+        if(level.getDifficulty() != levelRequest.getDifficulty()){
+            checkIfLevelDifficultyIsUsed(courseID, levelRequest);
+        }
+
         level.setName(levelRequest.getName());
         level.setDifficulty(levelRequest.getDifficulty());
         level.setStatus(statusService.findByName(levelRequest.getStatusName()));
@@ -85,7 +90,7 @@ public class LevelService {
         levelRepository.save(level);
     }
 
-    public void checkIfLevelIsUsed(Long courseID, LevelRequest levelRequest) {
+    public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest) {
         Course course = courseService.findById(courseID);
 
         List<Level> levelList = course.getLevels();
@@ -97,6 +102,14 @@ public class LevelService {
         if (checkIfLevelExists.isPresent()) {
             throw new LevelAlreadyExistsException();
         }
+
+
+    }
+
+    public void checkIfLevelDifficultyIsUsed(Long courseID, LevelRequest levelRequest) {
+        Course course = courseService.findById(courseID);
+
+        List<Level> levelList = course.getLevels();
 
         Optional checkIfLevelDifficultyExists = levelList.stream()
                 .filter(level -> level.getDifficulty() == levelRequest.getDifficulty())
