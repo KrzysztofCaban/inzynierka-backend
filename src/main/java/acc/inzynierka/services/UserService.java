@@ -10,6 +10,8 @@ import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
 
@@ -20,7 +22,10 @@ public class UserService {
     public UserDto getUser(Long id){
         User user = findById(id);
 
-        return (UserDto) ObjectMapperUtil.mapToDTOSingle(user, UserDto.class);
+        UserDto userDto = (UserDto) ObjectMapperUtil.mapToDTOSingle(user, UserDto.class);
+        userDto.setRoles(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()));
+
+        return userDto;
     }
 
     public void editUser(Long id, UserRequest userRequest) {

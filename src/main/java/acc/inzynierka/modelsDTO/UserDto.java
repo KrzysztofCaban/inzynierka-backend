@@ -1,5 +1,6 @@
 package acc.inzynierka.modelsDTO;
 
+import acc.inzynierka.models.Role;
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
 import lombok.*;
@@ -7,6 +8,7 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,5 +26,5 @@ public class UserDto implements Serializable {
     private String firstName;
     private String lastName;
     private Timestamp CreationDate;
-    private Set<ERole> roleNames;
+    private List<ERole> roles;
 }
