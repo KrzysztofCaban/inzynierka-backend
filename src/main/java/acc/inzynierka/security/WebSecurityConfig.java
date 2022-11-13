@@ -1,5 +1,6 @@
 package acc.inzynierka.security;
 
+import acc.inzynierka.security.jwt.AccessDeniedHanlder;
 import acc.inzynierka.security.jwt.AuthEntryPointJwt;
 import acc.inzynierka.security.jwt.AuthTokenFilter;
 import acc.inzynierka.security.services.UserDetailsServiceImpl;
@@ -34,6 +35,9 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
+
+    @Bean
+    public AccessDeniedHanlder accessDeniedHanlder() { return new AccessDeniedHanlder(); }
 
 //	@Override
 //	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -81,7 +85,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).accessDeniedHandler(accessDeniedHanlder()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
