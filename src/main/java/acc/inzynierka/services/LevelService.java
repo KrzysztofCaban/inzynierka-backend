@@ -79,7 +79,7 @@ public class LevelService {
         if (!level.getName().equals(levelRequest.getName())) {
             checkIfLevelNameIsUsed(courseID, levelRequest);
         }
-        if(level.getDifficulty() != levelRequest.getDifficulty()){
+        if (level.getDifficulty() != levelRequest.getDifficulty()) {
             checkIfLevelDifficultyIsUsed(courseID, levelRequest);
         }
 
