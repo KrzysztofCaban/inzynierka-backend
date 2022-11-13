@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LevelService {
@@ -33,7 +34,17 @@ public class LevelService {
 
         List<Level> levelList = course.getLevels();
 
-        return ObjectMapperUtil.mapToDTO(levelList, LevelDto.class);
+        List<LevelDto> levelDtoList = levelList.stream()
+                .map(level -> new LevelDto(level.getId(),
+                        level.getName(),
+                        level.getDifficulty(),
+                        level.getStatus().getName(),
+                        level.getExercises().size(),
+                        level.getFlashcards().size(),
+                        level.getTestQuestions().size()))
+                .collect(Collectors.toList());
+
+        return levelDtoList;
     }
 
     public LevelDto getLevelById(Long id) {
