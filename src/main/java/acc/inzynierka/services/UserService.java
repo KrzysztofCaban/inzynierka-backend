@@ -47,7 +47,7 @@ public class UserService {
 
 
     public User findById(long id) {
-        User user = userRepository.findById(UserUtil.getUser()).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         return user;
     }
 }
