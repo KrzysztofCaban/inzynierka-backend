@@ -8,6 +8,7 @@ import acc.inzynierka.payload.request.CourseRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.services.CourseService;
+import acc.inzynierka.services.UserService;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class CourseController {
     private CourseService courseService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping(value = "all")
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
@@ -44,7 +45,7 @@ public class CourseController {
     public ResponseEntity<?> getAllAdminCourses(@PathVariable Optional<Long> id) {
         Long adminId = id.orElseGet(UserUtil::getUser);
 
-        User admin = userRepository.findById(adminId).orElseThrow(UserNotFoundException::new);
+        User admin = userService.findById(adminId);
 
         if (admin.getRoles()
                 .stream()
