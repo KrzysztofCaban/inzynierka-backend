@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -64,4 +65,8 @@ public class User {
         this.password = password;
         this.CreationDate = Timestamp.from(Instant.now());
     }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Collection<PotentialCategory> PotentialCategories;
+
 }

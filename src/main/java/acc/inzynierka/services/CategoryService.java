@@ -3,6 +3,7 @@ package acc.inzynierka.services;
 import acc.inzynierka.exception.category.CategoryAlreadyExistsException;
 import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.models.Category;
+import acc.inzynierka.models.PotentialCategory;
 import acc.inzynierka.modelsDTO.CategoryDto;
 import acc.inzynierka.payload.request.CategoryRequest;
 import acc.inzynierka.payload.response.CategoryResponse;
@@ -25,10 +26,8 @@ public class CategoryService {
     }
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
-        Optional checkIfExists = findByNameOptional(categoryRequest.getName());
-        if (checkIfExists.isPresent()) {
-            throw new CategoryAlreadyExistsException();
-        }
+        checkIfExistsByName(categoryRequest.getName());
+
         Category newCategory = new Category();
         newCategory.setName(categoryRequest.getName());
 
@@ -38,6 +37,12 @@ public class CategoryService {
         categoryResponse.setCategory((CategoryDto) ObjectMapperUtil.mapToDTOSingle(savedCategory, CategoryDto.class));
         categoryResponse.setMessage("Pomyślnie dodano kategorię");
         return categoryResponse;
+    }
+
+    public void checkIfExistsByName(String name) {
+        if (categoryRepository.existsByName(name)) {
+            throw new CategoryAlreadyExistsException();
+        }
     }
 
     public void editCategory(Long categoryID, CategoryRequest categoryRequest) {
@@ -51,6 +56,12 @@ public class CategoryService {
         category.setName(categoryRequest.getName());
 
         categoryRepository.save(category);
+    }
+
+    public void deleteCategory(Long categoryID) {
+        Category category = findById(categoryID);
+
+        categoryRepository.delete(category);
     }
 
 
@@ -73,4 +84,12 @@ public class CategoryService {
 
         return category;
     }
+
+    public void savePotentialCategoryAsCategory(PotentialCategory potentialCategory){
+        Category category = new Category();
+        category.setName(potentialCategory.getName());
+
+        categoryRepository.save(category);
+    }
+
 }

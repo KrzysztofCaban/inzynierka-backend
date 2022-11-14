@@ -46,10 +46,17 @@ public class StatusCategoryController {
         );
     }
 
-    @PostMapping(value = "editCategory/{categoryID}")
+    @PatchMapping(value = "editCategory/{categoryID}")
     public ResponseEntity<?> editCategory(@PathVariable Long categoryID, @RequestBody CategoryRequest categoryRequest) {
         categoryService.editCategory(categoryID, categoryRequest);
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano kategorię"));
+    }
+
+    @DeleteMapping(value = "deleteCategory/{categoryID}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryID) {
+        categoryService.deleteCategory(categoryID);
+
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto kategorię"));
     }
 
 
