@@ -21,7 +21,7 @@ public class PotentialCategoryController {
 
     @Autowired
     PotentialCategoryService potentialCategoryService;
-
+    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @GetMapping(value = "all")
     public ResponseEntity<List<PotentialCategoryDto>> getAllPotentialCategories() {
         return new ResponseEntity<>(
@@ -36,7 +36,7 @@ public class PotentialCategoryController {
                 HttpStatus.CREATED);
     }
 
-    //@PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @PostMapping(value = "acceptPotentialCategory/{potentialCatId}")
     public ResponseEntity<?> acceptPotentialCategory(@PathVariable Long potentialCatId) {
         potentialCategoryService.acceptPotentialCategory(potentialCatId);
@@ -45,7 +45,7 @@ public class PotentialCategoryController {
                 .body(new MessageResponse("Pomyślnie zaakceptowano prośbę dodania kategorii. Kategoria dodana"));
     }
 
-    //@PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @PostMapping(value = "deletePotentialCategory/{potentialCatId}")
     public ResponseEntity<?> deletePotentialCategory(@PathVariable Long potentialCatId) {
         potentialCategoryService.deletePotentialCategory(potentialCatId);
