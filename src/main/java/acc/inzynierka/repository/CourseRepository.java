@@ -2,6 +2,7 @@ package acc.inzynierka.repository;
 
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
+import acc.inzynierka.modelsDTO.CourseStatsAllDto;
 import acc.inzynierka.modelsDTO.CourseStatsDto;
 import acc.inzynierka.modelsDTO.newUsersPerDay;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,8 +21,11 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     void deleteByName(String name);
 
-    @Query(name = "getCoursesStats", nativeQuery = true)
-    List<CourseStatsDto> getCoursesStats(@Param("adminID") Long adminID);
+    @Query(name = "getCoursesStatsForOneAuthor", nativeQuery = true)
+    List<CourseStatsDto> getCoursesStatsForOneAuthor(@Param("adminID") Long adminID);
+
+    @Query(name = "getCoursesStatsForAllAuthors", nativeQuery = true)
+    List<CourseStatsAllDto> getCoursesStatsForAllAuthors();
 
     @Query(name = "newUsersPerDay", nativeQuery = true)
     List<newUsersPerDay> getNewUsersPerDay(@Param("courseId") Long courseId);
