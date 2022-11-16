@@ -7,7 +7,7 @@ import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.payload.request.LoginRequest;
 import acc.inzynierka.payload.request.SignupRequest;
-import acc.inzynierka.payload.request.webapp.TokenRefreshRequest;
+import acc.inzynierka.payload.request.TokenRefreshRequest;
 import acc.inzynierka.payload.response.JwtResponse;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.payload.response.TokenRefreshResponse;

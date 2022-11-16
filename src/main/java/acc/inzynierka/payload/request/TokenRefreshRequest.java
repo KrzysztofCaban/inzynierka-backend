@@ -1,4 +1,4 @@
-package acc.inzynierka.payload.request.webapp;
+package acc.inzynierka.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
