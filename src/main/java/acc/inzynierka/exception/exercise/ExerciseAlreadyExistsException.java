@@ -6,6 +6,6 @@ public class ExerciseAlreadyExistsException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ExerciseAlreadyExistsException() {
-        super(String.format("Podana wyrażenie ćwiczenia jest już w użyciu"));
+        super("Podana wyrażenie ćwiczenia jest już w użyciu");
     }
 }

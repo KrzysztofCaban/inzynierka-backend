@@ -6,6 +6,6 @@ public class ImageAlreadyExistsException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ImageAlreadyExistsException() {
-        super(String.format("Zdjęcie o tej nazwie jest już w użyciu"));
+        super("Zdjęcie o tej nazwie jest już w użyciu");
     }
 }

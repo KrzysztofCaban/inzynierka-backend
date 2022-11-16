@@ -6,6 +6,6 @@ public class LevelNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public LevelNotFoundException() {
-        super(String.format("Nie znaleziono poziomu"));
+        super("Nie znaleziono poziomu");
     }
 }

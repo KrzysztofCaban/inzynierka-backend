@@ -6,6 +6,6 @@ public class ImageNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ImageNotFoundException() {
-        super(String.format("Nie znaleziono podanego zdjęcia w bazie"));
+        super("Nie znaleziono podanego zdjęcia w bazie");
     }
 }

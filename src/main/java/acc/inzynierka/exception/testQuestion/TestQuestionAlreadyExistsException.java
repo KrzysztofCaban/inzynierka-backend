@@ -6,6 +6,6 @@ public class TestQuestionAlreadyExistsException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public TestQuestionAlreadyExistsException() {
-        super(String.format("Podane odpiedź testu jest już w użyciu"));
+        super("Podane odpiedź testu jest już w użyciu");
     }
 }

@@ -9,6 +9,6 @@ public class CategoryNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public CategoryNotFoundException() {
-        super(String.format("Nie znaleziono podanej kategorii w bazie"));
+        super("Nie znaleziono podanej kategorii w bazie");
     }
 }
