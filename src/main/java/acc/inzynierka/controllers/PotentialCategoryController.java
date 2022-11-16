@@ -37,7 +37,7 @@ public class PotentialCategoryController {
     }
 
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
-    @PostMapping(value = "acceptPotentialCategory/{potentialCatId}")
+    @PostMapping(value = "{potentialCatId}")
     public ResponseEntity<?> acceptPotentialCategory(@PathVariable Long potentialCatId) {
         potentialCategoryService.acceptPotentialCategory(potentialCatId);
 
@@ -46,7 +46,7 @@ public class PotentialCategoryController {
     }
 
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
-    @PostMapping(value = "deletePotentialCategory/{potentialCatId}")
+    @DeleteMapping(value = "{potentialCatId}")
     public ResponseEntity<?> deletePotentialCategory(@PathVariable Long potentialCatId) {
         potentialCategoryService.deletePotentialCategory(potentialCatId);
 
