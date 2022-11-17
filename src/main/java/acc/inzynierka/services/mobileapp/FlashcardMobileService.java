@@ -16,6 +16,8 @@ import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +34,9 @@ public class FlashcardMobileService {
         Level level = levelMobileService.findById(levelID);
         List<Flashcard> flashcardList = level.getFlashcards();
 
-        return ObjectMapperUtil.mapToDTO(flashcardList, FlashcardMobileDto.class);
+        List<FlashcardMobileDto> flashcardMobileDtoList = ObjectMapperUtil.mapToDTO(flashcardList, FlashcardMobileDto.class);
+        Collections.shuffle(flashcardMobileDtoList);
+
+        return flashcardMobileDtoList;
     }
 }
