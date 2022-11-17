@@ -8,6 +8,7 @@ import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -17,6 +18,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
 
 
     public UserDto getUser(Long id){
@@ -31,7 +35,7 @@ public class UserService {
     public void editUser(Long id, UserRequest userRequest) {
         User user = findById(id);
 
-        user.setPassword(userRequest.getPassword());
+        user.setPassword(encoder.encode(userRequest.getPassword()));
         user.setActive(userRequest.isActive());
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
