@@ -10,7 +10,6 @@ import acc.inzynierka.payload.response.CourseResponse;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -21,17 +20,20 @@ import java.util.Optional;
 @Service
 public class CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CourseService(CourseRepository courseRepository, UserService userService, StatusService statusService, CategoryService categoryService) {
+        this.courseRepository = courseRepository;
+        this.userService = userService;
+        this.statusService = statusService;
+        this.categoryService = categoryService;
+    }
 
     public List<CourseDto> getAllCourses() {
         return ObjectMapperUtil.mapToDTO(courseRepository.findAll(), CourseDto.class);

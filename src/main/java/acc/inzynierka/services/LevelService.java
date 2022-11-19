@@ -10,24 +10,27 @@ import acc.inzynierka.payload.request.LevelRequest;
 import acc.inzynierka.payload.response.LevelResponse;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
 public class LevelService {
 
-    @Autowired
-    private LevelRepository levelRepository;
+    private final LevelRepository levelRepository;
 
-    @Autowired
-    private CourseService courseService;
+    private final CourseService courseService;
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
+
+    public LevelService(LevelRepository levelRepository, CourseService courseService, StatusService statusService) {
+        this.levelRepository = levelRepository;
+        this.courseService = courseService;
+        this.statusService = statusService;
+    }
 
     public List<LevelDto> getAllLevels(Long courseID) {
         Course course = courseService.findById(courseID);

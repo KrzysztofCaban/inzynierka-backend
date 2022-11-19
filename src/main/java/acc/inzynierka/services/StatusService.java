@@ -6,7 +6,6 @@ import acc.inzynierka.models.enums.EStatus;
 import acc.inzynierka.modelsDTO.StatusDto;
 import acc.inzynierka.repository.StatusRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,12 @@ import java.util.List;
 @Service
 public class StatusService {
 
-    @Autowired
+    final
     StatusRepository statusRepository;
+
+    public StatusService(StatusRepository statusRepository) {
+        this.statusRepository = statusRepository;
+    }
 
     public List<StatusDto> getStatuses() {
         return ObjectMapperUtil.mapToDTO(statusRepository.findAll(), StatusDto.class);
