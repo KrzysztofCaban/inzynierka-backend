@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/mobile/course/{courseID}/level/{levelID}/flashcard")
+@RequestMapping("/api/mobile/level/{levelID}/flashcard")
 @PreAuthorize(value = "hasRole('ROLE_USER')")
 public class FlashcardMobileController {
     @Autowired
