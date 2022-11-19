@@ -1,5 +1,8 @@
 package acc.inzynierka.models;
 
+import acc.inzynierka.modelsDTO.CourseStatsAllDto;
+import acc.inzynierka.modelsDTO.CourseStatsDto;
+import acc.inzynierka.modelsDTO.newUsersPerDay;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +19,61 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "course")
+
+@NamedNativeQuery(name = "getCoursesStatsForOneAuthor",
+        query = "SELECT c.id as courseId ,c.name as courseName, COUNT(uc.user_id) as usersInCourse ,IFNULL(avgr.avgrr,0) as avgScoreInCourse " +
+                "FROM Course c " +
+                "LEFT JOIN  user_courses uc ON c.id = uc.course_id " +
+                "LEFT JOIN " +
+                "(SELECT c.id as id, avg(r.value) as avgrr " +
+                "FROM Course c " +
+                "LEFT JOIN  level l on c.id = l.course_id " +
+                "LEFT JOIN user_result r on l.id = r.level_id " +
+                "WHERE c.author_id = :adminID " +
+                "GROUP BY c.name ) as avgr on c.id = avgr.id " +
+                "WHERE c.author_id = :adminID " +
+                "GROUP BY c.name ",
+        resultSetMapping = "modelsDTO.CourseStatsDto")
+@SqlResultSetMapping(name = "modelsDTO.CourseStatsDto",
+        classes = @ConstructorResult(targetClass = CourseStatsDto.class,
+                columns = {@ColumnResult(name = "courseId", type = Long.class),
+                        @ColumnResult(name = "courseName", type = String.class),
+                        @ColumnResult(name = "usersInCourse", type = Integer.class),
+                        @ColumnResult(name = "avgScoreInCourse", type = Double.class)}))
+@NamedNativeQuery(name = "getCoursesStatsForAllAuthors",
+        query = "SELECT c.id as courseId, u.login as author ,c.name as courseName, COUNT(uc.user_id) as usersInCourse ,IFNULL(avgr.avgrr,0) as avgScoreInCourse " +
+                "FROM Course c " +
+                "LEFT JOIN  user_courses uc ON c.id = uc.course_id " +
+                "LEFT JOIN " +
+                "(SELECT c.id as id, avg(r.value) as avgrr " +
+                "FROM Course c " +
+                "LEFT JOIN  level l on c.id = l.course_id " +
+                "LEFT JOIN user_result r on l.id = r.level_id " +
+                "GROUP BY c.name ) as avgr on c.id = avgr.id " +
+                "left join user u on u.id = c.author_id " +
+                "GROUP BY c.name ",
+        resultSetMapping = "modelsDTO.CourseStatsAllDto")
+@SqlResultSetMapping(name = "modelsDTO.CourseStatsAllDto",
+        classes = @ConstructorResult(targetClass = CourseStatsAllDto.class,
+                columns = {@ColumnResult(name = "courseId", type = Long.class),
+                        @ColumnResult(name = "author", type = String.class),
+                        @ColumnResult(name = "courseName", type = String.class),
+                        @ColumnResult(name = "usersInCourse", type = Integer.class),
+                        @ColumnResult(name = "avgScoreInCourse", type = Double.class)}))
+@NamedNativeQuery(name = "newUsersPerDay",
+        query = "SELECT " +
+                "c.name as courseName, DATE_FORMAT(uc.join_date, '%Y/%m/%d') as date, COUNT(uc.course_id) as users " +
+                "FROM course c " +
+                "LEFT JOIN user_courses uc on c.id = uc.course_id " +
+                "WHERE c.id = :courseId "
+                + "GROUP BY  DATE_FORMAT(uc.join_date, '%Y/%m/%d')",
+        resultSetMapping = "modelsDTO.newUsersPerDay")
+@SqlResultSetMapping(name = "modelsDTO.newUsersPerDay",
+        classes = @ConstructorResult(targetClass = newUsersPerDay.class,
+                columns = {@ColumnResult(name = "courseName", type = String.class),
+                        @ColumnResult(name = "date", type = String.class),
+                        @ColumnResult(name = "users", type = Integer.class)}))
+
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
