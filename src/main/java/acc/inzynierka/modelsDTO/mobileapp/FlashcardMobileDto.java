@@ -20,5 +20,4 @@ public class FlashcardMobileDto implements Serializable {
     private String expTranslation;
     private String expDescription;
     private String imageUrl;
-    private String imageName;
 }
