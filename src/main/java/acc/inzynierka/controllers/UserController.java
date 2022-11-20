@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,6 +41,15 @@ public class UserController {
 
         return new ResponseEntity<>(
                 userDto
+                , HttpStatus.OK);
+    }
+
+    @GetMapping(value = "creators")
+    public ResponseEntity<?> getCreators(){
+        List<UserDto> creatorsList = userService.getCreators();
+
+        return new ResponseEntity<>(
+                creatorsList
                 , HttpStatus.OK);
     }
 
