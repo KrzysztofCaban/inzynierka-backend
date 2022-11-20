@@ -2,7 +2,6 @@ package acc.inzynierka.services.webapp;
 
 import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.User;
-import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.webapp.UserDto;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.repository.UserRepository;
@@ -10,7 +9,6 @@ import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,28 +25,6 @@ public class UserService {
         userDto.setRoles(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()));
 
         return userDto;
-    }
-
-    public List<UserDto> getCreators(){
-        List<User> userList = userRepository.findAll();
-
-        List<UserDto> userDtoList = userList.stream()
-                .map(user ->
-                    new UserDto(user.getId(),
-                            user.getLogin(),
-                            user.getEmail(),
-                            user.isActive(),
-                            user.getFirstName(),
-                            user.getLastName(),
-                            user.getCreationDate(),
-                            user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
-                ).collect(Collectors.toList());
-
-        userDtoList = userDtoList.stream()
-                .filter(user -> user.getRoles().contains(ERole.ROLE_ADMIN)).
-                collect(Collectors.toList());
-
-        return userDtoList;
     }
 
     public void editUser(Long id, UserRequest userRequest) {
