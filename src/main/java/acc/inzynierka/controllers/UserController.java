@@ -1,6 +1,7 @@
 package acc.inzynierka.controllers;
 
 import acc.inzynierka.modelsDTO.UserDto;
+import acc.inzynierka.payload.request.PasswordChangeRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.UserService;
@@ -11,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "edit")
-    public ResponseEntity<?> editUser(UserRequest userRequest) {
+    public ResponseEntity<?> editUser(@Valid @RequestBody UserRequest userRequest) {
         Long userId = UserUtil.getUser();
         userService.editUser(userId, userRequest);
 
@@ -62,10 +63,18 @@ public class UserController {
     }
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @PatchMapping(value = {"edit/{id}"})
-    public ResponseEntity<?> editUserById(@PathVariable Long id, UserRequest userRequest) {
-        userService.editUser(id, userRequest);
+    public ResponseEntity<?> editUserById(@PathVariable Long userId, @Valid @RequestBody UserRequest userRequest) {
+        Long adminId = UserUtil.getUser();
+        userService.editUserByAdmin(userId, adminId, userRequest);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
+    }
+
+    public ResponseEntity editPassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest){
+        Long userId = UserUtil.getUser();
+        userService.editPassword(userId, passwordChangeRequest);
+
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zmieniono hasło"));
     }
 
     @DeleteMapping(value = "delete")

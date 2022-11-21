@@ -1,13 +1,14 @@
 package acc.inzynierka.services;
 
+import acc.inzynierka.exception.user.PasswordNotCorrectException;
 import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.UserDto;
+import acc.inzynierka.payload.request.PasswordChangeRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
-import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class UserService {
 
     @Autowired
     PasswordEncoder encoder;
+
+
 
 
     public UserDto getUser(Long id){
@@ -59,10 +62,32 @@ public class UserService {
     public void editUser(Long id, UserRequest userRequest) {
         User user = findById(id);
 
-        user.setPassword(encoder.encode(userRequest.getPassword()));
+        checkPasswords(userRequest.getPassword(), user.getPassword());
+
         user.setActive(userRequest.isActive());
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
+
+        userRepository.save(user);
+    }
+
+    public void editUserByAdmin(Long userId, Long adminId, UserRequest userRequest) {
+        User admin = findById(adminId);
+        checkPasswords(userRequest.getPassword(), admin.getPassword());
+
+        User user = findById(userId);
+        user.setActive(userRequest.isActive());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+
+        userRepository.save(user);
+    }
+
+    public void editPassword(Long id, PasswordChangeRequest passwordChangeRequest) {
+        User user = findById(id);
+
+        checkPasswords(passwordChangeRequest.getOldPassword(), user.getPassword());
+        user.setPassword(encoder.encode(passwordChangeRequest.getNewPassword()));
 
         userRepository.save(user);
     }
@@ -77,5 +102,10 @@ public class UserService {
     public User findById(long id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         return user;
+    }
+
+    public void checkPasswords(String oldPassword, String newPassword){
+        if(!encoder.matches(newPassword, oldPassword))
+            throw new PasswordNotCorrectException();
     }
 }
