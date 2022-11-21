@@ -88,7 +88,7 @@ public class LevelService {
         return levelResponse;
     }
 
-    public void editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
+    public LevelResponse editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
         Level level = findById(levelID);
         if (!level.getName().equals(levelRequest.getName())) {
             checkIfLevelNameIsUsed(courseID, levelRequest);
@@ -102,6 +102,12 @@ public class LevelService {
         level.setStatus(statusService.findByName(levelRequest.getStatusName()));
 
         levelRepository.save(level);
+
+        LevelResponse levelResponse = new LevelResponse();
+        levelResponse.setLevel((LevelDto) ObjectMapperUtil.mapToDTOSingle(level, LevelDto.class));
+        levelResponse.setMessage("Pomyślnie zedytowano poziom");
+
+        return levelResponse;
     }
 
     public void checkIfLevelNameIsUsed(Long courseID, LevelRequest levelRequest) {

@@ -55,8 +55,8 @@ public class LevelController {
 
     @PatchMapping(value = {"edit/{levelId}"})
     public ResponseEntity<?> editLevel(@PathVariable Long courseID, @PathVariable Long levelId, @Valid @RequestBody LevelRequest levelRequest) {
-        levelService.editLevel(courseID, levelId, levelRequest);
-        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano poziom"));
+
+        return new ResponseEntity<>(levelService.editLevel(courseID, levelId, levelRequest), HttpStatus.OK);
     }
 
 }
