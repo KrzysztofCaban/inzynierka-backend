@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class ExerciseDto implements Serializable {
     private Long id;
     private String question;
-    private String expression;
+    private String answer;
     private String bad_answer1;
     private String bad_answer2;
     private String bad_answer3;
