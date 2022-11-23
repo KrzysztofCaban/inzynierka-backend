@@ -25,7 +25,7 @@ public class Flashcard {
     @Column(name = "exp_translation", nullable = false)
     private String expTranslation;
 
-    @Column(name = "exp_description", nullable = false)
+    @Column(name = "exp_description")
     private String expDescription;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

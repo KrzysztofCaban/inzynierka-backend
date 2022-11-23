@@ -64,7 +64,7 @@ public class ImageService {
         checkIfExistsByName(imageRequest.getName());
 
         Image newImage = new Image();
-        newImage.setName(imageRequest.getName());
+        newImage.setName(imageRequest.getName().toLowerCase());
         newImage.setUrl(blobStorageService.uploadPicture(image).toURL().toString());
         newImage.setCategory(categoryService.findByName(imageRequest.getCategoryName()));
 

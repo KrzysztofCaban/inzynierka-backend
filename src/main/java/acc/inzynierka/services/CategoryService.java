@@ -29,7 +29,7 @@ public class CategoryService {
         checkIfExistsByName(categoryRequest.getName());
 
         Category newCategory = new Category();
-        newCategory.setName(categoryRequest.getName());
+        newCategory.setName(categoryRequest.getName().toLowerCase());
 
         Category savedCategory = categoryRepository.save(newCategory);
 

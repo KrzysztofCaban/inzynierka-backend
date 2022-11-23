@@ -73,7 +73,7 @@ public class LevelService {
 
         Level level = new Level();
 
-        level.setName(levelRequest.getName());
+        level.setName(levelRequest.getName().toLowerCase());
         level.setDifficulty(levelRequest.getDifficulty());
         level.setStatus(statusService.findByName(levelRequest.getStatusName()));
         level.setCourse(courseService.findById(courseID));
@@ -90,14 +90,14 @@ public class LevelService {
 
     public LevelResponse editLevel(Long courseID, Long levelID, LevelRequest levelRequest) {
         Level level = findById(levelID);
-        if (!level.getName().equals(levelRequest.getName())) {
+        if (!level.getName().equalsIgnoreCase(levelRequest.getName())) {
             checkIfLevelNameIsUsed(courseID, levelRequest);
         }
         if (level.getDifficulty() != levelRequest.getDifficulty()) {
             checkIfLevelDifficultyIsUsed(courseID, levelRequest);
         }
 
-        level.setName(levelRequest.getName());
+        level.setName(levelRequest.getName().toLowerCase());
         level.setDifficulty(levelRequest.getDifficulty());
         level.setStatus(statusService.findByName(levelRequest.getStatusName()));
 
@@ -116,7 +116,7 @@ public class LevelService {
         List<Level> levelList = course.getLevels();
 
         Optional checkIfLevelExists = levelList.stream()
-                .filter(level -> level.getName().equals(levelRequest.getName()))
+                .filter(level -> level.getName().equalsIgnoreCase(levelRequest.getName()))
                 .findFirst();
 
         if (checkIfLevelExists.isPresent()) {

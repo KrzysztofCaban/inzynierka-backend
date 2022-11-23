@@ -22,8 +22,8 @@ public class Exercise {
     @Column(name = "question", nullable = false)
     private String question;
 
-    @Column(name = "expression", nullable = false)
-    private String expression;
+    @Column(name = "answer", nullable = false)
+    private String answer;
 
     @Column(name = "bad_answer1", nullable = false)
     private String bad_answer1;

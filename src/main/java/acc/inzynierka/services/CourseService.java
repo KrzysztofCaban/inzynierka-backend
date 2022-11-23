@@ -62,7 +62,7 @@ public class CourseService {
             throw new CourseAlreadyExistsException();
         }
         Course newCourse = new Course();
-        newCourse.setName(courseRequest.getName());
+        newCourse.setName(courseRequest.getName().toLowerCase());
         newCourse.setDescription(courseRequest.getDescription());
         newCourse.setCreated(Timestamp.from(Instant.now()));
         newCourse.setModified(Timestamp.from(Instant.now()));
@@ -85,16 +85,16 @@ public class CourseService {
     public void editCourse(Long id, CourseRequest courseRequest) throws RuntimeException {
         Course course = findById(id);
 
-        Optional checkIfExists = findByNameOptional(courseRequest.getName());
-        if (checkIfExists.isPresent() && !course.getName().equals(courseRequest.getName())) {
+        Optional checkIfExists = findByNameOptional(courseRequest.getName().toLowerCase());
+        if (checkIfExists.isPresent() && !course.getName().equalsIgnoreCase(courseRequest.getName())) {
             throw new CourseAlreadyExistsException();
         }
 
-        course.setName(courseRequest.getName());
+        course.setName(courseRequest.getName().toLowerCase());
         course.setDescription(courseRequest.getDescription());
         course.setModified(Timestamp.from(Instant.now()));
         course.setStatus(statusService.findByName(courseRequest.getStatusName()));
-        course.setCategory(categoryService.findByName(courseRequest.getCategoryName()));
+        course.setCategory(categoryService.findByName(courseRequest.getCategoryName().toLowerCase()));
 
         courseRepository.save(course);
     }
