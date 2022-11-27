@@ -22,4 +22,5 @@ public class LevelMobileDto implements Serializable {
     private int exerciseNumber;
     private int flashcardNumber;
     private int testQuestionNumber;
+    private int bestResult;
 }

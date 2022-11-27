@@ -1,4 +1,4 @@
-package acc.inzynierka.modelsDTO.webapp;
+package acc.inzynierka.modelsDTO.mobileapp;
 
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
@@ -18,13 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDto implements Serializable {
-    private Long id;
+public class FollowedResultsDto implements Serializable {
     private String login;
-    private String email;
-    private boolean isActive;
-    private String firstName;
-    private String lastName;
-    private Timestamp CreationDate;
-    private List<ERole> roles;
+    private int result;
 }

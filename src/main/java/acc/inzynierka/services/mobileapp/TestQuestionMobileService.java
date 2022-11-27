@@ -46,17 +46,25 @@ public class TestQuestionMobileService {
 
     public MessageResponse addUserResult(UserResultRequest userResultRequest) {
         Long userid = UserUtil.getUser();
-        System.out.println(userResultRequest.getUserResult());
-        System.out.println(userResultRequest.getLevelID());
-        Result result = new Result();
-        result.setDate(Timestamp.from(Instant.now()));
-        result.setUser(userRepository.findById(userid)
-                .orElseThrow(UserNotFoundException::new));
-        result.setLevel(levelRepository.findById(userResultRequest.getLevelID())
-                .orElseThrow(LevelNotFoundException::new));
-        result.setValue(userResultRequest.getUserResult());
-        System.out.println(resultRepository.save(result).getValue());
-
+        if(resultRepository.existsByUser_IdAndLevel_Id(userid, userResultRequest.getLevelID())){
+            Result result = resultRepository.findByUser_IdAndLevel_Id(userid, userResultRequest.getLevelID());
+            if(result.getValue() < userResultRequest.getUserResult()){
+                result.setValue(userResultRequest.getUserResult());
+                result.setDate(Timestamp.from(Instant.now()));
+                resultRepository.save(result);
+            }
+        }else{
+            System.out.println(userResultRequest.getUserResult());
+            System.out.println(userResultRequest.getLevelID());
+            Result result = new Result();
+            result.setDate(Timestamp.from(Instant.now()));
+            result.setUser(userRepository.findById(userid)
+                    .orElseThrow(UserNotFoundException::new));
+            result.setLevel(levelRepository.findById(userResultRequest.getLevelID())
+                    .orElseThrow(LevelNotFoundException::new));
+            result.setValue(userResultRequest.getUserResult());
+            System.out.println(resultRepository.save(result).getValue());
+        }
         return new MessageResponse("Pomyślnie zapisano wynik");
     }
 }
