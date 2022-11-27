@@ -162,7 +162,7 @@ public class DataLoader implements ApplicationRunner {
         exercise.setBad_answer1("testBadAnswer1");
         exercise.setBad_answer2("testBadAnswer1");
         exercise.setBad_answer3("testBadAnswer1");
-        exercise.setExpression("testExpresion");
+        exercise.setAnswer("testExpresion");
         exercise.setQuestion("test question");
 
         exerciseRepository.save(exercise);

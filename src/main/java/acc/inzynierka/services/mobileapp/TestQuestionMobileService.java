@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TestQuestionMobileService {
@@ -37,9 +38,8 @@ public class TestQuestionMobileService {
         Level level = levelMobileService.findById(levelID);
         List<TestQuestion> testQuestionList = level.getTestQuestions();
         Collections.shuffle(testQuestionList);
-        if (testQuestionList.size() > 10) {
-            testQuestionList = testQuestionList.subList(0, 9);
-        }
+
+        testQuestionList.stream().limit(15).collect(Collectors.toList());
         return ObjectMapperUtil.mapToDTO(testQuestionList, TestQuestionMobileDto.class);
     }
 

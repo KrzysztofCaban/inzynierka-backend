@@ -20,7 +20,7 @@ public class ExerciseRequest implements Serializable {
     @NotEmpty(message = "Pytanie nie może być puste")
     private String question;
     @NotEmpty(message = "Wyrażenie nie może być puste")
-    private String expression;
+    private String answer;
     @NotEmpty(message = "Błedna odpowiedź 1 nie może być puste")
     private String bad_answer1;
     @NotEmpty(message = "Błedna odpowiedź 2 nie może być puste")

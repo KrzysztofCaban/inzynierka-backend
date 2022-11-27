@@ -50,7 +50,7 @@ public class ExerciseService {
         checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
 
         Exercise newExercise = new Exercise();
-        newExercise.setExpression(exerciseRequest.getExpression());
+        newExercise.setAnswer(exerciseRequest.getAnswer());
         newExercise.setQuestion(exerciseRequest.getQuestion());
         newExercise.setBad_answer1(exerciseRequest.getBad_answer1());
         newExercise.setBad_answer2(exerciseRequest.getBad_answer2());
@@ -68,11 +68,11 @@ public class ExerciseService {
 
     public void editExercise(Long levelID, Long exerciseID, ExerciseRequest exerciseRequest) {
         Exercise exercise = findById(exerciseID);
-        if (!exercise.getExpression().equals(exercise.getExpression())) {
+        if (!exercise.getAnswer().equals(exercise.getAnswer())) {
             checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
         }
 
-        exercise.setExpression(exerciseRequest.getExpression());
+        exercise.setAnswer(exerciseRequest.getAnswer());
         exercise.setQuestion(exerciseRequest.getQuestion());
         exercise.setBad_answer1(exerciseRequest.getBad_answer1());
         exercise.setBad_answer2(exerciseRequest.getBad_answer2());
@@ -88,7 +88,7 @@ public class ExerciseService {
         List<Exercise> exerciseList = level.getExercises();
 
         Optional checkIfExerciseExists = exerciseList.stream()
-                .filter(exercise -> exercise.getExpression().equals(exerciseRequest.getExpression()))
+                .filter(exercise -> exercise.getAnswer().equals(exerciseRequest.getAnswer()))
                 .findFirst();
 
         if (checkIfExerciseExists.isPresent()) {
