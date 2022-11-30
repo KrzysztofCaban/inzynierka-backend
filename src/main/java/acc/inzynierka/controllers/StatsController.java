@@ -39,7 +39,7 @@ public class StatsController {
     public ResponseEntity<?> getNewUsersPerDay(@PathVariable Long courseId) {
 
         return new ResponseEntity<>(
-                statsService.getNewUsersPerDay(courseId),
+                statsService.getNewUsersPerDayWithCreationDate(courseId),
                 HttpStatus.OK
         );
     }

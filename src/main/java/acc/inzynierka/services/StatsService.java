@@ -2,6 +2,7 @@ package acc.inzynierka.services;
 
 import acc.inzynierka.modelsDTO.CourseStatsAllDto;
 import acc.inzynierka.modelsDTO.CourseStatsDto;
+import acc.inzynierka.modelsDTO.NewUsersPerDayCourseDto;
 import acc.inzynierka.modelsDTO.newUsersPerDay;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.utils.UserUtil;
@@ -16,6 +17,9 @@ public class StatsService {
     @Autowired
     CourseRepository courseRepository;
 
+    @Autowired
+    CourseService courseService;
+
     public List<CourseStatsDto> getStatsForAuthor() {
         Long adminID = UserUtil.getUser();
         return courseRepository.getCoursesStatsForOneAuthor(adminID);
@@ -23,6 +27,13 @@ public class StatsService {
 
     public List<CourseStatsAllDto> getStatsForAllAuthors() {
         return courseRepository.getCoursesStatsForAllAuthors();
+    }
+
+    public NewUsersPerDayCourseDto getNewUsersPerDayWithCreationDate(Long courseId) {
+        NewUsersPerDayCourseDto newUsersPerDayCourseDto = new NewUsersPerDayCourseDto();
+        newUsersPerDayCourseDto.setCreationDate(courseService.findById(courseId).getCreated());
+        newUsersPerDayCourseDto.setNewUsersPerDay(getNewUsersPerDay(courseId));
+        return newUsersPerDayCourseDto;
     }
 
     public List<newUsersPerDay> getNewUsersPerDay(Long courseId) {
