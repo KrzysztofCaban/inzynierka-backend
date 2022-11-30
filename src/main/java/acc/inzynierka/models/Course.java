@@ -62,11 +62,11 @@ import java.util.List;
                         @ColumnResult(name = "avgScoreInCourse", type = Double.class)}))
 @NamedNativeQuery(name = "newUsersPerDay",
         query = "SELECT " +
-                "c.name as courseName, DATE_FORMAT(uc.join_date, '%Y/%m/%d') as date, COUNT(uc.course_id) as users " +
+                "c.name as courseName, DATE_FORMAT(uc.join_date, '%Y-%m-%d') as date, COUNT(uc.course_id) as users " +
                 "FROM course c " +
                 "LEFT JOIN user_courses uc on c.id = uc.course_id " +
                 "WHERE c.id = :courseId "
-                + "GROUP BY  DATE_FORMAT(uc.join_date, '%Y/%m/%d')",
+                + "GROUP BY  DATE_FORMAT(uc.join_date, '%Y-%m-%d')",
         resultSetMapping = "modelsDTO.newUsersPerDay")
 @SqlResultSetMapping(name = "modelsDTO.newUsersPerDay",
         classes = @ConstructorResult(targetClass = newUsersPerDay.class,
