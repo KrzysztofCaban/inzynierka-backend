@@ -37,7 +37,9 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AccessDeniedHanlder accessDeniedHanlder() { return new AccessDeniedHanlder(); }
+    public AccessDeniedHanlder accessDeniedHanlder() {
+        return new AccessDeniedHanlder();
+    }
 
 //	@Override
 //	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {

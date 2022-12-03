@@ -29,4 +29,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query(name = "newUsersPerDay", nativeQuery = true)
     List<newUsersPerDay> getNewUsersPerDay(@Param("courseId") Long courseId);
+    @Override
+    boolean existsById(Long aLong);
 }

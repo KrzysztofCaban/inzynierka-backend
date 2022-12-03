@@ -23,7 +23,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @Column(name = "login", nullable = false, unique = true)
     private String login;
@@ -58,6 +58,8 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<UserCourse> courses;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Collection<PotentialCategory> PotentialCategories;
 
     public User(String login, String email, String password) {
         this.login = login;
@@ -65,8 +67,5 @@ public class User {
         this.password = password;
         this.CreationDate = Timestamp.from(Instant.now());
     }
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
-    private Collection<PotentialCategory> PotentialCategories;
 
 }

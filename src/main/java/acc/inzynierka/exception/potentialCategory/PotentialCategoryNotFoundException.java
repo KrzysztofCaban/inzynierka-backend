@@ -9,6 +9,6 @@ public class PotentialCategoryNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public PotentialCategoryNotFoundException() {
-        super(String.format("Nie znaleziono podanej prośby o dodanie nowej kategorii"));
+        super("Nie znaleziono podanej prośby o dodanie nowej kategorii");
     }
 }

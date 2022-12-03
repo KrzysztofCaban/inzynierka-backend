@@ -6,6 +6,6 @@ public class LevelDifficultyAlreadyExistsException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public LevelDifficultyAlreadyExistsException() {
-        super(String.format("Poziom o podanym poziomie trudności jest już w użyciu w obecnym kursie"));
+        super("Poziom o podanym poziomie trudności jest już w użyciu w obecnym kursie");
     }
 }

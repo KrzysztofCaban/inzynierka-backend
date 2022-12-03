@@ -6,6 +6,6 @@ public class UploadImageFailedException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public UploadImageFailedException() {
-        super(String.format("Zapisanie zdjęcia nie powiodło się"));
+        super("Zapisanie zdjęcia nie powiodło się");
     }
 }

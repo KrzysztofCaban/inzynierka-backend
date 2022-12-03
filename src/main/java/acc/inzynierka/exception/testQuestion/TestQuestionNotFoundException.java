@@ -6,6 +6,6 @@ public class TestQuestionNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public TestQuestionNotFoundException() {
-        super(String.format("Nie znaleziono pytania testowego"));
+        super("Nie znaleziono pytania testowego");
     }
 }

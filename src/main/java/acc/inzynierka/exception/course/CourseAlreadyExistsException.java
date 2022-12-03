@@ -7,7 +7,7 @@ public class CourseAlreadyExistsException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public CourseAlreadyExistsException() {
-        super(String.format("Nazwa kursu jest już w użyciu"));
+        super("Nazwa kursu jest już w użyciu");
     }
 
 }

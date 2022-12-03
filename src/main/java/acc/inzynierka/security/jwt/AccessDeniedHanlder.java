@@ -17,6 +17,7 @@ import java.util.Map;
 public class AccessDeniedHanlder implements AccessDeniedHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(AccessDeniedHanlder.class);
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         logger.error("Unauthorized error: {}", accessDeniedException.getMessage());

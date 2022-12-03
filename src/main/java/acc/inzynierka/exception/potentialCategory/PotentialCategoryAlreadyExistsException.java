@@ -6,6 +6,6 @@ public class PotentialCategoryAlreadyExistsException extends ApiRuntimeException
     private static final long serialVersionUID = 1L;
 
     public PotentialCategoryAlreadyExistsException() {
-        super(String.format("Podana nazwa kategorii jest już oczekuje na akceptację"));
+        super("Podana nazwa kategorii jest już oczekuje na akceptację");
     }
 }

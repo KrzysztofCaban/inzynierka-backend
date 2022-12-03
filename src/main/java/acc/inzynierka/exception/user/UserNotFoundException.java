@@ -6,6 +6,6 @@ public class UserNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 1L;
 
     public UserNotFoundException() {
-        super(String.format("Nie znaleziono użytkownika w bazie"));
+        super("Nie znaleziono użytkownika w bazie");
     }
 }

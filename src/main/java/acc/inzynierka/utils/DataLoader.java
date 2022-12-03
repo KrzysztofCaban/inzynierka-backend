@@ -19,6 +19,7 @@ import java.util.Set;
 @Component
 public class DataLoader implements ApplicationRunner {
 
+    private final UserRepository userRepository;
     RoleRepository roleRepository;
     CategoryRepository categoryRepository;
     StatusRepository statusRepository;
@@ -31,7 +32,6 @@ public class DataLoader implements ApplicationRunner {
     UserCourseRepository userCourseRepository;
     ResultRepository resultRepository;
     FollowedRepository followedRepository;
-    private UserRepository userRepository;
 
     @Autowired
     public DataLoader(UserRepository userRepository,
