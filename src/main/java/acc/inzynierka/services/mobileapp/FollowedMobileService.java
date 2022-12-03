@@ -44,8 +44,10 @@ public class FollowedMobileService {
                                 user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
                 ).collect(Collectors.toList());
 
+        User currentUser = userMobileService.findById(UserUtil.getUser());
         List<String> loginsList = userDtoList.stream()
                 .filter(user -> user.getRoles().contains(ERole.ROLE_USER))
+                .filter(user -> !user.getLogin().equals(currentUser.getLogin()))
                 .map(user -> user.getLogin())
                 .collect(Collectors.toList());
 
