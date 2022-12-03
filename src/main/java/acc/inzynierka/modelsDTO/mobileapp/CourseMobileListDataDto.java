@@ -20,9 +20,7 @@ public class CourseMobileListDataDto implements Serializable {
     private Long id;
     private String name;
     private String description;
-    private Timestamp created;
-    private Timestamp modified;
     private String authorLogin;
     private String categoryName;
-    private EStatus statusName;
+    private boolean isJoined;
 }

@@ -35,11 +35,21 @@ public class CourseMobileService {
     private UserMobileService userMobileService;
 
     public List<CourseMobileListDataDto> getAllCourses() {
+        User user = userMobileService.findById(UserUtil.getUser());
         List<Course> courseList = courseRepository.findAll();
-        courseList.stream()
-                .filter(course -> course.getStatus().equals(EStatus.STATUS_ACTIVE))
+        List<CourseMobileListDataDto> courseMobileListDataDtoList = courseList.stream()
+                .filter(course -> course.getStatus().getName().equals(EStatus.STATUS_ACTIVE))
+                .map(course -> {
+                    return new CourseMobileListDataDto(
+                            course.getId(),
+                            course.getName(),
+                            course.getDescription(),
+                            course.getAuthor().getLogin(),
+                            course.getCategory().getName(),
+                           userCourseRepository.existsByUser_IdAndCourse_Id(user.getId(), course.getId()) );
+                })
                 .collect(Collectors.toList());
-        return ObjectMapperUtil.mapToDTO(courseList, CourseMobileListDataDto.class);
+        return courseMobileListDataDtoList;
     }
 
     public List<CourseMobileListDataDto> getMyCourses() {
