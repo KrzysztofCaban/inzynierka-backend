@@ -40,7 +40,7 @@ public class ExerciseMobileService {
                 .collect(Collectors.toList());
         Collections.shuffle(exerciseMobileDtos);
 
-        exerciseMobileDtos.stream().limit(15).collect(Collectors.toList());
+        exerciseMobileDtos = exerciseMobileDtos.stream().limit(15).collect(Collectors.toList());
 
         return exerciseMobileDtos;
     }
