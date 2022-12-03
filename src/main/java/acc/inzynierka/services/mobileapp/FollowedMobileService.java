@@ -15,6 +15,7 @@ import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,7 +103,7 @@ public class FollowedMobileService {
                             .mapToInt(userResult -> userResult.getValue()).sum();
 
                     return new FollowedResultsDto(followedUser.getLogin(), result);
-                }).collect(Collectors.toList());
+                }).sorted(Comparator.comparing(FollowedResultsDto::getResult)).collect(Collectors.toList());
 
         return followedResultsDtoList;
     }
