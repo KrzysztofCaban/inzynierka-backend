@@ -29,6 +29,8 @@ public class ExerciseMobileService {
                     options.add(exercise.getBad_answer2());
                     options.add(exercise.getBad_answer3());
 
+                    Collections.shuffle(options);
+
                     return new ExerciseMobileDto(
                             exercise.getQuestion(),
                             exercise.getAnswer(),
