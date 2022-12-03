@@ -16,10 +16,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class LevelMobileDto implements Serializable {
+    private Long id;
     private String name;
     private int difficulty;
-    private int exerciseNumber;
-    private int flashcardNumber;
-    private int testQuestionNumber;
     private int bestResult;
 }

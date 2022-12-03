@@ -32,21 +32,12 @@ public class LevelMobileService {
 
         List<Level> levelList = course.getLevels();
 
-        List<LevelMobileDto> levelMobileDtoList = levelList.stream()
-                .map(level -> {
-                    Long userId = UserUtil.getUser();
-                    int result = 0;
-                    if (resultRepository.existsByUser_IdAndLevel_Id(userId, level.getId()))
-                        result = resultRepository.findByUser_IdAndLevel_Id(userId, level.getId()).getValue();
-                    return new LevelMobileDto(
-                            level.getName(),
-                            level.getDifficulty(),
-                            level.getExercises().size(),
-                            level.getFlashcards().size(),
-                            level.getTestQuestions().size(),
-                            result);
-                })
-                .collect(Collectors.toList());
+        List<LevelMobileDto> levelMobileDtoList = levelList.stream().map(level -> {
+
+            int result = findResultforLevel(level.getId());
+
+            return new LevelMobileDto(level.getId(), level.getName(), level.getDifficulty(), result);
+        }).collect(Collectors.toList());
 
         return levelMobileDtoList;
     }
@@ -55,16 +46,21 @@ public class LevelMobileService {
         Level level = findById(id);
 
         LevelMobileDto levelMobileDto = (LevelMobileDto) ObjectMapperUtil.mapToDTOSingle(level, LevelMobileDto.class);
-        levelMobileDto.setExerciseNumber(level.getExercises().size());
-        levelMobileDto.setFlashcardNumber(level.getFlashcards().size());
-        levelMobileDto.setTestQuestionNumber(level.getTestQuestions().size());
+        levelMobileDto.setBestResult(findResultforLevel(level.getId()));
 
-        return new LevelMobileDto();
+        return levelMobileDto;
+    }
+
+    public Integer findResultforLevel(Long levelId) {
+        Long userId = UserUtil.getUser();
+        int result = 0;
+        if (resultRepository.existsByUser_IdAndLevel_Id(userId, levelId))
+            result = resultRepository.findByUser_IdAndLevel_Id(userId, levelId).getValue();
+        return result;
     }
 
     public Level findById(long id) {
-        Level level = levelRepository.findById(id)
-                .orElseThrow(LevelNotFoundException::new);
+        Level level = levelRepository.findById(id).orElseThrow(LevelNotFoundException::new);
 
         return level;
     }
