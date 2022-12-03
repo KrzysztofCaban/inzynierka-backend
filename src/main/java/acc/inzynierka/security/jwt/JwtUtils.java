@@ -1,5 +1,6 @@
 package acc.inzynierka.security.jwt;
 
+import acc.inzynierka.models.User;
 import acc.inzynierka.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -26,6 +27,16 @@ public class JwtUtils {
     public String generateTokenFromUsername(String username) {
         return Jwts.builder().setSubject(username).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    public String generateJwtTokenEmail(User userPrincipal) {
+        return generateTokenFromUsername(userPrincipal.getLogin());
+    }
+
+    public String generateTokenFromUsernameEmail(String username) {
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + 1200000)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 

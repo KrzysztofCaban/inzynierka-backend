@@ -5,6 +5,7 @@ import acc.inzynierka.models.RefreshToken;
 import acc.inzynierka.models.Role;
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
+import acc.inzynierka.payload.request.ForgotPassword;
 import acc.inzynierka.payload.request.LoginRequest;
 import acc.inzynierka.payload.request.SignupRequest;
 import acc.inzynierka.payload.request.TokenRefreshRequest;
@@ -16,6 +17,7 @@ import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.security.jwt.JwtUtils;
 import acc.inzynierka.security.services.RefreshTokenService;
 import acc.inzynierka.security.services.UserDetailsImpl;
+import acc.inzynierka.services.webapp.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,6 +55,9 @@ public class AuthController {
 
     @Autowired
     RefreshTokenService refreshTokenService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -154,6 +159,13 @@ public class AuthController {
         Long userId = userDetails.getId();
         refreshTokenService.deleteByUserId(userId);
         return ResponseEntity.ok(new MessageResponse("Log out successful!"));
+    }
+
+    @GetMapping(value = "forgotPassword")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPassword forgotPassword) {
+        userService.forgotPassword(forgotPassword.getEmail());
+
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie wysłano link do resetowania hasła"));
     }
 
 }

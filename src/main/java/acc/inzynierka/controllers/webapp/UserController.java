@@ -1,6 +1,7 @@
 package acc.inzynierka.controllers.webapp;
 
 import acc.inzynierka.modelsDTO.webapp.UserDto;
+import acc.inzynierka.payload.request.PasswordRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.payload.response.MessageResponse;
 import acc.inzynierka.services.webapp.UserService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -71,5 +74,13 @@ public class UserController {
         userService.deleteUser(id);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));
+    }
+
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN') or hasRole('ROLE_USER')")
+    @PatchMapping(value = "resetPassword")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordRequest passwordRequest) {
+        userService.resetPassword(passwordRequest);
+
+        return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zmieniono hasło"));
     }
 }
