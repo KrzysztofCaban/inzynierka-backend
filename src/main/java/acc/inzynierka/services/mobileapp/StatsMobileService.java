@@ -8,6 +8,7 @@ import acc.inzynierka.services.webapp.UserService;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @SuppressWarnings("UnresolvedClassReferenceRepair")
@@ -25,39 +26,24 @@ public class StatsMobileService {
         Long userId = UserUtil.getUser();
         User user = userService.findById(userId);
 
-        List<UserCourseResults> userCourseResultsList = user.getCourses()
-                .stream()
-                .map(userCourse -> {
-                    UserCourseResults userCourseResults = new UserCourseResults();
-                    userCourseResults.setCourseName(userCourse.getCourse().getName());
-                    userCourseResults.setAuthorName(userCourse.getCourse().getAuthor().getLogin());
-                    userCourseResults.setResults(
-                            userCourse.getCourse()
-                                    .getLevels()
-                                    .stream()
-                                    .map(level -> {
-                                        LevelResult levelResult = new LevelResult();
-                                        levelResult.setLevelName(level.getName());
-                                        levelResult.setLevelDifficulty(level.getDifficulty());
-                                        Result resultt = new Result();
-                                        resultt.setValue(-1);
-                                        levelResult.setLevelScore(
-                                                level.getLevelResults()
-                                                        .stream()
-                                                        .filter(
-                                                                result -> result.getUser()
-                                                                        .getId()
-                                                                        .equals(userId))
-                                                        .findFirst()
-                                                        .orElse(resultt)
-                                                        .getValue());
-                                        return levelResult;
-                                    })
-//                                    .filter(out -> out.getLevelScore() != -1)
-                                    .toList());
-                    return userCourseResults;
-                })
-                .toList();
+        List<UserCourseResults> userCourseResultsList = user.getCourses().stream().map(userCourse -> {
+            UserCourseResults userCourseResults = new UserCourseResults();
+            userCourseResults.setCourseName(userCourse.getCourse().getName());
+            userCourseResults.setAuthorName(userCourse.getCourse().getAuthor().getLogin());
+            userCourseResults.setResults(userCourse.getCourse().getLevels().stream().map(level -> {
+                        LevelResult levelResult = new LevelResult();
+                        levelResult.setLevelName(level.getName());
+                        levelResult.setLevelDifficulty(level.getDifficulty());
+                        Result resultt = new Result();
+                        resultt.setValue(-1);
+                        levelResult.setLevelScore(level.getLevelResults().stream().filter(result -> result.getUser().getId().equals(userId)).findFirst().orElse(resultt).getValue());
+                        return levelResult;
+                    })
+                    .filter(out -> out.getLevelScore() != -1)
+                    .sorted(Comparator.comparingInt(LevelResult::getLevelDifficulty))
+                    .toList());
+            return userCourseResults;
+        }).toList();
 
         return userCourseResultsList;
     }
