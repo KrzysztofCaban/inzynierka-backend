@@ -5,6 +5,7 @@ import acc.inzynierka.modelsDTO.CourseStatsDto;
 import acc.inzynierka.modelsDTO.NewUsersPerDayCourseDto;
 import acc.inzynierka.modelsDTO.newUsersPerDay;
 import acc.inzynierka.repository.CourseRepository;
+import acc.inzynierka.services.webapp.CourseService;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
