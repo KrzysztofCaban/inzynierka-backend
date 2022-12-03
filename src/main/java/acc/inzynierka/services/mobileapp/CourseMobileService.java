@@ -42,7 +42,7 @@ public class CourseMobileService {
         return ObjectMapperUtil.mapToDTO(courseList, CourseMobileListDataDto.class);
     }
 
-    public List<CourseMobileListDataDto> getMyCourses(){
+    public List<CourseMobileListDataDto> getMyCourses() {
         Long userId = UserUtil.getUser();
         User user = userMobileService.findById(userId);
 
@@ -60,10 +60,10 @@ public class CourseMobileService {
         return (CourseMobileDto) ObjectMapperUtil.mapToDTOSingle(course, CourseMobileDto.class);
     }
 
-    public void joinCourse(Long courseId){
+    public void joinCourse(Long courseId) {
         Long userId = UserUtil.getUser();
 
-        if(checkIfUserIsInCourse(userId, courseId))
+        if (checkIfUserIsInCourse(userId, courseId))
             throw new UserIsInCourseAlreadyException();
 
         Course course = findById(courseId);
@@ -77,10 +77,10 @@ public class CourseMobileService {
         userCourseRepository.save(userCourse);
     }
 
-    public void leaveCourse(Long courseId){
+    public void leaveCourse(Long courseId) {
         Long userId = UserUtil.getUser();
 
-        if(!courseRepository.existsById(courseId))
+        if (!courseRepository.existsById(courseId))
             throw new CourseNotFoundException();
 
         UserCourse userCourse = getUserCourse(userId, courseId);
@@ -102,12 +102,12 @@ public class CourseMobileService {
         return courseOptional;
     }
 
-    public boolean checkIfUserIsInCourse(Long userId, Long courseId){
+    public boolean checkIfUserIsInCourse(Long userId, Long courseId) {
         return userCourseRepository.existsByUser_IdAndCourse_Id(userId, courseId);
     }
 
-    public UserCourse getUserCourse(Long userId, Long courseId){
-        UserCourse userCourse =  userCourseRepository.findByUser_IdAndCourse_Id(userId, courseId)
+    public UserCourse getUserCourse(Long userId, Long courseId) {
+        UserCourse userCourse = userCourseRepository.findByUser_IdAndCourse_Id(userId, courseId)
                 .orElseThrow(UserIsNotInCourseException::new);
 
         return userCourse;

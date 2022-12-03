@@ -3,11 +3,10 @@ package acc.inzynierka.services.webapp;
 import acc.inzynierka.exception.user.PasswordNotCorrectException;
 import acc.inzynierka.exception.user.UserNotFoundException;
 import acc.inzynierka.models.User;
-import acc.inzynierka.modelsDTO.webapp.UserDto;
-import acc.inzynierka.payload.request.PasswordRequest;
 import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.webapp.UserDto;
 import acc.inzynierka.payload.request.PasswordChangeRequest;
+import acc.inzynierka.payload.request.PasswordRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.security.jwt.JwtUtils;
@@ -37,9 +36,6 @@ public class UserService {
     PasswordEncoder encoder;
 
 
-
-
-
     public UserDto getUser(Long id) {
         User user = findById(id);
 
@@ -49,7 +45,7 @@ public class UserService {
         return userDto;
     }
 
-    public List<UserDto> getCreators(){
+    public List<UserDto> getCreators() {
         List<User> userList = userRepository.findAll();
 
         List<UserDto> userDtoList = userList.stream()
@@ -143,8 +139,8 @@ public class UserService {
         return user;
     }
 
-    public void checkPasswords(String oldPassword, String newPassword){
-        if(!encoder.matches(newPassword, oldPassword))
+    public void checkPasswords(String oldPassword, String newPassword) {
+        if (!encoder.matches(newPassword, oldPassword))
             throw new PasswordNotCorrectException();
     }
 }

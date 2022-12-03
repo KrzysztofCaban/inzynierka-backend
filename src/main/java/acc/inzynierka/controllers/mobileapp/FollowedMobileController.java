@@ -2,10 +2,7 @@ package acc.inzynierka.controllers.mobileapp;
 
 import acc.inzynierka.payload.request.mobile.FollowUser;
 import acc.inzynierka.payload.response.MessageResponse;
-import acc.inzynierka.repository.FollowedRepository;
-import acc.inzynierka.services.mobileapp.ExerciseMobileService;
 import acc.inzynierka.services.mobileapp.FollowedMobileService;
-import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,7 @@ public class FollowedMobileController {
 
 
     @GetMapping(value = "allUsers")
-    public ResponseEntity<?> getAllUsersLogins(){
+    public ResponseEntity<?> getAllUsersLogins() {
         return new ResponseEntity<>(
                 followedMobileService.getAllUsersLogins(),
                 HttpStatus.OK
@@ -39,7 +36,7 @@ public class FollowedMobileController {
     }
 
     @PostMapping(value = "follow")
-    public ResponseEntity<?> followUser(@RequestBody FollowUser followUser){
+    public ResponseEntity<?> followUser(@RequestBody FollowUser followUser) {
 
         followedMobileService.followUser(followUser.getLogin());
 
@@ -47,14 +44,14 @@ public class FollowedMobileController {
     }
 
     @DeleteMapping(value = "unfollow")
-    public ResponseEntity<?> unFollowUser(@RequestBody FollowUser followUser){
+    public ResponseEntity<?> unFollowUser(@RequestBody FollowUser followUser) {
         followedMobileService.unFollowUser(followUser.getLogin());
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika z obserwowanych"));
     }
 
     @GetMapping(value = "followedUsersResults")
-    public ResponseEntity<?> followedUsersResults(){
+    public ResponseEntity<?> followedUsersResults() {
         return new ResponseEntity<>(
                 followedMobileService.followedUsersResults(),
                 HttpStatus.OK

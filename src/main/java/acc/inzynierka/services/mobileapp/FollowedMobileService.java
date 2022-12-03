@@ -22,13 +22,11 @@ import java.util.stream.Collectors;
 public class FollowedMobileService {
 
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     private FollowedRepository followedRepository;
-
     @Autowired
     private UserMobileService userMobileService;
-
-    @Autowired
-    UserRepository userRepository;
 
     public List<String> getAllUsersLogins() {
         List<User> userList = userRepository.findAll();
@@ -52,6 +50,7 @@ public class FollowedMobileService {
 
         return loginsList;
     }
+
     public List<FollowedUserDto> getFollowedUsers() {
         Long userId = UserUtil.getUser();
         User user = userMobileService.findById(userId);
@@ -65,7 +64,7 @@ public class FollowedMobileService {
 
     public void followUser(String loginToFollow) {
         Long userId = UserUtil.getUser();
-        if(followedRepository.existsByUser_IdAndFollowedUser_Login(userId, loginToFollow))
+        if (followedRepository.existsByUser_IdAndFollowedUser_Login(userId, loginToFollow))
             throw new UserIsAlreadyFollowedException();
 
         User user = userMobileService.findById(userId);
@@ -80,7 +79,7 @@ public class FollowedMobileService {
 
     public void unFollowUser(String loginToUnFollow) {
         Long userId = UserUtil.getUser();
-        if(!followedRepository.existsByUser_IdAndFollowedUser_Login(userId, loginToUnFollow))
+        if (!followedRepository.existsByUser_IdAndFollowedUser_Login(userId, loginToUnFollow))
             throw new UserIsNotFollowedException();
 
         User user = userMobileService.findById(userId);

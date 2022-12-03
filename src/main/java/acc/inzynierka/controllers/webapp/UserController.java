@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping(value = "creators")
-    public ResponseEntity<?> getCreators(){
+    public ResponseEntity<?> getCreators() {
         List<UserDto> creatorsList = userService.getCreators();
 
         return new ResponseEntity<>(
@@ -62,6 +62,7 @@ public class UserController {
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
     }
+
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @PatchMapping(value = {"edit/{id}"})
     public ResponseEntity<?> editUserById(@PathVariable Long userId, @Valid @RequestBody UserRequest userRequest) {
@@ -71,7 +72,7 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
     }
 
-    public ResponseEntity editPassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest){
+    public ResponseEntity editPassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest) {
         Long userId = UserUtil.getUser();
         userService.editPassword(userId, passwordChangeRequest);
 
@@ -85,6 +86,7 @@ public class UserController {
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));
     }
+
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @DeleteMapping(value = {"delete/{id}"})
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) {

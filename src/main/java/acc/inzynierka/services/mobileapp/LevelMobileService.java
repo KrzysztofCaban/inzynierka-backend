@@ -1,25 +1,18 @@
 package acc.inzynierka.services.mobileapp;
 
-import acc.inzynierka.exception.level.LevelAlreadyExistsException;
-import acc.inzynierka.exception.level.LevelDifficultyAlreadyExistsException;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.mobileapp.LevelMobileDto;
-import acc.inzynierka.modelsDTO.webapp.LevelDto;
-import acc.inzynierka.payload.request.webapp.LevelRequest;
-import acc.inzynierka.payload.response.webapp.LevelResponse;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.repository.ResultRepository;
 import acc.inzynierka.services.webapp.CourseService;
-import acc.inzynierka.services.webapp.StatusService;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,15 +36,16 @@ public class LevelMobileService {
                 .map(level -> {
                     Long userId = UserUtil.getUser();
                     int result = 0;
-                    if(resultRepository.existsByUser_IdAndLevel_Id(userId, level.getId()))
+                    if (resultRepository.existsByUser_IdAndLevel_Id(userId, level.getId()))
                         result = resultRepository.findByUser_IdAndLevel_Id(userId, level.getId()).getValue();
                     return new LevelMobileDto(
-                        level.getName(),
-                        level.getDifficulty(),
-                        level.getExercises().size(),
-                        level.getFlashcards().size(),
-                        level.getTestQuestions().size(),
-                            result);})
+                            level.getName(),
+                            level.getDifficulty(),
+                            level.getExercises().size(),
+                            level.getFlashcards().size(),
+                            level.getTestQuestions().size(),
+                            result);
+                })
                 .collect(Collectors.toList());
 
         return levelMobileDtoList;

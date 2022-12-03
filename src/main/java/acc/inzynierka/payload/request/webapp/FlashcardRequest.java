@@ -20,7 +20,7 @@ public class FlashcardRequest implements Serializable {
     @Size(min = 1, max = 30, message = "Długość tłumaczenia powinna zawierać się pomiędzy 1 a 30 znaków")
     private String expTranslation;
 
-//    @NotEmpty(message = "Opis nie może być pusty")
+    //    @NotEmpty(message = "Opis nie może być pusty")
     @Size(min = 4, max = 80, message = "Długość opisu powinna zawierać się pomiędzy 4 a 80 znaków")
     private String expDescription;
 

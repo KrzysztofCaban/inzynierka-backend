@@ -1,6 +1,5 @@
 package acc.inzynierka.modelsDTO.mobileapp;
 
-import acc.inzynierka.models.enums.EStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

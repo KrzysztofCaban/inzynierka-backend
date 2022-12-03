@@ -46,14 +46,14 @@ public class TestQuestionMobileService {
 
     public MessageResponse addUserResult(UserResultRequest userResultRequest) {
         Long userid = UserUtil.getUser();
-        if(resultRepository.existsByUser_IdAndLevel_Id(userid, userResultRequest.getLevelID())){
+        if (resultRepository.existsByUser_IdAndLevel_Id(userid, userResultRequest.getLevelID())) {
             Result result = resultRepository.findByUser_IdAndLevel_Id(userid, userResultRequest.getLevelID());
-            if(result.getValue() < userResultRequest.getUserResult()){
+            if (result.getValue() < userResultRequest.getUserResult()) {
                 result.setValue(userResultRequest.getUserResult());
                 result.setDate(Timestamp.from(Instant.now()));
                 resultRepository.save(result);
             }
-        }else{
+        } else {
             System.out.println(userResultRequest.getUserResult());
             System.out.println(userResultRequest.getLevelID());
             Result result = new Result();
