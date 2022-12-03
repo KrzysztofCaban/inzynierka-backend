@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class CourseMobileListDataDto implements Serializable {
+    private Long id;
     private String name;
     private String description;
     private Timestamp created;
