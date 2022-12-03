@@ -1,6 +1,7 @@
 package acc.inzynierka.controllers.webapp;
 
 import acc.inzynierka.modelsDTO.webapp.UserDto;
+import acc.inzynierka.payload.request.PasswordChangeRequest;
 import acc.inzynierka.payload.request.PasswordRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.payload.response.MessageResponse;
