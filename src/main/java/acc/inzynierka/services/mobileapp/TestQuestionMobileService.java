@@ -39,7 +39,7 @@ public class TestQuestionMobileService {
         List<TestQuestion> testQuestionList = level.getTestQuestions();
         Collections.shuffle(testQuestionList);
 
-        testQuestionList.stream().limit(15).collect(Collectors.toList());
+        testQuestionList = testQuestionList.stream().limit(15).collect(Collectors.toList());
         return ObjectMapperUtil.mapToDTO(testQuestionList, TestQuestionMobileDto.class);
     }
 
