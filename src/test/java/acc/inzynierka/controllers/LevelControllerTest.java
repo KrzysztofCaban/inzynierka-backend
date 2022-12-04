@@ -3,7 +3,7 @@ package acc.inzynierka.controllers;
 import acc.inzynierka.InzynierkaApplication;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.models.enums.EStatus;
-import acc.inzynierka.payload.request.LevelRequest;
+import acc.inzynierka.payload.request.webapp.LevelRequest;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

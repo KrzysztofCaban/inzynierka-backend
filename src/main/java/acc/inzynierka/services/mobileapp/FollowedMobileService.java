@@ -7,6 +7,7 @@ import acc.inzynierka.models.User;
 import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.mobileapp.FollowedResultsDto;
 import acc.inzynierka.modelsDTO.mobileapp.FollowedUserDto;
+import acc.inzynierka.modelsDTO.mobileapp.UserToFollowDto;
 import acc.inzynierka.modelsDTO.webapp.UserDto;
 import acc.inzynierka.repository.FollowedRepository;
 import acc.inzynierka.repository.UserRepository;
@@ -29,7 +30,7 @@ public class FollowedMobileService {
     @Autowired
     private UserMobileService userMobileService;
 
-    public List<String> getAllUsersLogins() {
+    public List<UserToFollowDto> getAllUsersLogins() {
         List<User> userList = userRepository.findAll();
 
         List<UserDto> userDtoList = userList.stream()
@@ -45,10 +46,14 @@ public class FollowedMobileService {
                 ).collect(Collectors.toList());
 
         User currentUser = userMobileService.findById(UserUtil.getUser());
-        List<String> loginsList = userDtoList.stream()
+        List<UserToFollowDto> loginsList = userDtoList.stream()
                 .filter(user -> user.getRoles().contains(ERole.ROLE_USER))
                 .filter(user -> !user.getLogin().equals(currentUser.getLogin()))
-                .map(user -> user.getLogin())
+                .map(user ->
+                        new UserToFollowDto(
+                                user.getLogin(),
+                                followedRepository.existsByUser_IdAndFollowedUser_Login(currentUser.getId(), user.getLogin())
+                        ))
                 .collect(Collectors.toList());
 
         return loginsList;
@@ -105,7 +110,7 @@ public class FollowedMobileService {
                             .mapToInt(userResult -> userResult.getValue()).sum();
 
                     return new FollowedResultsDto(followedUser.getLogin(), result);
-                }).sorted(Comparator.comparing(FollowedResultsDto::getResult)).collect(Collectors.toList());
+                }).sorted(Comparator.comparing(FollowedResultsDto::getResult).reversed()).collect(Collectors.toList());
 
         return followedResultsDtoList;
     }
