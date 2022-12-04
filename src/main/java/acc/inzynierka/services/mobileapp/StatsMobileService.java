@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 
-@SuppressWarnings("UnresolvedClassReferenceRepair")
 @Service
 public class StatsMobileService {
 
