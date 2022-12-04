@@ -8,6 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class TokenRefreshRequest {
-    @NotBlank
+    @NotBlank(message = "Nie wprowadzono tokenu")
     private String refreshToken;
 }
