@@ -31,7 +31,7 @@ public class JwtUtils {
     }
 
     public String generateJwtTokenEmail(User userPrincipal) {
-        return generateTokenFromUsername(userPrincipal.getLogin());
+        return generateTokenFromUsernameEmail(userPrincipal.getLogin());
     }
 
     public String generateTokenFromUsernameEmail(String username) {
