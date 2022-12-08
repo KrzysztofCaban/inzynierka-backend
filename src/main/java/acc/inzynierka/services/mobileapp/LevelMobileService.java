@@ -3,6 +3,7 @@ package acc.inzynierka.services.mobileapp;
 import acc.inzynierka.exception.level.LevelNotFoundException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.Level;
+import acc.inzynierka.models.enums.EStatus;
 import acc.inzynierka.modelsDTO.mobileapp.LevelMobileDto;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.repository.ResultRepository;
@@ -32,7 +33,9 @@ public class LevelMobileService {
 
         List<Level> levelList = course.getLevels();
 
-        List<LevelMobileDto> levelMobileDtoList = levelList.stream().map(level -> {
+        List<LevelMobileDto> levelMobileDtoList = levelList.stream()
+                .filter(level -> level.getStatus().getName().equals(EStatus.STATUS_ACTIVE))
+                .map(level -> {
 
             int result = findResultforLevel(level.getId());
 
