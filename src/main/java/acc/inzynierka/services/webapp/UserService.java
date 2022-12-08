@@ -70,7 +70,7 @@ public class UserService {
     public void editUser(Long id, UserRequest userRequest) {
         User user = findById(id);
 
-        checkPasswords(userRequest.getPassword(), user.getPassword());
+        checkPasswords(user.getPassword(), userRequest.getPassword());
 
         user.setActive(userRequest.isActive());
         user.setFirstName(userRequest.getFirstName());
@@ -103,7 +103,7 @@ public class UserService {
 
     public void editUserByAdmin(Long userId, Long adminId, UserRequest userRequest) {
         User admin = findById(adminId);
-        checkPasswords(userRequest.getPassword(), admin.getPassword());
+        checkPasswords(admin.getPassword(), userRequest.getPassword());
 
         User user = findById(userId);
         user.setActive(userRequest.isActive());

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -22,7 +23,7 @@ public class UserRequest implements Serializable {
     @Size(min = 6, max = 40, message = "Długość hasła powinna wynosić pomiędzy 6 a 40 znaków")
     private String password;
 
-    @NotEmpty(message = "Status nie może być pusty")
+    @NotNull(message = "Status nie może być pusty")
     private boolean isActive;
 
     @NotEmpty(message = "Imie nie może być pusta")
