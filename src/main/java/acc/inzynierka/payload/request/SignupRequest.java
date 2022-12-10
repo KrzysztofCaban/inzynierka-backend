@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ public class SignupRequest {
 
     @NotBlank
     @Size(min = 6, max = 40, message = "Długość hasła powinna wynosić pomiędzy 6 a 40 znaków")
+    @Pattern(regexp = "^(?=.[A-Za-z])(?=d)(?=.[@$!%#?&])[A-Za-zd@$!%*#?&]{8,}$", message = "Hasło nie spełnia wymogów")
     private String password;
 
 }
