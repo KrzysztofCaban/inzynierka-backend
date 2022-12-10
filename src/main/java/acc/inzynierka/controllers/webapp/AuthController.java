@@ -17,6 +17,7 @@ import acc.inzynierka.repository.UserRepository;
 import acc.inzynierka.security.jwt.JwtUtils;
 import acc.inzynierka.security.services.RefreshTokenService;
 import acc.inzynierka.security.services.UserDetailsImpl;
+import acc.inzynierka.services.EmailSender.EmailService;
 import acc.inzynierka.services.webapp.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,9 @@ public class AuthController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EmailService emailService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -139,6 +143,11 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        emailService.send(signUpRequest.getEmail(),"Witaj w NABO", "Witaj " + signUpRequest.getLogin() +
+                "\n\nDziękujemy za korzystanie z naszej aplikacji. Mamy nadzieję, że nauka języka angielskiego będzie przyjemna i efektywna." +
+                "\n\n\n\nPozdrawiamy," +
+                "\nZespół NABO");
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
