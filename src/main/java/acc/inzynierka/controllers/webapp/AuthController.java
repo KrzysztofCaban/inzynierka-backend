@@ -176,7 +176,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("Log out successful!"));
     }
 
-    @GetMapping(value = "forgotPassword")
+    @PostMapping(value = "forgotPassword")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPassword forgotPassword) {
         userService.forgotPassword(forgotPassword.getEmail());
 
