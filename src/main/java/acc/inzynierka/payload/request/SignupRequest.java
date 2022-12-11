@@ -25,7 +25,7 @@ public class SignupRequest {
 
     @NotBlank
     @Size(min = 6, max = 40, message = "Długość hasła powinna wynosić pomiędzy 6 a 40 znaków")
-    @Pattern(regexp = "^(?=.[A-Za-z])(?=.\\\\d)(?=.[@$!%#?&])[A-Za-z\\\\d@$!%*#?&]{8,}$", message = "Hasło nie spełnia wymogów")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "Hasło nie spełnia wymogów")
     private String password;
 
 }
