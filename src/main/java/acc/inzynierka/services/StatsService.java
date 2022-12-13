@@ -33,6 +33,7 @@ public class StatsService {
     public NewUsersPerDayCourseDto getNewUsersPerDayWithCreationDate(Long courseId) {
         NewUsersPerDayCourseDto newUsersPerDayCourseDto = new NewUsersPerDayCourseDto();
         newUsersPerDayCourseDto.setCreationDate(courseService.findById(courseId).getCreated());
+        newUsersPerDayCourseDto.setCourseName(courseService.getCourseById(courseId).getName());
         newUsersPerDayCourseDto.setNewUsersPerDay(getNewUsersPerDay(courseId));
         return newUsersPerDayCourseDto;
     }

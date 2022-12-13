@@ -62,7 +62,7 @@ import java.util.List;
                         @ColumnResult(name = "avgScoreInCourse", type = Double.class)}))
 @NamedNativeQuery(name = "newUsersPerDay",
         query = "SELECT " +
-                "c.name as courseName, DATE_FORMAT(uc.join_date, '%Y-%m-%d') as date, COUNT(uc.course_id) as users " +
+                "DATE_FORMAT(uc.join_date, '%Y-%m-%d') as date, COUNT(uc.course_id) as users " +
                 "FROM course c " +
                 "LEFT JOIN user_courses uc on c.id = uc.course_id " +
                 "WHERE c.id = :courseId "
@@ -70,7 +70,7 @@ import java.util.List;
         resultSetMapping = "modelsDTO.newUsersPerDay")
 @SqlResultSetMapping(name = "modelsDTO.newUsersPerDay",
         classes = @ConstructorResult(targetClass = newUsersPerDay.class,
-                columns = {@ColumnResult(name = "courseName", type = String.class),
+                columns = {
                         @ColumnResult(name = "date", type = String.class),
                         @ColumnResult(name = "users", type = Integer.class)}))
 

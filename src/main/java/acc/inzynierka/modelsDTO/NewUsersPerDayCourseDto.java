@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class NewUsersPerDayCourseDto {
+    private String courseName;
     private List<newUsersPerDay> newUsersPerDay;
     private Timestamp CreationDate;
 }
