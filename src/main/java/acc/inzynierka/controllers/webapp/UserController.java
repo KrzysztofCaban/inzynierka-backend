@@ -5,6 +5,7 @@ import acc.inzynierka.payload.request.PasswordChangeRequest;
 import acc.inzynierka.payload.request.PasswordRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.payload.response.MessageResponse;
+import acc.inzynierka.security.services.RefreshTokenService;
 import acc.inzynierka.services.webapp.UserService;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
+    @Autowired
+    RefreshTokenService refreshTokenService;
 
     @GetMapping(value = {""})
     public ResponseEntity<?> getUser() {
@@ -90,6 +92,7 @@ public class UserController {
     @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
     @DeleteMapping(value = {"delete/{id}"})
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        refreshTokenService.deleteByUserId(id);
         userService.deleteUser(id);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));

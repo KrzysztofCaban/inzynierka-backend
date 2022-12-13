@@ -34,9 +34,17 @@ public class Exercise {
     @Column(name = "bad_answer3", nullable = false)
     private String bad_answer3;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "image_id", nullable = false)

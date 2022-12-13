@@ -38,14 +38,12 @@ public class CourseMobileController {
     @PostMapping(value = "{courseId}/join")
     public ResponseEntity<?> joinCourse(@PathVariable Long courseId) {
         courseMobileService.joinCourse(courseId);
-
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zapisano się do kursu"));
     }
 
     @DeleteMapping(value = "{courseId}/leave")
     public ResponseEntity<?> leaveCourse(@PathVariable Long courseId) {
         courseMobileService.leaveCourse(courseId);
-
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie wypisano się z kursu"));
     }
 }
