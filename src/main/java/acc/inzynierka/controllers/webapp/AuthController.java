@@ -110,7 +110,7 @@ public class AuthController {
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "ROLE_ADMIN":
+                    case "ROLE_CREATOR":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_CREATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
@@ -120,7 +120,7 @@ public class AuthController {
                         roles.add(userRole);
 
                         break;
-                    case "ROLE_SUPERADMIN":
+                    case "ROLE_ADMIN":
                         Role Role = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(Role);
