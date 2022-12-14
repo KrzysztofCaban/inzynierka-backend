@@ -104,40 +104,36 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
+            //assigning a default role - user role
+            roles.add(roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Błąd. Nie znaleziono roli Użytkownik.")));
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "ROLE_CREATOR":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_CREATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
+                        //assigning a creator role
+                        roles.add(roleRepository.findByName(ERole.ROLE_CREATOR)
+                                .orElseThrow(() -> new RuntimeException("Błąd. Nie znaleziono roli Twórca.")));
 
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-
+                        //assigning a user role
+                        roles.add(roleRepository.findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Błąd. Nie znaleziono roli Użytkownik.")));
                         break;
                     case "ROLE_ADMIN":
-                        Role Role = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(Role);
+                        //assigning an admin role
+                        roles.add(roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Błąd. Nie znaleziono roli Administrator.")));
 
-                        Role = roleRepository.findByName(ERole.ROLE_CREATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(Role);
+                        //assigning a creator role
+                        roles.add(roleRepository.findByName(ERole.ROLE_CREATOR)
+                                .orElseThrow(() -> new RuntimeException("Błąd. Nie znaleziono roli Twórca.")));
 
-                        Role = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(Role);
-
+                        //assigning a user role
+                        roles.add(roleRepository.findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Błąd. Nie znaleziono roli Użytkownik.")));
                         break;
                     default:
-
                 }
-
             });
         }
 
