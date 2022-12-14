@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    @PatchMapping(value = {"edit/{id}"})
+    @PatchMapping(value = {"edit/{userId}"})
     public ResponseEntity<?> editUserById(@PathVariable Long userId, @Valid @RequestBody UserRequest userRequest) {
         Long adminId = UserUtil.getUser();
         userService.editUserByAdmin(userId, adminId, userRequest);
@@ -81,6 +81,7 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zmieniono hasło"));
     }
 
+    @PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @DeleteMapping(value = "delete")
     public ResponseEntity<?> deleteUser() {
         Long userId = UserUtil.getUser();
