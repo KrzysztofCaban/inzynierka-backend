@@ -3,7 +3,6 @@ package acc.inzynierka.services.mobileapp;
 import acc.inzynierka.models.Flashcard;
 import acc.inzynierka.models.Level;
 import acc.inzynierka.modelsDTO.mobileapp.FlashcardMobileDto;
-import acc.inzynierka.services.webapp.ImageService;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,6 @@ public class FlashcardMobileService {
 
     @Autowired
     private LevelMobileService levelMobileService;
-
-    @Autowired
-    private ImageService imageService;
 
     public List<FlashcardMobileDto> getAllFlashcards(Long levelID) {
         Level level = levelMobileService.findById(levelID);

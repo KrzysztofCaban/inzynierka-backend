@@ -22,7 +22,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/course")
-@PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')")
+@PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
 public class CourseController {
 
     @Autowired
@@ -32,28 +32,28 @@ public class CourseController {
     private UserService userService;
 
     @GetMapping(value = "all")
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CourseDto>> getAllCourses() {
         return new ResponseEntity<>(
                 courseService.getAllCourses()
                 , HttpStatus.OK);
     }
 
-    @GetMapping(value = {"admin", "admin/{id}"})
-    public ResponseEntity<?> getAllAdminCourses(@PathVariable Optional<Long> id) {
-        Long adminId = id.orElseGet(UserUtil::getUser);
+    @GetMapping(value = {"creator", "creator/{id}"})
+    public ResponseEntity<?> getAllCreatorCourses(@PathVariable Optional<Long> id) {
+        Long creatorId = id.orElseGet(UserUtil::getUser);
 
-        User admin = userService.findById(adminId);
+        User creator = userService.findById(creatorId);
 
-        if (admin.getRoles()
+        if (creator.getRoles()
                 .stream()
-                .filter(r -> r.getName().equals(ERole.ROLE_ADMIN))
+                .filter(r -> r.getName().equals(ERole.ROLE_CREATOR))
                 .findAny()
                 .isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Użytkownik nie jest administratorem");
         }
         return new ResponseEntity<>(
-                courseService.getAllAdminCourses(admin)
+                courseService.getAllAdminCourses(creator)
                 , HttpStatus.OK);
     }
 

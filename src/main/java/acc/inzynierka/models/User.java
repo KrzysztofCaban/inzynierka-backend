@@ -50,6 +50,11 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<PotentialCategory> PotentialCategories;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<Course> creatorCourses;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Result> results;
 
@@ -58,8 +63,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<UserCourse> courses;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
-    private Collection<PotentialCategory> PotentialCategories;
 
     public User(String login, String email, String password) {
         this.login = login;
@@ -68,4 +71,6 @@ public class User {
         this.CreationDate = Timestamp.from(Instant.now());
     }
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "followedUser")
+    private Collection<Followed> followedBy;
 }

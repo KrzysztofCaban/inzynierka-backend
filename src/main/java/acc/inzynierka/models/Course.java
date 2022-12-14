@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -96,6 +95,13 @@ public class Course {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    private List<UserCourse> courseUsers;
+
+    public User getAuthor() {
+        return author;
+    }
+
     @JoinColumn(name = "category_id", nullable = false)
     @ManyToOne(optional = false)
     private Category category;
@@ -107,6 +113,23 @@ public class Course {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private List<Level> levels;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
-    private Collection<UserCourse> courseUsers;
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public List<Level> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(List<Level> levels) {
+        this.levels = levels;
+    }
+
+    public List<UserCourse> getCourseUsers() {
+        return courseUsers;
+    }
+
+    public void setCourseUsers(List<UserCourse> courseUsers) {
+        this.courseUsers = courseUsers;
+    }
 }

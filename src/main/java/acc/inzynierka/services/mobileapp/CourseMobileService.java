@@ -7,7 +7,6 @@ import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
 import acc.inzynierka.models.UserCourse;
 import acc.inzynierka.models.enums.EStatus;
-import acc.inzynierka.modelsDTO.mobileapp.CourseMobileDto;
 import acc.inzynierka.modelsDTO.mobileapp.CourseMobileListDataDto;
 import acc.inzynierka.repository.CourseRepository;
 import acc.inzynierka.repository.UserCourseRepository;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,12 +62,6 @@ public class CourseMobileService {
         return ObjectMapperUtil.mapToDTO(courseList, CourseMobileListDataDto.class);
     }
 
-    public CourseMobileDto getCourseById(Long id) {
-        Course course = findById(id);
-
-        return (CourseMobileDto) ObjectMapperUtil.mapToDTOSingle(course, CourseMobileDto.class);
-    }
-
     public void joinCourse(Long courseId) {
         Long userId = UserUtil.getUser();
 
@@ -104,12 +96,6 @@ public class CourseMobileService {
                 .orElseThrow(CourseNotFoundException::new);
 
         return course;
-    }
-
-    public Optional findByNameOptional(String name) {
-        Optional courseOptional = courseRepository.findByName(name);
-
-        return courseOptional;
     }
 
     public boolean checkIfUserIsInCourse(Long userId, Long courseId) {

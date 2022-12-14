@@ -61,7 +61,7 @@ public class UserService {
                 ).collect(Collectors.toList());
 
         userDtoList = userDtoList.stream()
-                .filter(user -> user.getRoles().contains(ERole.ROLE_ADMIN)).
+                .filter(user -> user.getRoles().contains(ERole.ROLE_CREATOR)).
                 collect(Collectors.toList());
 
         return userDtoList;

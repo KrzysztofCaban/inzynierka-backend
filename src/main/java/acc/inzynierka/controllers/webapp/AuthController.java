@@ -111,7 +111,7 @@ public class AuthController {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "ROLE_ADMIN":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_CREATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
@@ -121,11 +121,11 @@ public class AuthController {
 
                         break;
                     case "ROLE_SUPERADMIN":
-                        Role Role = roleRepository.findByName(ERole.ROLE_SUPERADMIN)
+                        Role Role = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(Role);
 
-                        Role = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role = roleRepository.findByName(ERole.ROLE_CREATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(Role);
 
@@ -168,7 +168,7 @@ public class AuthController {
     }
 
     @PostMapping("/signout")
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> logoutUser() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();

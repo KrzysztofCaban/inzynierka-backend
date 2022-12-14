@@ -27,8 +27,6 @@ public class TestQuestionMobileController {
 
     @PostMapping(value = {"result"})
     public ResponseEntity<?> saveResults(@RequestBody UserResultRequest userResultRequest) {
-        System.out.println("tak");
-        System.out.println(userResultRequest.getUserResult());
         return new ResponseEntity<>(
                 testQuestionMobileService.addUserResult(userResultRequest),
                 HttpStatus.OK

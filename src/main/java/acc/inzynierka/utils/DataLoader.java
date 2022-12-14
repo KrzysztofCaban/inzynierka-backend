@@ -77,10 +77,10 @@ public class DataLoader implements ApplicationRunner {
         role.setName(ERole.ROLE_USER);
 
         Role role2 = new Role();
-        role2.setName(ERole.ROLE_ADMIN);
+        role2.setName(ERole.ROLE_CREATOR);
 
         Role role3 = new Role();
-        role3.setName(ERole.ROLE_SUPERADMIN);
+        role3.setName(ERole.ROLE_ADMIN);
 
         List<Role> roles = new ArrayList<>();
         roles.add(role);
@@ -109,7 +109,7 @@ public class DataLoader implements ApplicationRunner {
         User user = new User("test1234", "maill@abc.abc", "$2a$10$9SEKVUXwNa8NGnpYBjQU/eIuZE2olkYaRC58S0ZqXJci0y/xgfiNO");
         User user2 = new User("test123", "mail@abc.abc", "$2a$10$5.rWkw8sLxlhCY0OTk9r5ujUtyuO63lOmWhTB5Smxs/Cdj9c6vkHy");
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleRepository.findByName(ERole.ROLE_ADMIN).get());
+        roleSet.add(roleRepository.findByName(ERole.ROLE_CREATOR).get());
         user.setRoles(roleSet);
         userRepository.save(user);
         roleSet.clear();

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/stats")
-@PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')")
+@PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
 public class StatsController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class StatsController {
     }
 
     @GetMapping("coursesforall")
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getCoursesStatsForAllAuthors() {
 
         return new ResponseEntity<>(

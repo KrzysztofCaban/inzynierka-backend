@@ -5,6 +5,7 @@ import acc.inzynierka.payload.request.PasswordChangeRequest;
 import acc.inzynierka.payload.request.PasswordRequest;
 import acc.inzynierka.payload.request.UserRequest;
 import acc.inzynierka.payload.response.MessageResponse;
+import acc.inzynierka.security.services.RefreshTokenService;
 import acc.inzynierka.services.webapp.UserService;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,13 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
-@PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')")
+@PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
 public class UserController {
 
     @Autowired
     UserService userService;
-
+    @Autowired
+    RefreshTokenService refreshTokenService;
 
     @GetMapping(value = {""})
     public ResponseEntity<?> getUser() {
@@ -37,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping(value = "{id}")
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getUserBySuperAdmin(@PathVariable Long id) {
         UserDto userDto = userService.getUser(id);
 
@@ -63,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
     }
 
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PatchMapping(value = {"edit/{id}"})
     public ResponseEntity<?> editUserById(@PathVariable Long userId, @Valid @RequestBody UserRequest userRequest) {
         Long adminId = UserUtil.getUser();
@@ -72,7 +74,7 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
     }
 
-    public ResponseEntity editPassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest) {
+    public ResponseEntity<?> editPassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest) {
         Long userId = UserUtil.getUser();
         userService.editPassword(userId, passwordChangeRequest);
 
@@ -82,20 +84,22 @@ public class UserController {
     @DeleteMapping(value = "delete")
     public ResponseEntity<?> deleteUser() {
         Long userId = UserUtil.getUser();
+        refreshTokenService.deleteByUserId(userId);
         userService.deleteUser(userId);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));
     }
 
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = {"delete/{id}"})
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        refreshTokenService.deleteByUserId(id);
         userService.deleteUser(id);
 
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie usunięto użytkownika"));
     }
 
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PatchMapping(value = "resetPassword")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordRequest passwordRequest) {
         userService.resetPassword(passwordRequest);

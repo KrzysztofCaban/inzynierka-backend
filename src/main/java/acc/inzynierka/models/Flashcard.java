@@ -28,9 +28,17 @@ public class Flashcard {
     @Column(name = "exp_description")
     private String expDescription;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "image_id", nullable = false)
