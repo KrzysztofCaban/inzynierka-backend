@@ -54,8 +54,6 @@ public class TestQuestionMobileService {
                 resultRepository.save(result);
             }
         } else {
-            System.out.println(userResultRequest.getUserResult());
-            System.out.println(userResultRequest.getLevelID());
             Result result = new Result();
             result.setDate(Timestamp.from(Instant.now()));
             result.setUser(userRepository.findById(userid)

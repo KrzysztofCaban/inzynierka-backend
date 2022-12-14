@@ -16,13 +16,13 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/potentialCategory")
-@PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')")
+@PreAuthorize(value = "hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
 public class PotentialCategoryController {
 
     @Autowired
     PotentialCategoryService potentialCategoryService;
 
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @GetMapping(value = "all")
     public ResponseEntity<List<PotentialCategoryDto>> getAllPotentialCategories() {
         return new ResponseEntity<>(
@@ -37,7 +37,7 @@ public class PotentialCategoryController {
                 HttpStatus.CREATED);
     }
 
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping(value = "{potentialCatId}")
     public ResponseEntity<?> acceptPotentialCategory(@PathVariable Long potentialCatId) {
         potentialCategoryService.acceptPotentialCategory(potentialCatId);
@@ -46,7 +46,7 @@ public class PotentialCategoryController {
                 .body(new MessageResponse("Pomyślnie zaakceptowano prośbę dodania kategorii. Kategoria dodana"));
     }
 
-    @PreAuthorize(value = "hasRole('ROLE_SUPERADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "{potentialCatId}")
     public ResponseEntity<?> deletePotentialCategory(@PathVariable Long potentialCatId) {
         potentialCategoryService.deletePotentialCategory(potentialCatId);

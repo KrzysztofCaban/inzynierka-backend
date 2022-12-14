@@ -8,7 +8,6 @@ import acc.inzynierka.modelsDTO.mobileapp.LevelMobileDto;
 import acc.inzynierka.repository.LevelRepository;
 import acc.inzynierka.repository.ResultRepository;
 import acc.inzynierka.services.webapp.CourseService;
-import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,15 +42,6 @@ public class LevelMobileService {
         }).collect(Collectors.toList());
 
         return levelMobileDtoList;
-    }
-
-    public LevelMobileDto getLevelById(Long id) {
-        Level level = findById(id);
-
-        LevelMobileDto levelMobileDto = (LevelMobileDto) ObjectMapperUtil.mapToDTOSingle(level, LevelMobileDto.class);
-        levelMobileDto.setBestResult(findResultforLevel(level.getId()));
-
-        return levelMobileDto;
     }
 
     public Integer findResultforLevel(Long levelId) {

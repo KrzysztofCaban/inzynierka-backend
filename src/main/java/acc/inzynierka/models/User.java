@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -57,48 +58,11 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Result> results;
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Followed> followed;
 
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
-    }
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<UserCourse> courses;
-
-    public List<Followed> getFollowed() {
-        return followed;
-    }
-
-    public void setFollowed(List<Followed> followed) {
-        this.followed = followed;
-    }
-
-    public List<UserCourse> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<UserCourse> courses) {
-        this.courses = courses;
-    }
-
-    public List<PotentialCategory> getPotentialCategories() {
-        return PotentialCategories;
-    }
-
 
     public User(String login, String email, String password) {
         this.login = login;
@@ -107,15 +71,6 @@ public class User {
         this.CreationDate = Timestamp.from(Instant.now());
     }
 
-    public void setPotentialCategories(List<PotentialCategory> potentialCategories) {
-        PotentialCategories = potentialCategories;
-    }
-
-    public List<Course> getCreatorCourses() {
-        return creatorCourses;
-    }
-
-    public void setCreatorCourses(List<Course> creatorCourses) {
-        this.creatorCourses = creatorCourses;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "followedUser")
+    private Collection<Followed> followedBy;
 }

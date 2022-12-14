@@ -68,7 +68,7 @@ public class ExerciseService {
 
     public void editExercise(Long levelID, Long exerciseID, ExerciseRequest exerciseRequest) {
         Exercise exercise = findById(exerciseID);
-        if (!exercise.getAnswer().equals(exercise.getAnswer())) {
+        if (!exercise.getAnswer().equals(exerciseRequest.getAnswer())) {
             checkIfExerciseExpressionIsUsed(levelID, exerciseRequest);
         }
 

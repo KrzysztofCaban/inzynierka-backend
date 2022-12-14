@@ -62,7 +62,7 @@ class CourseControllerTest {
     @WithUserDetails(value = "test1234")
     @Order(5)
     void getAllAdminCourses() throws Exception {
-        mockMvc.perform(get("/api/course/admin").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/course/creator").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
