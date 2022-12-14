@@ -30,24 +30,7 @@ public class Result {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
-
-    public Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
 }

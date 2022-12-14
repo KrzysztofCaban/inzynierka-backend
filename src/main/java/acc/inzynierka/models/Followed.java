@@ -23,14 +23,6 @@ public class Followed {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "followed_user_id", nullable = false)
     private User followedUser;

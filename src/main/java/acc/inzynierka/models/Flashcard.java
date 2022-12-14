@@ -32,14 +32,6 @@ public class Flashcard {
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
 
-    public Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
