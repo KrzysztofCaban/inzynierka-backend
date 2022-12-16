@@ -1,13 +1,18 @@
 package acc.inzynierka.services.webapp;
 
+
+import acc.inzynierka.exception.RoleNotFoundCustomException;
 import acc.inzynierka.exception.course.CourseAlreadyExistsException;
 import acc.inzynierka.exception.course.CourseNotFoundException;
+import acc.inzynierka.exception.course.NotCourseCreatorException;
 import acc.inzynierka.models.Course;
 import acc.inzynierka.models.User;
+import acc.inzynierka.models.enums.ERole;
 import acc.inzynierka.modelsDTO.webapp.CourseDto;
 import acc.inzynierka.payload.request.webapp.CourseRequest;
 import acc.inzynierka.payload.response.webapp.CourseResponse;
 import acc.inzynierka.repository.CourseRepository;
+import acc.inzynierka.repository.RoleRepository;
 import acc.inzynierka.utils.ObjectMapperUtil;
 import acc.inzynierka.utils.UserUtil;
 import org.springframework.stereotype.Service;
@@ -27,12 +32,14 @@ public class CourseService {
     private final StatusService statusService;
 
     private final CategoryService categoryService;
+    private final RoleRepository roleRepository;
 
-    public CourseService(CourseRepository courseRepository, UserService userService, StatusService statusService, CategoryService categoryService) {
+    public CourseService(CourseRepository courseRepository, UserService userService, StatusService statusService, CategoryService categoryService, RoleRepository roleRepository) {
         this.courseRepository = courseRepository;
         this.userService = userService;
         this.statusService = statusService;
         this.categoryService = categoryService;
+        this.roleRepository = roleRepository;
     }
 
     public List<CourseDto> getAllCourses() {
@@ -43,16 +50,27 @@ public class CourseService {
         return ObjectMapperUtil.mapToDTO(courseRepository.findAllByAuthor(admin), CourseDto.class);
     }
 
+    public void checkAccessToCourse(Long courseId) {
+        User currentUser = userService.findById(UserUtil.getUser());
+        if (!currentUser.getRoles().
+                contains(roleRepository.findByName(ERole.ROLE_ADMIN)
+                        .orElseThrow(RoleNotFoundCustomException::new))
+        ) {
+            if (courseRepository.findById(courseId).get().getAuthor().getId().equals(currentUser.getId())) {
+                throw new NotCourseCreatorException();
+            }
+        }
+    }
 
     public CourseDto getCourseById(Long id) {
         Course course = findById(id);
-
+        checkAccessToCourse(id);
         return (CourseDto) ObjectMapperUtil.mapToDTOSingle(course, CourseDto.class);
     }
 
     public void deleteCourseById(Long id) {
         Course course = findById(id);
-
+        checkAccessToCourse(id);
         courseRepository.delete(course);
     }
 
@@ -84,7 +102,7 @@ public class CourseService {
 
     public void editCourse(Long id, CourseRequest courseRequest) throws RuntimeException {
         Course course = findById(id);
-
+        checkAccessToCourse(id);
         Optional checkIfExists = findByNameOptional(courseRequest.getName().toLowerCase());
         if (checkIfExists.isPresent() && !course.getName().equalsIgnoreCase(courseRequest.getName())) {
             throw new CourseAlreadyExistsException();
