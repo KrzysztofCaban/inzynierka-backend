@@ -1,5 +1,6 @@
 package acc.inzynierka.exception;
 
+import acc.inzynierka.exception.course.NotCourseCreatorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,12 @@ public class RestExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ExceptionHandler(value = {NotCourseCreatorException.class})
+    public ResponseEntity<Object> handleNotCourseCreatorException(ApiRuntimeException ex) {
+        logger.error(ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(value = {ApiRuntimeException.class})
