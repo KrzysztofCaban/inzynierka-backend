@@ -56,7 +56,7 @@ public class CourseService {
                 contains(roleRepository.findByName(ERole.ROLE_ADMIN)
                         .orElseThrow(RoleNotFoundCustomException::new))
         ) {
-            if (courseRepository.findById(courseId).get().getAuthor().getId().equals(currentUser.getId())) {
+            if (!courseRepository.findById(courseId).get().getAuthor().getId().equals(currentUser.getId())) {
                 throw new NotCourseCreatorException();
             }
         }
