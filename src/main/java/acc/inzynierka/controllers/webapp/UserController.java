@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping(value = "{id}")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> getUserBySuperAdmin(@PathVariable Long id) {
+    public ResponseEntity<?> getUserByAdmin(@PathVariable Long id) {
         UserDto userDto = userService.getUser(id);
 
         return new ResponseEntity<>(
@@ -74,6 +74,7 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageResponse("Pomyślnie zedytowano użytkownika"));
     }
 
+    @PatchMapping(value = "editPassword")
     public ResponseEntity<?> editPassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest) {
         Long userId = UserUtil.getUser();
         userService.editPassword(userId, passwordChangeRequest);
