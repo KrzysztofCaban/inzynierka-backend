@@ -89,11 +89,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByLogin(signUpRequest.getLogin())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Login jest już w użyciu!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Login jest już w użyciu!"));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email jest już w użyciu!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Email jest już w użyciu!"));
         }
 
         // Create new user's account
