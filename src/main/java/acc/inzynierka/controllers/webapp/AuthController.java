@@ -89,11 +89,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByLogin(signUpRequest.getLogin())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Login jest już w użyciu!"));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Email jest już w użyciu!"));
         }
 
         // Create new user's account
@@ -145,7 +145,7 @@ public class AuthController {
                 "\n\n\n\nPozdrawiamy," +
                 "\nZespół NABO");
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Zarejestrowano pomyślnie!"));
     }
 
     @PostMapping("/refreshtoken")
@@ -160,7 +160,7 @@ public class AuthController {
                     return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
                 })
                 .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-                        "Refresh token is not in database!"));
+                        "Nie odnaleziono Refresh Tokena!"));
     }
 
     @PostMapping("/signout")
@@ -169,7 +169,7 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         refreshTokenService.deleteByUserId(userId);
-        return ResponseEntity.ok(new MessageResponse("Log out successful!"));
+        return ResponseEntity.ok(new MessageResponse("Wylogowano pomyślnie"));
     }
 
     @PostMapping(value = "forgotPassword")
