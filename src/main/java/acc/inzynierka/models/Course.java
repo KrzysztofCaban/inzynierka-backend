@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "course")
-
 @NamedNativeQuery(name = "getCoursesStatsForOneAuthor",
         query = "SELECT c.id as courseId ,c.name as courseName, COUNT(uc.user_id) as usersInCourse ,IFNULL(avgr.avgrr,0) as avgScoreInCourse " +
                 "FROM Course c " +
