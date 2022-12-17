@@ -1,6 +1,7 @@
 package acc.inzynierka.services.webapp;
 
 import acc.inzynierka.exception.category.CategoryAlreadyExistsException;
+import acc.inzynierka.exception.category.CategoryIsUsedException;
 import acc.inzynierka.exception.category.CategoryNotFoundException;
 import acc.inzynierka.models.Category;
 import acc.inzynierka.models.PotentialCategory;
@@ -60,8 +61,11 @@ public class CategoryService {
 
     public void deleteCategory(Long categoryID) {
         Category category = findById(categoryID);
-
-        categoryRepository.delete(category);
+        try {
+            categoryRepository.delete(category);
+        } catch (Exception e) {
+            throw new CategoryIsUsedException();
+        }
     }
 
 
